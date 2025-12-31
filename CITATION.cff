@@ -1,0 +1,63 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "SynDX: Explainable AI-Driven Synthetic Data Generation for Privacy-Preserving Differential Diagnosis of Vestibular Disorders"
+version: 0.1.0
+date-released: 2025-01-01
+authors:
+  - family-names: "Tritham"
+    given-names: "Chatchai"
+    email: "chatchai.tritham@nu.ac.th"
+    affiliation: "Naresuan University"
+    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: Update with actual ORCID
+  - family-names: "Namahoot"
+    given-names: "Chakkrit Snae"
+    email: "chakkrits@nu.ac.th"
+    affiliation: "Naresuan University"
+    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: Update with actual ORCID
+
+repository-code: "https://github.com/chatchai.tritham/SynDX"
+url: "https://github.com/chatchai.tritham/SynDX"
+repository-artifact: "https://zenodo.org/record/XXXXXXX"  # TODO: Update after Zenodo upload
+license: MIT
+
+keywords:
+  - synthetic data generation
+  - explainable AI
+  - XAI
+  - vestibular disorders
+  - differential diagnosis
+  - privacy-preserving machine learning
+  - clinical decision support
+  - SHAP
+  - counterfactual explanations
+  - TiTrATE framework
+  - HL7 FHIR
+  - differential privacy
+
+abstract: |
+  SynDX is a framework that generates synthetic medical data by integrating
+  clinical guidelines with explainable AI techniques, eliminating the need
+  for real patient records entirely. The system implements the TiTrATE
+  diagnostic framework and Bárány Society's ICVD 2025 classification, using
+  SHAP-guided feature importance, non-negative matrix factorization, and
+  counterfactual validation to generate clinically plausible synthetic
+  patient data. This software is preliminary work without clinical
+  validation and should NOT be used for clinical decision-making.
+
+preferred-citation:
+  type: article
+  title: "SynDX: Explainable AI-Driven Synthetic Data Generation for Privacy-Preserving Differential Diagnosis of Vestibular Disorders"
+  authors:
+    - family-names: "Tritham"
+      given-names: "Chatchai"
+    - family-names: "Namahoot"
+      given-names: "Chakkrit Snae"
+  journal: "IEEE Access"
+  year: 2025
+  volume: XX  # TODO: Update after publication
+  issue: XX   # TODO: Update after publication
+  start: XX   # TODO: Update after publication
+  end: XX     # TODO: Update after publication
+  doi: "10.1109/ACCESS.2025.XXXXXXX"  # TODO: Update after publication
+  notes: "Preliminary work without clinical validation"
