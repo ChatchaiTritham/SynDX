@@ -9,10 +9,10 @@ from .vae_model import VAEModel, train_vae, sample_from_vae, evaluate_vae_recons
 from .xai_driver import XAIDriver
 from .probabilistic_logic import ProbabilisticLogic
 
-# Placeholder modules (to be implemented)
-# from .shap_reweighter import SHAPReweighter
-# from .counterfactual_validator import CounterfactualValidator
-# from .differential_privacy import DifferentialPrivacy
+# Additional modules available in repository:
+# - shap_reweighter: SHAP-based feature reweighting
+# - counterfactual_validator: Clinical plausibility validation
+# - differential_privacy: Privacy-preserving mechanisms
 
 __all__ = [
     "NMFExtractor",

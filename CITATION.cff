@@ -9,16 +9,13 @@ authors:
     given-names: "Chatchai"
     email: "chatchait66@nu.ac.th"
     affiliation: "Department of Computer Science and Information Technology, Faculty of Science, Naresuan University, Phitsanulok 65000, Thailand"
-    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: Update with actual ORCID
   - family-names: "Namahoot"
     given-names: "Chakkrit Snae"
     email: "chakkrits@nu.ac.th"
     affiliation: "Department of Computer Science and Information Technology, Faculty of Science, Naresuan University, Phitsanulok 65000, Thailand; Center of Excellence in Nonlinear Analysis and Optimization, Faculty of Science, Naresuan University, Phitsanulok 65000, Thailand"
-    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: Update with actual ORCID
 
 repository-code: "https://github.com/ChatchaiTritham/SynDX"
 url: "https://github.com/ChatchaiTritham/SynDX"
-repository-artifact: "https://zenodo.org/record/XXXXXXX"  # TODO: Update after Zenodo upload
 license: MIT
 
 keywords:
@@ -55,9 +52,4 @@ preferred-citation:
       given-names: "Chakkrit Snae"
   journal: "IEEE Access"
   year: 2025
-  volume: XX  # TODO: Update after publication
-  issue: XX   # TODO: Update after publication
-  start: XX   # TODO: Update after publication
-  end: XX     # TODO: Update after publication
-  doi: "10.1109/ACCESS.2025.XXXXXXX"  # TODO: Update after publication
-  notes: "Preliminary work without clinical validation"
+  notes: "Preliminary research without clinical validation"

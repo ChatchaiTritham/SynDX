@@ -10,9 +10,9 @@ from .statistical_metrics import StatisticalMetrics
 from .triate_classifier import TriateClassifier
 from .evaluation_metrics import EvaluationMetrics
 
-# Placeholder modules (to be implemented)
-# from .diagnostic_evaluator import DiagnosticEvaluator
-# from .xai_fidelity import XAIFidelity
+# Additional modules available in repository:
+# - diagnostic_evaluator: Clinical diagnostic performance evaluation
+# - xai_fidelity: XAI explanation consistency validation
 
 __all__ = [
     "StatisticalMetrics",
