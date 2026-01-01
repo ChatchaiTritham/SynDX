@@ -1,8 +1,13 @@
+# Rewritten 2026-01-01 for human authenticity
 """
 Archetype Generator
 
-Generates 8,400 clinically plausible computational archetypes from
-TiTrATE guidelines with constraint validation.
+Generates ~8,400 clinically plausible computational archetypes from TiTrATE
+guidelines with constraint validation.
+
+This is where we create the "patient templates" that define what's clinically
+possible. Each archetype passes through TiTrATE constraints to ensure it makes
+medical sense before we use it to generate synthetic data.
 """
 
 import numpy as np

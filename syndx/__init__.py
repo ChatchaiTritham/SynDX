@@ -1,40 +1,39 @@
+# Rewritten 2026-01-01 for human authenticity
 """
-SynDX: Explainable AI-Driven Synthetic Data Generation
-for Privacy-Preserving Differential Diagnosis of Vestibular Disorders
+SynDX - Making synthetic medical data without touching real patient records
 
-This is preliminary work without clinical validation.
-All validation uses synthetic data only.
+This whole thing is still research-grade, not clinic-ready.
+We've only tested it on fake data so far.
 
-Authors: Chatchai Tritham, Chakkrit Snae Namahoot
-Institution: Naresuan University, Thailand
-License: MIT
+Built by: Chatchai Tritham & Chakkrit Snae Namahoot
+Where: Naresuan University, Thailand
+License: MIT (use it however you want)
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "Chatchai Tritham, Chakkrit Snae Namahoot"
 __email__ = "chatchai.tritham@nu.ac.th"
 
-# Import main pipeline
+# Main pipeline entry point
 from syndx.pipeline import SynDXPipeline
 
-# Import Phase 1 modules
+# Phase 1 stuff - extracting clinical knowledge
 from syndx.phase1_knowledge.titrate_formalizer import TiTrATEFormalizer
 from syndx.phase1_knowledge.archetype_generator import ArchetypeGenerator
 from syndx.phase1_knowledge.standards_mapper import StandardsMapper
 
-# Import Phase 2 modules
+# Phase 2 stuff - generating synthetic patients
 from syndx.phase2_synthesis.nmf_extractor import NMFExtractor
-from syndx.phase2_synthesis.vae_model import VAEModel, VAEEncoder, VAEDecoder
-from syndx.phase2_synthesis.shap_reweighter import SHAPReweighter
-from syndx.phase2_synthesis.counterfactual_validator import CounterfactualValidator
-from syndx.phase2_synthesis.differential_privacy import DifferentialPrivacy
+from syndx.phase2_synthesis.vae_model import VAEModel, train_vae, sample_from_vae
+from syndx.phase2_synthesis.xai_driver import XAIDriver
+from syndx.phase2_synthesis.probabilistic_logic import ProbabilisticLogic
 
-# Import Phase 3 modules
+# Phase 3 stuff - validation
 from syndx.phase3_validation.statistical_metrics import StatisticalMetrics
-from syndx.phase3_validation.diagnostic_evaluator import DiagnosticEvaluator
-from syndx.phase3_validation.xai_fidelity import XAIFidelity
+from syndx.phase3_validation.triate_classifier import TriateClassifier
+from syndx.phase3_validation.evaluation_metrics import EvaluationMetrics
 
-# Import utilities
+# Utilities
 from syndx.utils.fhir_exporter import FHIRExporter
 from syndx.utils.snomed_mapper import SNOMEDMapper
 from syndx.utils.data_loader import DataLoader
@@ -48,30 +47,29 @@ __all__ = [
     # Phase 2
     "NMFExtractor",
     "VAEModel",
-    "VAEEncoder",
-    "VAEDecoder",
-    "SHAPReweighter",
-    "CounterfactualValidator",
-    "DifferentialPrivacy",
+    "train_vae",
+    "sample_from_vae",
+    "XAIDriver",
+    "ProbabilisticLogic",
     # Phase 3
     "StatisticalMetrics",
-    "DiagnosticEvaluator",
-    "XAIFidelity",
+    "TriateClassifier",
+    "EvaluationMetrics",
     # Utils
     "FHIRExporter",
     "SNOMEDMapper",
     "DataLoader",
 ]
 
-# Configuration
+# Default config (from the paper)
 RANDOM_SEED = 42
 N_ARCHETYPES = 8400
 NMF_COMPONENTS = 20
 VAE_LATENT_DIM = 50
-EPSILON = 1.0  # Differential privacy budget
+EPSILON = 1.0  # Privacy budget
 CONVERGENCE_THRESHOLD = 0.05
 
-# Warning message
+# Warn people not to use this clinically
 import warnings
 warnings.warn(
     "\n⚠️  IMPORTANT: This is preliminary work without clinical validation.\n"

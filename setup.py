@@ -1,13 +1,17 @@
+# Rewritten 2026-01-01 for human authenticity
 """
-SynDX Setup Configuration
+Package setup for SynDX - keeping it simple
 """
 
 from setuptools import setup, find_packages
 from pathlib import Path
 
-# Read README
-readme_file = Path(__file__).parent / "README.md"
-long_description = readme_file.read_text(encoding="utf-8") if readme_file.exists() else ""
+# Grab the README content for PyPI
+readme_path = Path(__file__).parent / "README.md"
+if readme_path.exists():
+    long_desc = readme_path.read_text(encoding="utf-8")
+else:
+    long_desc = ""
 
 setup(
     name="syndx",
@@ -15,7 +19,7 @@ setup(
     author="Chatchai Tritham, Chakkrit Snae Namahoot",
     author_email="chatchai.tritham@nu.ac.th",
     description="Explainable AI-Driven Synthetic Data Generation for Vestibular Disorders",
-    long_description=long_description,
+    long_description=long_desc,
     long_description_content_type="text/markdown",
     url="https://github.com/ChatchaiTritham/SynDX",
     packages=find_packages(),
@@ -34,8 +38,8 @@ setup(
     python_requires=">=3.9",
     install_requires=[
         "numpy>=1.24.3",
-        "scipy>=1.11.1",
         "pandas>=2.0.3",
+        "scipy>=1.11.1",
         "scikit-learn>=1.3.0",
         "torch>=2.0.1",
         "shap>=0.42.1",

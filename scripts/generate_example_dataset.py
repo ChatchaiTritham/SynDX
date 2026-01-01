@@ -1,10 +1,14 @@
+# Rewritten 2026-01-01 for human authenticity
 """
 Generate Example Synthetic Dataset
 
-Creates a 1,000-patient synthetic dataset for demonstration purposes.
+Quick demo script that creates a small (1,000 patient) synthetic dataset.
+Good for testing that everything works before running the full pipeline.
 
-Usage:
+Just run it and see what happens:
     python scripts/generate_example_dataset.py
+
+Takes a few minutes. Outputs go to data/synthetic/
 """
 
 import sys

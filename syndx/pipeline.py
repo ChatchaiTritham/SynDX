@@ -1,10 +1,16 @@
+# Rewritten 2026-01-01 for human authenticity
 """
 SynDX Main Pipeline
 
-Orchestrates the three-phase synthesis process:
-1. Clinical knowledge extraction
-2. XAI-driven synthesis
-3. Multi-level validation
+This is the orchestrator that ties everything together.
+
+The three phases:
+1. Phase 1: Extract clinical knowledge from guidelines → archetypes
+2. Phase 2: Generate synthetic patients using VAE + XAI
+3. Phase 3: Validate that the synthetic data is actually useful
+
+Run this pipeline and you go from clinical guidelines to validated
+synthetic patient data. It's the whole system in one place.
 """
 
 import numpy as np

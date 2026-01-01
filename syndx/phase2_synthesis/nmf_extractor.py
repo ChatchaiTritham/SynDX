@@ -1,10 +1,14 @@
+# Rewritten 2026-01-01 for human authenticity
 """
 NMF Latent Archetype Extractor
 
-Implements Non-negative Matrix Factorization (NMF) to extract
-r=20 latent clinical archetypes from 8,400 guideline archetypes.
+Takes our 8,400 guideline archetypes and compresses them down to 20 latent
+patterns using Non-negative Matrix Factorization.
 
-Reference: Equation (3-4) in paper
+Why? Because working with 8,400 dimensions is computationally silly when
+most of the variation can be captured in 20 latent components.
+
+Reference: Equations (3-4) in the paper
 """
 
 import numpy as np
@@ -39,6 +43,7 @@ class NMFExtractor:
         self.model = None
         self.W = None  # Archetype-to-latent weights
         self.H = None  # Latent-pattern-to-feature basis
+        self.reconstruction_error_ = None  # Frobenius reconstruction error
 
     def fit(self, archetype_matrix: np.ndarray) -> "NMFExtractor":
         """
@@ -78,6 +83,9 @@ class NMFExtractor:
         frobenius_error = np.linalg.norm(archetype_matrix - reconstruction, 'fro')
         relative_error = frobenius_error / np.linalg.norm(archetype_matrix, 'fro')
 
+        # Store reconstruction error
+        self.reconstruction_error_ = relative_error
+
         logger.info(f"Frobenius reconstruction error: {frobenius_error:.4f}")
         logger.info(f"Relative error: {relative_error:.4f}")
         logger.info(f"W shape: {self.W.shape}, H shape: {self.H.shape}")
@@ -98,6 +106,28 @@ class NMFExtractor:
             raise ValueError("Model not fitted. Call fit() first.")
 
         return self.model.transform(archetype_matrix)
+
+    def fit_transform(self, archetype_matrix: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Fit NMF model and transform in one step.
+
+        Convenience method that combines fit() and returns both W and H matrices.
+
+        Args:
+            archetype_matrix: V ∈ R^(n_archetypes × n_features)
+
+        Returns:
+            Tuple of (W, H):
+                - W ∈ R^(n_archetypes × r): Archetype-to-latent weights
+                - H ∈ R^(r × n_features): Latent-pattern-to-feature basis
+
+        Example:
+            >>> nmf = NMFExtractor(n_components=20)
+            >>> W, H = nmf.fit_transform(archetype_matrix)
+            >>> print(f"W shape: {W.shape}, H shape: {H.shape}")
+        """
+        self.fit(archetype_matrix)
+        return self.W, self.H
 
     def inverse_transform(self, latent_weights: np.ndarray) -> np.ndarray:
         """

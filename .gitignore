@@ -37,8 +37,12 @@ env/
 
 # Data
 data/raw/
+data/archetypes/full_*.csv
+data/archetypes/full_*.json
 outputs/synthetic_patients/*.csv
 outputs/synthetic_patients/*.json
+!outputs/synthetic_patients/example_*.csv
+!outputs/synthetic_patients/example_*.json
 !outputs/synthetic_patients/.gitkeep
 
 # Models
@@ -58,3 +62,13 @@ logs/
 .coverage
 htmlcov/
 .pytest_cache/
+
+# Internal documentation (not for public GitHub)
+*_REPORT.md
+*_RESULTS.md
+*_VERIFICATION.md
+*_INSTRUCTIONS.md
+*_ANALYSIS_AND_*.md
+*_UPGRADE_*.md
+generate_complete_codebase.py
+prepare_github_release.*

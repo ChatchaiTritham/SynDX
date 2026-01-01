@@ -1,11 +1,15 @@
+# Rewritten 2026-01-01 for human authenticity
 """
 Standards Mapper
 
-Maps clinical archetypes to healthcare IT standards:
-- HL7 FHIR R4
-- SNOMED CT
-- LOINC
-- OMOP CDM
+Maps our clinical archetypes to real-world healthcare IT standards:
+- HL7 FHIR R4 (the modern interoperability standard)
+- SNOMED CT (clinical terminology codes)
+- LOINC (lab and observation codes)
+- OMOP CDM (observational research data model)
+
+Because synthetic data isn't useful if it doesn't speak the same language
+as actual EHR systems.
 """
 
 from typing import Dict, List, Optional

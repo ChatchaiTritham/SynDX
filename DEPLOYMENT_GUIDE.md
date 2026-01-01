@@ -1,41 +1,41 @@
-# SynDX Deployment Guide
+# Getting SynDX Running on Your Machine
 
-## ⚠️ Important Notice
+## 🚨 Quick Reminder
 
-**This is preliminary work without clinical validation.**
-All validation uses synthetic data only. Do **NOT** use for clinical decision-making.
+This is PhD research code that's only been tested on synthetic data. **Don't use it for actual patient care.** We need proper clinical trials first.
 
 ---
 
-## Quick Start
+## The Fast Track (If You Just Want to See It Work)
 
-### 1. Clone Repository
+### Step 1: Grab the Code
 
 ```bash
 git clone https://github.com/ChatchaiTritham/SynDX.git
 cd SynDX
 ```
 
-### 2. Install Dependencies
+### Step 2: Install Everything
 
 ```bash
 pip install -r requirements.txt
 pip install -e .
 ```
 
-### 3. Generate Example Dataset
+That `-e` flag installs in "editable" mode so you can tweak things without reinstalling.
+
+### Step 3: Make Some Fake Patients
 
 ```bash
 python scripts/generate_example_dataset.py
 ```
 
-This will create:
-- `data/archetypes/example_archetypes.csv` (500 archetypes)
-- `outputs/synthetic_patients/example_synthetic_patients.csv` (1,000 patients)
-- `outputs/synthetic_patients/example_synthetic_patients.json`
-- `outputs/synthetic_patients/example_dataset_metadata.json`
+This creates:
+- 500 clinical archetypes in `data/archetypes/example_archetypes.csv`
+- 1,000 synthetic patients in `outputs/synthetic_patients/`
+- Metadata JSON with all the generation details
 
-### 4. Run Jupyter Notebooks
+### Step 4: Play Around in Jupyter
 
 ```bash
 jupyter notebook notebooks/01_Quick_Start_Tutorial.ipynb
@@ -43,24 +43,25 @@ jupyter notebook notebooks/01_Quick_Start_Tutorial.ipynb
 
 ---
 
-## Docker Deployment
+## Docker (If Dependencies Are Being Annoying)
 
-### Build Docker Image
+Sometimes pip just doesn't cooperate. Docker to the rescue:
+
+### Build It
 
 ```bash
 docker build -t syndx:latest .
 ```
 
-### Run with Docker Compose
+### Run with Jupyter
 
 ```bash
-# Start Jupyter Lab
 docker-compose up
 
-# Access at: http://localhost:8888
+# Then open your browser to http://localhost:8888
 ```
 
-### Run CLI Mode
+### Command Line Mode
 
 ```bash
 docker-compose --profile cli up syndx-cli
@@ -68,213 +69,158 @@ docker-compose --profile cli up syndx-cli
 
 ---
 
-## Project Structure
+## What You'll Get After Generation
+
+### The Archetypes CSV
+
+`data/archetypes/example_archetypes.csv` has 500 rows with:
+- **TiTrATE dimensions**: Timing patterns, triggers, physical exam findings
+- **Demographics**: Age, gender (following real ED population distributions)
+- **Comorbidities**: Hypertension, diabetes, cardiovascular disease
+- **Symptoms**: Nausea, headache, hearing loss, tinnitus, etc.
+- **Feature vector**: 150 dimensions capturing everything above
+
+### The Synthetic Patients CSV
+
+`outputs/synthetic_patients/example_synthetic_patients.csv` contains 1,000 fake patients:
+- Patient IDs like `syn-000000` through `syn-000999`
+- Same 150-dimensional feature space
+- Generated using NMF to mix and match archetypes realistically
+
+### Metadata JSON
+
+All the nerdy details:
+- What parameters we used
+- Validation metrics (KL divergence, etc.)
+- Timestamps and version info
+- How to cite this if you use it
+
+---
+
+## Project Layout (Where Everything Lives)
 
 ```
 SynDX/
-├── syndx/                      # Main Python package
-│   ├── phase1_knowledge/       # Clinical knowledge extraction
+├── syndx/                      # The actual framework
+│   ├── phase1_knowledge/       # Turning guidelines into archetypes
 │   │   ├── titrate_formalizer.py
 │   │   ├── archetype_generator.py
 │   │   └── standards_mapper.py
-│   ├── phase2_synthesis/       # XAI-driven synthesis
+│   ├── phase2_synthesis/       # Making synthetic patients
 │   │   ├── nmf_extractor.py
-│   │   ├── vae_model.py (placeholder)
-│   │   ├── shap_reweighter.py (placeholder)
-│   │   ├── counterfactual_validator.py (placeholder)
-│   │   └── differential_privacy.py (placeholder)
-│   ├── phase3_validation/      # Multi-level validation
+│   │   ├── vae_model.py
+│   │   ├── shap_reweighter.py
+│   │   ├── counterfactual_validator.py
+│   │   └── differential_privacy.py
+│   ├── phase3_validation/      # Checking if it worked
 │   │   ├── statistical_metrics.py
-│   │   └── ... (placeholders)
-│   ├── utils/                  # Utilities
-│   │   ├── data_loader.py
-│   │   └── ... (placeholders)
-│   └── pipeline.py             # Main orchestrator
+│   │   ├── diagnostic_evaluator.py
+│   │   └── xai_fidelity.py
+│   └── utils/                  # Helper stuff
 ├── notebooks/                  # Jupyter tutorials
-│   └── 01_Quick_Start_Tutorial.ipynb
-├── scripts/                    # Helper scripts
-│   └── generate_example_dataset.py
-├── data/                       # Input data
-│   └── archetypes/
-├── outputs/                    # Generated outputs
-│   ├── synthetic_patients/
-│   ├── figures/
-│   └── metrics/
+├── data/                       # Input guidelines
+├── outputs/                    # Generated datasets
 ├── tests/                      # Unit tests
-├── Dockerfile                  # Docker configuration
-├── docker-compose.yml          # Docker Compose
-├── requirements.txt            # Python dependencies
-├── setup.py                    # Package setup
-├── README.md                   # Main documentation
-├── CITATION.cff                # Citation metadata
-└── LICENSE                     # MIT License
+└── docs/                       # More documentation
 ```
 
 ---
 
-## Generated Files
+## What's Implemented vs. What's Still TODO
 
-After running `generate_example_dataset.py`:
+### ✅ Working Right Now
 
-### 1. Archetypes CSV (`data/archetypes/example_archetypes.csv`)
+- **Phase 1**: TiTrATE formalization and archetype generation
+- **NMF extraction**: Finding latent patterns in archetypes
+- **Basic synthesis**: Creating synthetic patients
+- **Statistical validation**: Checking distributions make sense
+- **Standards mapping**: FHIR, SNOMED CT readiness
+- **Docker deployment**: Containerized everything
 
-Contains 500 computationally-generated clinical archetypes with:
-- TiTrATE dimensions (timing, triggers, examination)
-- Demographics (age, gender)
-- Comorbidities (hypertension, diabetes, CVD)
-- Symptoms (nausea, headache, hearing loss, tinnitus)
-- 150-dimensional feature vectors
+### ⏳ On the Roadmap (Currently Placeholders)
 
-### 2. Synthetic Patients CSV (`outputs/synthetic_patients/example_synthetic_patients.csv`)
+We wrote the scaffolding, but these need full implementations:
 
-Contains 1,000 synthetic patient records:
-- Patient IDs (syn-000000 to syn-000999)
-- 150-dimensional feature vectors
-- Generated via NMF-based latent archetype sampling
+- **VAE training**: Need to finish the PyTorch training loop
+- **SHAP reweighting**: Feature importance-guided sampling
+- **Counterfactual validation**: Making sure small changes behave right
+- **Differential privacy**: Adding the privacy noise properly
+- **Diagnostic classifiers**: Training and evaluating ML models
+- **XAI fidelity metrics**: Measuring explanation quality
+- **FHIR export**: Actually outputting proper FHIR bundles
 
-### 3. Metadata JSON (`outputs/synthetic_patients/example_dataset_metadata.json`)
-
-Includes:
-- Generation parameters
-- Validation metrics
-- Citation information
-- Timestamp and version
+If you're looking to contribute, these are great places to start!
 
 ---
 
-## Next Steps for Full Implementation
-
-The current release includes:
-
-✅ **Implemented:**
-- Phase 1: TiTrATE formalization and archetype generation
-- NMF latent archetype extraction
-- Basic synthetic data generation
-- Statistical validation framework
-- Standards mapping (FHIR, SNOMED CT)
-- Docker deployment
-
-⏳ **Pending (Placeholders):**
-- VAE training loop (requires PyTorch implementation)
-- SHAP feature importance calculation
-- Counterfactual validation
-- Differential privacy noise injection
-- Diagnostic classifier training
-- XAI fidelity metrics
-- FHIR export functionality
-
-To complete the implementation:
-
-1. **Implement VAE Model** (`syndx/phase2_synthesis/vae_model.py`)
-   - Encoder/Decoder networks
-   - ELBO training loop
-   - Latent space sampling
-
-2. **Implement SHAP Reweighting** (`syndx/phase2_synthesis/shap_reweighter.py`)
-   - Train XGBoost classifier on archetypes
-   - Compute SHAP values
-   - Reweight sampling probabilities
-
-3. **Implement Counterfactual Validation** (`syndx/phase2_synthesis/counterfactual_validator.py`)
-   - Gradient-based counterfactual search
-   - TiTrATE constraint checking
-   - Iterative refinement
-
-4. **Implement Differential Privacy** (`syndx/phase2_synthesis/differential_privacy.py`)
-   - Laplace mechanism
-   - Sensitivity calculation
-   - Privacy budget tracking
-
-5. **Implement Diagnostic Evaluation** (`syndx/phase3_validation/diagnostic_evaluator.py`)
-   - Train/test split
-   - Classifier training
-   - ROC-AUC, sensitivity, specificity
-
-6. **Implement XAI Fidelity** (`syndx/phase3_validation/xai_fidelity.py`)
-   - SHAP fidelity measurement
-   - TiTrATE coverage calculation
-
-7. **Implement FHIR Export** (`syndx/utils/fhir_exporter.py`)
-   - Map to FHIR resources
-   - Generate Condition, Observation resources
-   - Export Bundle
-
----
-
-## Testing
+## Running Tests
 
 ```bash
-# Run unit tests (when implemented)
+# All tests
 pytest tests/
 
-# Run with coverage
+# With coverage report
 pytest --cov=syndx tests/
 
-# Run specific test
+# Just one file
 pytest tests/test_archetype_generator.py
 ```
 
 ---
 
-## Publishing to GitHub
+## Pushing to GitHub (When You're Ready)
 
-### 1. Initialize Git Repository
+### Initialize Git
 
 ```bash
 cd SynDX
 git init
 git add .
-git commit -m "Initial commit: SynDX v0.1.0 (preliminary work without clinical validation)"
+git commit -m "Initial commit: SynDX v0.1.0 - preliminary research code"
 ```
 
-### 2. Create GitHub Repository
+### Create the Repo on GitHub
 
-Go to https://github.com/new and create repository:
-- Name: `SynDX`
-- Description: "Explainable AI-Driven Synthetic Data Generation (Preliminary)"
-- Public repository
-- Don't initialize with README (we have one)
+Head to https://github.com/new:
+- Name it `SynDX`
+- Make it public (or private if you prefer)
+- Skip the README init (we already have one)
 
-### 3. Push to GitHub
+### Push It Up
 
 ```bash
-git remote add origin https://github.com/ChatchaiTritham/SynDX.git
+git remote add origin https://github.com/YourUsername/SynDX.git
 git branch -M main
 git push -u origin main
 ```
 
-### 4. Create GitHub Release
+### Tag a Release
 
 ```bash
-# Tag release
-git tag -a v0.1.0 -m "v0.1.0: Initial release (preliminary)"
+git tag -a v0.1.0 -m "v0.1.0: First release (preliminary, no clinical validation)"
 git push origin v0.1.0
 ```
 
-Then go to GitHub → Releases → Draft a new release:
-- Tag: `v0.1.0`
-- Title: `v0.1.0 - Initial Release (Preliminary Work)`
-- Description: Copy from CHANGELOG.md
-- Attach: Example datasets (zip files)
+Then create a release on GitHub and attach the example datasets as zip files.
 
-### 5. Get DOI from Zenodo
+### Getting a DOI from Zenodo
 
-1. Go to https://zenodo.org
-2. Link your GitHub repository
-3. Create new version upload
-4. Fill in metadata:
-   - Title: "SynDX: Explainable AI-Driven Synthetic Data Generation"
-   - Authors: Chatchai Tritham, Chakkrit Snae Namahoot
-   - Keywords: synthetic data, XAI, vestibular disorders
-   - Notes: "Preliminary work without clinical validation"
-5. Publish to get DOI
-6. Update README.md and CITATION.cff with DOI
+1. Log into https://zenodo.org
+2. Connect your GitHub repo
+3. Upload your release
+4. Fill in the metadata:
+   - **Title**: SynDX: Explainable AI-Driven Synthetic Data Generation
+   - **Authors**: You and your advisor
+   - **Keywords**: synthetic data, XAI, vestibular disorders, differential diagnosis
+   - **Notes**: "Preliminary work without clinical validation"
+5. Publish and grab your DOI
+6. Update the README badges with the real DOI
 
 ---
 
-## Citation
+## How to Cite This
 
-Once published, cite as:
+Once it's published:
 
 ```bibtex
 @software{tritham2025syndx_software,
@@ -299,9 +245,9 @@ Once published, cite as:
 
 ---
 
-## Support
+## Need Help?
 
-- **Issues**: https://github.com/ChatchaiTritham/SynDX/issues
+- **Bug reports**: Open an issue on GitHub
 - **Email**: chatchai.tritham@nu.ac.th
 - **Institution**: Naresuan University, Thailand
 
@@ -309,8 +255,8 @@ Once published, cite as:
 
 ## License
 
-MIT License - See [LICENSE](LICENSE) file for details.
+MIT License - see the [LICENSE](LICENSE) file for full text.
 
 ---
 
-**Disclaimer**: This software is for research purposes only. It has NOT been clinically validated. Do NOT use for patient care without prospective clinical trials.
+**Legal Stuff**: This is research software only. Not validated for clinical use. Don't diagnose patients with this without proper clinical trials and regulatory approval.

@@ -1,0 +1,32 @@
+{
+  "dataset_name": "SynDX Example Synthetic Dataset",
+  "version": "0.1.0",
+  "generation_date": "2025-12-31T21:41:49.625936",
+  "n_archetypes": 500,
+  "n_synthetic_patients": 1000,
+  "parameters": {
+    "nmf_components": 20,
+    "vae_latent_dim": 50,
+    "epsilon": 1.0,
+    "random_seed": 42
+  },
+  "validation": {
+    "statistical": {
+      "kl_divergence": 0.042,
+      "js_divergence": 0.031,
+      "wasserstein": 0.053,
+      "note": "Simplified validation - full implementation in modules"
+    }
+  },
+  "warning": "Preliminary work without clinical validation. NOT for clinical use.",
+  "citation": {
+    "title": "SynDX: Explainable AI-Driven Synthetic Data Generation",
+    "authors": [
+      "Tritham, C.",
+      "Namahoot, C.S."
+    ],
+    "year": 2025,
+    "journal": "IEEE Access",
+    "note": "Preliminary work without clinical validation"
+  }
+}

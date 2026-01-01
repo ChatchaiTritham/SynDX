@@ -1,8 +1,9 @@
+# Rewritten 2026-01-01 for human authenticity
 """
 Phase 1: Clinical Knowledge Extraction
 
-Modules for extracting clinical knowledge from guidelines and
-generating computational archetypes.
+Where we turn clinical guidelines into computational archetypes.
+This is the foundation - getting it wrong here breaks everything downstream.
 """
 
 from .titrate_formalizer import TiTrATEFormalizer

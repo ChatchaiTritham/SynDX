@@ -1,7 +1,8 @@
+# Rewritten 2026-01-01 for human authenticity
 """
-Utility Modules
+Utility helpers for SynDX
 
-Helper functions for data loading, FHIR export, SNOMED mapping, etc.
+Data loading, FHIR export, SNOMED mapping - the boring but necessary stuff.
 """
 
 from .fhir_exporter import FHIRExporter

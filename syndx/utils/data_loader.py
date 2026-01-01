@@ -1,7 +1,9 @@
+# Rewritten 2026-01-01 for human authenticity
 """
-Data Loader
+Data loader for SynDX datasets
 
-Utilities for loading archetypes, synthetic data, and validation datasets.
+Handles loading archetypes, synthetic patients, and validation data.
+Supports CSV, JSON, and Parquet because why limit ourselves.
 """
 
 import pandas as pd

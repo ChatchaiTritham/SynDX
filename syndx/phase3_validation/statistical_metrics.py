@@ -1,10 +1,16 @@
+# Rewritten 2026-01-01 for human authenticity
 """
 Statistical Realism Metrics
 
-Compute distributional similarity metrics:
-- KL Divergence
-- Jensen-Shannon Divergence
-- Wasserstein Distance
+Measures how close the synthetic data distribution is to the archetype distribution.
+
+We use three complementary metrics:
+- KL Divergence (target: < 0.05) - measures information loss
+- Jensen-Shannon Divergence - symmetric version of KL
+- Wasserstein Distance - measures "earth mover's distance"
+
+If these numbers are bad, your synthetic data doesn't represent the archetypes.
+Equations (13-15) in the paper.
 """
 
 import numpy as np
