@@ -232,7 +232,7 @@
 2. **Push Code**
    ```bash
    cd "d:\PhD\Journals\PeeJ-CS\SynDX"
-   git remote add origin https://github.com/chatchai.tritham/SynDX.git
+   git remote add origin https://github.com/ChatchaiTritham/SynDX.git
    git branch -M main
    git push -u origin main
    git push origin v0.1.0
@@ -386,7 +386,7 @@
 - **Primary Author**: Chatchai Tritham (chatchai.tritham@nu.ac.th)
 - **Co-Author**: Chakkrit Snae Namahoot (chakkrits@nu.ac.th)
 - **Institution**: Naresuan University, Thailand
-- **Repository**: https://github.com/chatchai.tritham/SynDX (pending upload)
+- **Repository**: https://github.com/ChatchaiTritham/SynDX (pending upload)
 - **DOI**: 10.5281/zenodo.XXXXXXX (pending registration)
 
 ---
@@ -402,7 +402,7 @@
   year = {2025},
   version = {0.1.0},
   publisher = {GitHub},
-  url = {https://github.com/chatchai.tritham/SynDX},
+  url = {https://github.com/ChatchaiTritham/SynDX},
   doi = {10.5281/zenodo.XXXXXXX},
   note = {Preliminary work without clinical validation}
 }

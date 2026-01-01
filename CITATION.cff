@@ -16,8 +16,8 @@ authors:
     affiliation: "Naresuan University"
     orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: Update with actual ORCID
 
-repository-code: "https://github.com/chatchai.tritham/SynDX"
-url: "https://github.com/chatchai.tritham/SynDX"
+repository-code: "https://github.com/ChatchaiTritham/SynDX"
+url: "https://github.com/ChatchaiTritham/SynDX"
 repository-artifact: "https://zenodo.org/record/XXXXXXX"  # TODO: Update after Zenodo upload
 license: MIT
 

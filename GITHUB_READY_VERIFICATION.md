@@ -199,7 +199,7 @@ The repository is **READY** to be pushed to GitHub. Follow these manual steps:
 ### Step 2: Push to GitHub
 ```bash
 cd "d:\PhD\Journals\PeeJ-CS\SynDX"
-git remote add origin https://github.com/chatchai.tritham/SynDX.git
+git remote add origin https://github.com/ChatchaiTritham/SynDX.git
 git branch -M main
 git push -u origin main
 git push origin v0.1.0
@@ -242,7 +242,7 @@ git push origin v0.1.0
 Test the published repository:
 ```bash
 # Clone in new location
-git clone https://github.com/chatchai.tritham/SynDX.git
+git clone https://github.com/ChatchaiTritham/SynDX.git
 cd SynDX
 
 # Test installation
@@ -257,7 +257,7 @@ ls outputs/synthetic_patients/
 
 ### Step 7: Update Paper
 Update the IEEE Access paper manuscript:
-- Add GitHub URL: `https://github.com/chatchai.tritham/SynDX`
+- Add GitHub URL: `https://github.com/ChatchaiTritham/SynDX`
 - Add Zenodo DOI: `10.5281/zenodo.ACTUAL_DOI`
 - Update "Code Availability" section
 - Include citation information
@@ -413,9 +413,9 @@ Generation Time: ~8 seconds (full dataset)
 ## 📞 Support Information
 
 ### Repository
-- **GitHub**: https://github.com/chatchai.tritham/SynDX
-- **Issues**: https://github.com/chatchai.tritham/SynDX/issues
-- **Discussions**: https://github.com/chatchai.tritham/SynDX/discussions
+- **GitHub**: https://github.com/ChatchaiTritham/SynDX
+- **Issues**: https://github.com/ChatchaiTritham/SynDX/issues
+- **Discussions**: https://github.com/ChatchaiTritham/SynDX/discussions
 
 ### Contact
 - **Email**: chatchai.tritham@nu.ac.th

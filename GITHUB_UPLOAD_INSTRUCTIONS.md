@@ -37,7 +37,7 @@ Git repository พร้อมแล้ว:
 cd "d:\PhD\Journals\PeeJ-CS\SynDX"
 
 # เพิ่ม remote repository
-git remote add origin https://github.com/chatchai.tritham/SynDX.git
+git remote add origin https://github.com/ChatchaiTritham/SynDX.git
 
 # เปลี่ยนชื่อ branch เป็น main
 git branch -M main
@@ -55,7 +55,7 @@ git push origin v0.1.0
 
 ### **ขั้นตอนที่ 3: สร้าง GitHub Release**
 
-1. ไปที่ repository: `https://github.com/chatchai.tritham/SynDX`
+1. ไปที่ repository: `https://github.com/ChatchaiTritham/SynDX`
 
 2. คลิก **"Releases"** → **"Draft a new release"**
 
@@ -94,7 +94,7 @@ git push origin v0.1.0
 ### Installation
 
 ```bash
-git clone https://github.com/chatchai.tritham/SynDX.git
+git clone https://github.com/ChatchaiTritham/SynDX.git
 cd SynDX
 pip install -r requirements.txt
 pip install -e .
@@ -128,7 +128,7 @@ docker-compose up
   title = {SynDX: Explainable AI-Driven Synthetic Data Generation},
   year = {2025},
   version = {0.1.0},
-  url = {https://github.com/chatchai.tritham/SynDX},
+  url = {https://github.com/ChatchaiTritham/SynDX},
   note = {Preliminary work without clinical validation}
 }
 ```
@@ -195,7 +195,7 @@ git push
 
 ```
 Code and data are publicly available at:
-https://github.com/chatchai.tritham/SynDX
+https://github.com/ChatchaiTritham/SynDX
 DOI: 10.5281/zenodo.XXXXXXX
 
 The complete pipeline is reproducible via Docker:
@@ -217,7 +217,7 @@ seed 42.
 
 หลัง push ไปยัง GitHub แล้ว ตรวจสอบ:
 
-- [ ] Repository แสดงใน https://github.com/chatchai.tritham/SynDX
+- [ ] Repository แสดงใน https://github.com/ChatchaiTritham/SynDX
 - [ ] README.md แสดงถูกต้อง พร้อม badges
 - [ ] ไฟล์ทั้งหมด 43 ไฟล์ upload ครบ
 - [ ] Tag v0.1.0 แสดงใน Tags
@@ -232,7 +232,7 @@ seed 42.
 
 คุณจะได้:
 
-1. ✅ GitHub repository: `https://github.com/chatchai.tritham/SynDX`
+1. ✅ GitHub repository: `https://github.com/ChatchaiTritham/SynDX`
 2. ✅ Release v0.1.0 พร้อม datasets
 3. ✅ Zenodo DOI สำหรับ citation
 4. ✅ คนทั่วโลกสามารถ:
@@ -309,7 +309,7 @@ git push
 > 📢 We're pleased to share the SynDX framework - an explainable AI approach
 > for generating synthetic medical data without requiring real patient records.
 >
-> 🔗 GitHub: https://github.com/chatchai.tritham/SynDX
+> 🔗 GitHub: https://github.com/ChatchaiTritham/SynDX
 > 📊 Dataset: 8,400 archetypes + 10,000 synthetic patients
 > 📝 Paper: IEEE Access (under review)
 >

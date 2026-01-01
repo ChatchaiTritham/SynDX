@@ -261,7 +261,7 @@ def main():
         },
         "warning": "⚠️  CRITICAL LIMITATION: Preliminary work without clinical validation. All validation uses synthetic-to-synthetic data only. NOT for clinical use. Prospective clinical trials required.",
         "reproducibility": {
-            "github": "https://github.com/chatchai.tritham/SynDX",
+            "github": "https://github.com/ChatchaiTritham/SynDX",
             "doi": "10.5281/zenodo.XXXXXXX",
             "docker": "docker pull chatchaitritham/syndx:latest",
             "citation_file": "CITATION.cff"

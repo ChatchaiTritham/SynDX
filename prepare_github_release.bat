@@ -67,7 +67,7 @@ echo    Public repository
 echo    Don't initialize with README
 echo.
 echo 2. Add remote and push:
-echo    git remote add origin https://github.com/chatchai.tritham/SynDX.git
+echo    git remote add origin https://github.com/ChatchaiTritham/SynDX.git
 echo    git branch -M main
 echo    git push -u origin main
 echo    git push origin v0.1.0

@@ -10,7 +10,7 @@
 
 The SynDX (Synthetic Diagnosis with eXplainability) framework has been successfully developed and is ready for publication on GitHub at:
 
-**Repository URL**: `https://github.com/chatchai.tritham/SynDX`
+**Repository URL**: `https://github.com/ChatchaiTritham/SynDX`
 
 ### Key Achievement
 
@@ -283,7 +283,7 @@ omop = mapper.map_to_omop_cdm(archetype)  # OMOP CDM
 
 2. **Push to GitHub**
    ```bash
-   git remote add origin https://github.com/chatchai.tritham/SynDX.git
+   git remote add origin https://github.com/ChatchaiTritham/SynDX.git
    git branch -M main
    git push -u origin main
    git push origin v0.1.0
@@ -345,7 +345,7 @@ omop = mapper.map_to_omop_cdm(archetype)  # OMOP CDM
 
 ## 📞 Support & Contact
 
-- **GitHub Issues**: https://github.com/chatchai.tritham/SynDX/issues
+- **GitHub Issues**: https://github.com/ChatchaiTritham/SynDX/issues
 - **Email**: chatchai.tritham@nu.ac.th
 - **Institution**: Naresuan University, Thailand
 - **Paper**: IEEE Access (submitted/in review)
@@ -363,7 +363,7 @@ omop = mapper.map_to_omop_cdm(archetype)  # OMOP CDM
   year = {2025},
   publisher = {GitHub},
   version = {0.1.0},
-  url = {https://github.com/chatchai.tritham/SynDX},
+  url = {https://github.com/ChatchaiTritham/SynDX},
   doi = {10.5281/zenodo.XXXXXXX},
   note = {Preliminary work without clinical validation}
 }

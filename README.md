@@ -53,7 +53,7 @@ SynDX operates in three phases:
 ### Using pip
 
 ```bash
-git clone https://github.com/chatchai.tritham/SynDX.git
+git clone https://github.com/ChatchaiTritham/SynDX.git
 cd SynDX
 pip install -r requirements.txt
 ```
@@ -227,7 +227,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 ### Development Setup
 
 ```bash
-git clone https://github.com/chatchai.tritham/SynDX.git
+git clone https://github.com/ChatchaiTritham/SynDX.git
 cd SynDX
 pip install -e ".[dev]"
 pytest tests/

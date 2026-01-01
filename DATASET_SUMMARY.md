@@ -258,7 +258,7 @@ results = pipeline.validate(patients)
 ## 📞 ติดต่อ
 
 - **Email**: chatchai.tritham@nu.ac.th
-- **GitHub**: https://github.com/chatchai.tritham/SynDX
+- **GitHub**: https://github.com/ChatchaiTritham/SynDX
 - **Institution**: Naresuan University, Thailand
 
 ---

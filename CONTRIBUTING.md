@@ -5,7 +5,7 @@ We welcome contributions! Please follow these guidelines.
 ## Development Setup
 
 ```bash
-git clone https://github.com/chatchai.tritham/SynDX.git
+git clone https://github.com/ChatchaiTritham/SynDX.git
 cd SynDX
 pip install -e ".[dev]"
 ```

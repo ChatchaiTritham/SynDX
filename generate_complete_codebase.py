@@ -822,7 +822,7 @@ setup(
     description="Explainable AI-Driven Synthetic Data Generation for Vestibular Disorders",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/chatchai.tritham/SynDX",
+    url="https://github.com/ChatchaiTritham/SynDX",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -969,7 +969,7 @@ We welcome contributions! Please follow these guidelines.
 ## Development Setup
 
 ```bash
-git clone https://github.com/chatchai.tritham/SynDX.git
+git clone https://github.com/ChatchaiTritham/SynDX.git
 cd SynDX
 pip install -e ".[dev]"
 ```

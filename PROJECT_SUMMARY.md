@@ -376,7 +376,7 @@
 ### For Immediate GitHub Publication (Today)
 
 1. ✅ Code is ready to push
-2. Create GitHub repository: `https://github.com/chatchai.tritham/SynDX`
+2. Create GitHub repository: `https://github.com/ChatchaiTritham/SynDX`
 3. Push all files
 4. Create v0.1.0 release tag
 5. Upload to Zenodo for DOI
@@ -430,7 +430,7 @@
 - **Principal Investigator**: Chatchai Tritham (chatchai.tritham@nu.ac.th)
 - **Co-Investigator**: Chakkrit Snae Namahoot (chakkrits@nu.ac.th)
 - **Institution**: Naresuan University, Thailand
-- **GitHub**: https://github.com/chatchai.tritham/SynDX
+- **GitHub**: https://github.com/ChatchaiTritham/SynDX
 
 ---
 

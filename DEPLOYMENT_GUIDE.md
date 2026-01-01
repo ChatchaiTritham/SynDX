@@ -12,7 +12,7 @@ All validation uses synthetic data only. Do **NOT** use for clinical decision-ma
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/chatchai.tritham/SynDX.git
+git clone https://github.com/ChatchaiTritham/SynDX.git
 cd SynDX
 ```
 
@@ -238,7 +238,7 @@ Go to https://github.com/new and create repository:
 ### 3. Push to GitHub
 
 ```bash
-git remote add origin https://github.com/chatchai.tritham/SynDX.git
+git remote add origin https://github.com/ChatchaiTritham/SynDX.git
 git branch -M main
 git push -u origin main
 ```
@@ -282,7 +282,7 @@ Once published, cite as:
   title = {SynDX: Explainable AI-Driven Synthetic Data Generation},
   year = {2025},
   publisher = {GitHub},
-  url = {https://github.com/chatchai.tritham/SynDX},
+  url = {https://github.com/ChatchaiTritham/SynDX},
   doi = {10.5281/zenodo.XXXXXXX}
 }
 
@@ -301,7 +301,7 @@ Once published, cite as:
 
 ## Support
 
-- **Issues**: https://github.com/chatchai.tritham/SynDX/issues
+- **Issues**: https://github.com/ChatchaiTritham/SynDX/issues
 - **Email**: chatchai.tritham@nu.ac.th
 - **Institution**: Naresuan University, Thailand
 
