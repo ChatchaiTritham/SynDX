@@ -1,8 +1,13 @@
-# Rewritten 2026-01-01 for human authenticity
 """
-Utility helpers for SynDX
+Utility Modules for SynDX Framework
 
-Data loading, FHIR export, SNOMED mapping - the boring but necessary stuff.
+Provides essential utility functions for data management, healthcare standards
+compliance, and interoperability with clinical information systems.
+
+Modules:
+    - DataLoader: Dataset I/O operations for archetypes and synthetic patients
+    - FHIRExporter: HL7 FHIR R4 resource generation (placeholder)
+    - SNOMEDMapper: SNOMED CT terminology mapping (placeholder)
 """
 
 from .fhir_exporter import FHIRExporter

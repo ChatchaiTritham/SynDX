@@ -1,11 +1,10 @@
-# Rewritten 2026-01-01 for human authenticity
 """
-Differential Privacy - you guessed it, placeholder
+Differential Privacy - placeholder implementation
 
 This should add calibrated noise to protect against membership inference
 attacks. We use epsilon=1.0 as the privacy budget per the paper.
 
-The idea: even if someone has access to the synthetic data and the real
+Implementation concept: even if someone has access to the synthetic data and the real
 archetypes, they shouldn't be able to determine if a specific archetype
 was in the training set.
 

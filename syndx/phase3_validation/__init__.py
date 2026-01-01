@@ -1,10 +1,9 @@
-# Rewritten 2026-01-01 for human authenticity
 """
 Phase 3: Multi-Level Validation
 
-Where we prove the synthetic data is actually good.
+Validates the quality and clinical plausibility of generated synthetic data.
 Statistical metrics, diagnostic performance, XAI fidelity - the whole shebang.
-This is what separates "we generated some data" from "we generated useful data."
+Comprehensive validation ensures data utility for downstream applications."
 """
 
 from .statistical_metrics import StatisticalMetrics

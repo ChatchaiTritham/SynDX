@@ -1,20 +1,31 @@
-# Rewritten 2026-01-01 for human authenticity
 """
-Generate Full Dataset for Paper
+Full-Scale Dataset Generation for Research Paper Reproduction
 
-This recreates the EXACT dataset we reported in the paper:
-- 8,400 computational archetypes from TiTrATE guidelines
-- 10,000 synthetic patients generated via VAE
-- Full validation metrics (KL divergence, ROC-AUC, etc.)
+Generates the complete dataset as specified in the IEEE Access publication:
+    - 8,400 computational archetypes from TiTrATE diagnostic guidelines
+    - 10,000 synthetic patient records via VAE latent-space sampling
+    - Comprehensive validation metrics (KL divergence, ROC-AUC, etc.)
 
-The numbers you get should match Tables 2-5 in the paper (within random variance).
-If they don't, something's wrong with the implementation.
+This script enables reproducibility of results reported in Tables 2-5 of the
+research paper. Generated metrics should match published values within expected
+statistical variance due to random seed initialization.
 
 Usage:
     python scripts/generate_full_dataset_for_paper.py
 
-Runtime: 5-10 minutes on a decent machine
-Outputs: data/paper_dataset/ (archetypes, synthetic patients, metrics)
+Expected Runtime:
+    5-10 minutes on recommended system specifications (GPU-accelerated)
+
+Output Directory:
+    data/paper_dataset/
+        - archetypes.csv: 8,400 computational archetypes
+        - synthetic_patients.csv: 10,000 generated patient records
+        - metrics.json: Validation statistics and performance measures
+
+System Requirements:
+    - Python 3.9+
+    - CUDA-capable GPU (recommended)
+    - Minimum 16GB RAM
 """
 
 import sys

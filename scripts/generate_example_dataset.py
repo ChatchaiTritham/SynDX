@@ -1,14 +1,21 @@
-# Rewritten 2026-01-01 for human authenticity
 """
-Generate Example Synthetic Dataset
+Example Synthetic Dataset Generation Script
 
-Quick demo script that creates a small (1,000 patient) synthetic dataset.
-Good for testing that everything works before running the full pipeline.
+Generates a demonstration dataset of 1,000 synthetic patients for testing
+and validation purposes. This script provides a quick verification that the
+SynDX pipeline is correctly installed and operational.
 
-Just run it and see what happens:
+Usage:
     python scripts/generate_example_dataset.py
 
-Takes a few minutes. Outputs go to data/synthetic/
+Output:
+    data/synthetic/ directory containing generated synthetic patient records
+
+Expected Runtime:
+    Approximately 2-5 minutes depending on system specifications
+
+This is a reduced-scale demonstration. For full-scale dataset generation
+matching the research paper specifications, use generate_full_dataset_for_paper.py
 """
 
 import sys

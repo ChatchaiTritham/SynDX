@@ -1,6 +1,12 @@
-# Rewritten 2026-01-01 for human authenticity
 """
-Package setup for SynDX - keeping it simple
+SynDX: Explainable AI-Driven Synthetic Data Generation Framework
+
+Package configuration for the SynDX framework, which implements privacy-preserving
+synthetic medical data generation for vestibular disorder research.
+
+Author: Chatchai Tritham
+Advisor: Assoc. Prof. Dr. Chakkrit Snae Namahoot
+Institution: Naresuan University, Thailand
 """
 
 from setuptools import setup, find_packages

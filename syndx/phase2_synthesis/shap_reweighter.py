@@ -1,13 +1,12 @@
-# Rewritten 2026-01-01 for human authenticity
 """
-SHAP Reweighter - still a placeholder
+SHAP Reweighter - placeholder implementation
 
 This should use SHAP values to reweight features based on their importance
 to the clinical outcome. The idea is to emphasize features that actually
 matter for diagnosis while downweighting noise.
 
 Not implemented yet because we're still getting the core pipeline working.
-Pull requests welcome!
+Community contributions are welcomed.
 """
 
 import logging

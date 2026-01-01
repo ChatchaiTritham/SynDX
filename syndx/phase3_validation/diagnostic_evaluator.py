@@ -1,11 +1,10 @@
-# Rewritten 2026-01-01 for human authenticity
 """
 Diagnostic Performance Evaluator - placeholder for now
 
 This should evaluate how well models trained on synthetic data perform
 diagnostic tasks compared to the archetype baseline.
 
-The idea: train a diagnostic classifier on synthetic data, test it on
+Implementation concept: train a diagnostic classifier on synthetic data, test it on
 archetypes, see if the performance is acceptable. If not, the synthetic
 data isn't good enough.
 

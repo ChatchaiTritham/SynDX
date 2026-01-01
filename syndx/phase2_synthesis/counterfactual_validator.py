@@ -1,6 +1,5 @@
-# Rewritten 2026-01-01 for human authenticity
 """
-Counterfactual Validator - another placeholder
+Counterfactual Validator - placeholder implementation
 
 This should generate counterfactual examples to test the boundaries of
 the TiTrATE constraints. Like "what if we change this patient's trigger

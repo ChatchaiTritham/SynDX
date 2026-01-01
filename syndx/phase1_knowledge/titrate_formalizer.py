@@ -1,4 +1,3 @@
-# Rewritten 2026-01-01 for human authenticity
 """
 TiTrATE Framework Formalizer
 
@@ -6,7 +5,7 @@ Converts the TiTrATE diagnostic framework (Timing-Triggers-Targeted Examination)
 into computational structures with consistency constraints.
 
 This is the clinical knowledge base that makes everything else work.
-Get these constraints wrong and you generate garbage data.
+Incorrect constraint implementation compromises data quality.
 
 Reference: Newman-Toker & Edlow (2015) - the clinical foundation
 """

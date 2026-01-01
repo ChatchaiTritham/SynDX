@@ -1,4 +1,3 @@
-# Rewritten 2026-01-01 for human authenticity
 """
 XAI Driver - making synthetic data generation explainable
 
@@ -6,12 +5,12 @@ This is what makes SynDX different from other synthetic data generators.
 Instead of just generating random data, we use explainability (SHAP values)
 to guide the generation process toward clinically meaningful patterns.
 
-What it does:
+Functionality:
 - SHAP-guided reweighting of feature importance
 - Counterfactual generation to test edge cases
 - Probabilistic logic integration to maintain clinical constraints
 
-Why it matters: Black box generators create garbage. This keeps the
+Significance: Opaque generative models may produce clinically implausible data. This keeps the
 generation process grounded in clinical reasoning.
 """
 

@@ -1,11 +1,10 @@
-# Rewritten 2026-01-01 for human authenticity
 """
 NMF Latent Archetype Extractor
 
 Takes our 8,400 guideline archetypes and compresses them down to 20 latent
 patterns using Non-negative Matrix Factorization.
 
-Why? Because working with 8,400 dimensions is computationally silly when
+Rationale: Because working with 8,400 dimensions is computationally silly when
 most of the variation can be captured in 20 latent components.
 
 Reference: Equations (3-4) in the paper

@@ -1,4 +1,3 @@
-# Rewritten 2026-01-01 for human authenticity
 """
 Probabilistic Logic Refinement
 

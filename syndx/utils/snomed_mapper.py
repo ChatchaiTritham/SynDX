@@ -1,9 +1,20 @@
-# Rewritten 2026-01-01 for human authenticity
 """
-SNOMED CT mapper - also a placeholder
+SNOMED CT Terminology Mapper Module (Placeholder)
 
-This should map clinical terms to SNOMED CT codes eventually.
-Right now it's just here so nothing breaks when you import it.
+This module will provide mapping functionality from clinical concepts to
+SNOMED CT (Systematized Nomenclature of Medicine Clinical Terms) codes
+for standardized clinical terminology representation.
+
+Status: Placeholder implementation
+Future Work: Integration with SNOMED CT terminology services requires
+appropriate licensing from SNOMED International.
+
+Note: SNOMED CT is a comprehensive clinical terminology owned by SNOMED
+International. Implementation requires proper licensing and access to the
+SNOMED CT distribution files.
+
+References:
+    SNOMED International: https://www.snomed.org/
 """
 
 import logging
@@ -13,10 +24,20 @@ logger = logging.getLogger(__name__)
 
 class SNOMEDMapper:
     """
-    SNOMED CT code mapper (not implemented yet)
+    SNOMED CT Clinical Terminology Mapper (Placeholder)
 
-    SNOMED CT licensing is complicated so we're starting without it.
-    If you have a SNOMED CT license and want this, contribute!
+    Future implementation will support:
+        - Diagnosis code mapping to SNOMED CT concepts
+        - Finding mapping for examination results
+        - Procedure code translation
+        - Anatomic site encoding
+
+    Note: SNOMED CT licensing requirements necessitate institutional
+    agreements before full implementation. This placeholder maintains
+    API compatibility for future integration.
     """
     def __init__(self):
-        logger.warning("Using SNOMED mapper placeholder - full implementation pending")
+        logger.warning(
+            "SNOMEDMapper placeholder loaded. Full SNOMED CT support requires "
+            "appropriate licensing from SNOMED International."
+        )

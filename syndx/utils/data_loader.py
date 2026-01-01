@@ -1,9 +1,16 @@
-# Rewritten 2026-01-01 for human authenticity
 """
-Data loader for SynDX datasets
+Data Loader Module
 
-Handles loading archetypes, synthetic patients, and validation data.
-Supports CSV, JSON, and Parquet because why limit ourselves.
+Provides I/O operations for SynDX datasets including computational archetypes,
+synthetic patient records, and validation datasets.
+
+Supported Formats:
+    - CSV: Comma-separated values for interoperability
+    - JSON: JavaScript Object Notation for structured data
+    - Parquet: Apache Parquet for efficient columnar storage
+
+This module implements standardized data loading patterns to ensure consistency
+across the SynDX pipeline phases.
 """
 
 import pandas as pd
