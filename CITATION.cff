@@ -7,13 +7,13 @@ date-released: 2025-01-01
 authors:
   - family-names: "Tritham"
     given-names: "Chatchai"
-    email: "chatchai.tritham@nu.ac.th"
-    affiliation: "Naresuan University"
+    email: "chatchait66@nu.ac.th"
+    affiliation: "Department of Computer Science and Information Technology, Faculty of Science, Naresuan University, Phitsanulok 65000, Thailand"
     orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: Update with actual ORCID
   - family-names: "Namahoot"
     given-names: "Chakkrit Snae"
     email: "chakkrits@nu.ac.th"
-    affiliation: "Naresuan University"
+    affiliation: "Department of Computer Science and Information Technology, Faculty of Science, Naresuan University, Phitsanulok 65000, Thailand; Center of Excellence in Nonlinear Analysis and Optimization, Faculty of Science, Naresuan University, Phitsanulok 65000, Thailand"
     orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: Update with actual ORCID
 
 repository-code: "https://github.com/ChatchaiTritham/SynDX"

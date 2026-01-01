@@ -12,7 +12,7 @@ License: MIT (use it however you want)
 
 __version__ = "0.2.0"
 __author__ = "Chatchai Tritham, Chakkrit Snae Namahoot"
-__email__ = "chatchai.tritham@nu.ac.th"
+__email__ = "chatchait66@nu.ac.th"
 
 # Main pipeline entry point
 from syndx.pipeline import SynDXPipeline

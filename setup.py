@@ -17,7 +17,7 @@ setup(
     name="syndx",
     version="0.1.0",
     author="Chatchai Tritham, Chakkrit Snae Namahoot",
-    author_email="chatchai.tritham@nu.ac.th",
+    author_email="chatchait66@nu.ac.th",
     description="Explainable AI-Driven Synthetic Data Generation for Vestibular Disorders",
     long_description=long_desc,
     long_description_content_type="text/markdown",

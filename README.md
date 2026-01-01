@@ -259,11 +259,18 @@ Thanks to [Funding Agency] for supporting this research.
 
 ## Get in Touch
 
-**Chatchai Tritham** - chatchai.tritham@nu.ac.th
-**Chakkrit Snae Namahoot** - chakkrits@nu.ac.th
-
+**Chatchai Tritham** (Advisee)
+Email: <chatchait66@nu.ac.th>
 Department of Computer Science and Information Technology
-Naresuan University, Phitsanulok 65000, Thailand
+Faculty of Science, Naresuan University
+Phitsanulok 65000, Thailand
+
+**Chakkrit Snae Namahoot** (Advisor)
+Email: <chakkrits@nu.ac.th>
+Department of Computer Science and Information Technology
+Faculty of Science, Naresuan University
+Center of Excellence in Nonlinear Analysis and Optimization
+Phitsanulok 65000, Thailand
 
 ## What's Next?
 
