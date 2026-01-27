@@ -1,0 +1,90 @@
+[run]
+# Coverage.py configuration for SynDX
+
+# Source code to measure
+source = syndx
+
+# Omit specific files/patterns
+omit =
+    */tests/*
+    */test_*.py
+    */__pycache__/*
+    */syndx_env/*
+    */venv/*
+    */build/*
+    */dist/*
+    */.eggs/*
+    setup.py
+    # Demo code in __main__ blocks
+    */__main__.py
+
+# Parallel mode for multiprocessing
+parallel = False
+
+# Branch coverage
+branch = True
+
+[report]
+# Reporting options
+
+# Precision for coverage percentage
+precision = 2
+
+# Show missing lines
+show_missing = True
+
+# Skip covered files in report
+skip_covered = False
+
+# Skip empty files
+skip_empty = True
+
+# Sort output by name
+sort = Name
+
+# Exclude lines from coverage
+exclude_lines =
+    # Standard pragma
+    pragma: no cover
+
+    # Debug code
+    def __repr__
+    def __str__
+
+    # Non-runnable code
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    if typing.TYPE_CHECKING:
+
+    # Abstract methods
+    @abstractmethod
+    @abc.abstractmethod
+    raise NotImplementedError
+
+    # Defensive programming
+    raise AssertionError
+    raise RuntimeError
+
+    # Type checking
+    pass
+    \.\.\.
+
+    # Logger debug statements
+    logger\.debug
+
+# Fail under minimum coverage
+fail_under = 80.0
+
+[html]
+# HTML report options
+directory = htmlcov
+title = SynDX Test Coverage Report
+
+[xml]
+# XML report options (for CI/CD)
+output = coverage.xml
+
+[json]
+# JSON report options
+output = coverage.json
+pretty_print = True
