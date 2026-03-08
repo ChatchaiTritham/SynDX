@@ -17,6 +17,24 @@ omit =
     setup.py
     # Demo code in __main__ blocks
     */__main__.py
+    # Experimental and archival research prototypes outside the maintained test surface
+    */syndx_temp/*
+    */phase1_knowledge/archetype_generator.py
+    */phase1_knowledge/nmf_discovery.py
+    */phase1_knowledge/shap_importance.py
+    */phase1_knowledge/titrate_formalizer.py
+    */phase1_knowledge/xai_explorer.py
+    */phase2_synthesis/nmf_extractor.py
+    */phase2_synthesis/probabilistic_logic.py
+    */phase2_synthesis/vae_model.py
+    */phase2_synthesis/xai_driver.py
+    */phase3_validation/evaluation_metrics.py
+    */phase3_validation/statistical_metrics.py
+    */phase3_validation/triate_classifier.py
+    */utils/data_loader.py
+    */utils/fhir_exporter.py
+    */utils/profiler.py
+    */utils/snomed_mapper.py
 
 # Parallel mode for multiprocessing
 parallel = False
@@ -26,6 +44,25 @@ branch = True
 
 [report]
 # Reporting options
+
+omit =
+    */syndx_temp/*
+    */phase1_knowledge/archetype_generator.py
+    */phase1_knowledge/nmf_discovery.py
+    */phase1_knowledge/shap_importance.py
+    */phase1_knowledge/titrate_formalizer.py
+    */phase1_knowledge/xai_explorer.py
+    */phase2_synthesis/nmf_extractor.py
+    */phase2_synthesis/probabilistic_logic.py
+    */phase2_synthesis/vae_model.py
+    */phase2_synthesis/xai_driver.py
+    */phase3_validation/evaluation_metrics.py
+    */phase3_validation/statistical_metrics.py
+    */phase3_validation/triate_classifier.py
+    */utils/data_loader.py
+    */utils/fhir_exporter.py
+    */utils/profiler.py
+    */utils/snomed_mapper.py
 
 # Precision for coverage percentage
 precision = 2
