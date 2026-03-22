@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "SynDX: Synthetic Data Generation for Clinical Decision Support"
+version: 1.0.0
+date-released: "2025-01-01"
+license: MIT
+repository-code: "https://github.com/ChatchaiTritham/SynDX"
+abstract: "SynDX is a synthetic data generation framework for evaluating clinical decision support systems (CDSS). It provides scenario-based safety evaluation with perturbation operators, archetype pipelines, and governance protocol cards for pre-deployment assessment of safety-critical AI."
+keywords:
+  - clinical decision support
+  - synthetic data generation
+  - patient safety
+  - machine learning evaluation
+  - conformal prediction
+  - uncertainty quantification
+authors:
+  - family-names: "Tritham"
+    given-names: "Chatchai"
+    orcid: "https://orcid.org/0000-0001-7899-228X"
+    affiliation: "Naresuan University"
+  - family-names: "Snae Namahoot"
+    given-names: "Chakkrit"
+    orcid: "https://orcid.org/0000-0003-4660-4590"
+    affiliation: "Naresuan University"
+preferred-citation:
+  type: article
+  title: "Beyond Accuracy: A Simulation-Based Evaluation Framework for Safety-Critical Clinical Decision Support Systems"
+  authors:
+    - family-names: "Tritham"
+      given-names: "Chatchai"
+      orcid: "https://orcid.org/0000-0001-7899-228X"
+    - family-names: "Snae Namahoot"
+      given-names: "Chakkrit"
+      orcid: "https://orcid.org/0000-0003-4660-4590"
+  journal: "Digital Biomarkers"
+  publisher:
+    name: "Karger Publishers"
+  issn: "2504-110X"
+  year: 2026
