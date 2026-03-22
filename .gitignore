@@ -78,3 +78,4 @@ tmp/
 fix_indentation.py
 fix_all_indentation.py
 automated_test.py
+coverage.xml
