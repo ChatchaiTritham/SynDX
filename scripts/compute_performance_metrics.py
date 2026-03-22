@@ -31,7 +31,7 @@ from sklearn.metrics import (
     matthews_corrcoef,
     cohen_kappa_score,
     brier_score_loss,
-    log_loss
+    log_loss,
 )
 from sklearn.preprocessing import label_binarize
 from typing import Dict, List, Tuple, Optional
@@ -63,10 +63,12 @@ class PerformanceMetricsCalculator:
         self.class_names = class_names
         self.metrics = {}
 
-    def compute_all_metrics(self,
-                            y_true: np.ndarray,
-                            y_pred: np.ndarray,
-                            y_pred_proba: Optional[np.ndarray] = None) -> Dict:
+    def compute_all_metrics(
+        self,
+        y_true: np.ndarray,
+        y_pred: np.ndarray,
+        y_pred_proba: Optional[np.ndarray] = None,
+    ) -> Dict:
         """
         Compute comprehensive performance metrics.
 
@@ -87,27 +89,32 @@ class PerformanceMetricsCalculator:
 
         # Per-class and averaged metrics
         metrics['precision_macro'] = precision_score(
-            y_true, y_pred, average='macro', zero_division=0)
+            y_true, y_pred, average='macro', zero_division=0
+        )
         metrics['precision_weighted'] = precision_score(
-            y_true, y_pred, average='weighted', zero_division=0)
+            y_true, y_pred, average='weighted', zero_division=0
+        )
         metrics['recall_macro'] = recall_score(
-            y_true, y_pred, average='macro', zero_division=0)
+            y_true, y_pred, average='macro', zero_division=0
+        )
         metrics['recall_weighted'] = recall_score(
-            y_true, y_pred, average='weighted', zero_division=0)
-        metrics['f1_macro'] = f1_score(
-            y_true, y_pred, average='macro', zero_division=0)
+            y_true, y_pred, average='weighted', zero_division=0
+        )
+        metrics['f1_macro'] = f1_score(y_true, y_pred, average='macro', zero_division=0)
         metrics['f1_weighted'] = f1_score(
-            y_true, y_pred, average='weighted', zero_division=0)
+            y_true, y_pred, average='weighted', zero_division=0
+        )
 
         # Per-class metrics
         precision_per_class = precision_score(
-            y_true, y_pred, average=None, zero_division=0)
-        recall_per_class = recall_score(
-            y_true, y_pred, average=None, zero_division=0)
+            y_true, y_pred, average=None, zero_division=0
+        )
+        recall_per_class = recall_score(y_true, y_pred, average=None, zero_division=0)
         f1_per_class = f1_score(y_true, y_pred, average=None, zero_division=0)
 
         for i, (p, r, f) in enumerate(
-                zip(precision_per_class, recall_per_class, f1_per_class)):
+            zip(precision_per_class, recall_per_class, f1_per_class)
+        ):
             class_name = self.class_names[i] if self.class_names else f'Class_{i}'
             metrics[f'precision_{class_name}'] = p
             metrics[f'recall_{class_name}'] = r
@@ -118,13 +125,11 @@ class PerformanceMetricsCalculator:
         metrics['confusion_matrix'] = cm.tolist()
 
         # Specificity and Sensitivity (per-class)
-        specificity_list, sensitivity_list = self._compute_specificity_sensitivity(
-            cm)
+        specificity_list, sensitivity_list = self._compute_specificity_sensitivity(cm)
         metrics['specificity_macro'] = np.mean(specificity_list)
         metrics['sensitivity_macro'] = np.mean(sensitivity_list)
 
-        for i, (spec, sens) in enumerate(
-                zip(specificity_list, sensitivity_list)):
+        for i, (spec, sens) in enumerate(zip(specificity_list, sensitivity_list)):
             class_name = self.class_names[i] if self.class_names else f'Class_{i}'
             metrics[f'specificity_{class_name}'] = spec
             metrics[f'sensitivity_{class_name}'] = sens
@@ -144,20 +149,25 @@ class PerformanceMetricsCalculator:
 
                 # Macro average
                 roc_auc_macro = roc_auc_score(
-                    y_true_bin, y_pred_proba, average='macro', multi_class='ovr')
+                    y_true_bin, y_pred_proba, average='macro', multi_class='ovr'
+                )
                 metrics['roc_auc_macro'] = roc_auc_macro
 
                 # Weighted average
                 roc_auc_weighted = roc_auc_score(
-                    y_true_bin, y_pred_proba, average='weighted', multi_class='ovr')
+                    y_true_bin, y_pred_proba, average='weighted', multi_class='ovr'
+                )
                 metrics['roc_auc_weighted'] = roc_auc_weighted
 
                 # Per-class ROC-AUC
                 for i in range(n_classes):
-                    class_name = self.class_names[i] if self.class_names else f'Class_{i}'
+                    class_name = (
+                        self.class_names[i] if self.class_names else f'Class_{i}'
+                    )
                     try:
                         roc_auc_class = roc_auc_score(
-                            y_true_bin[:, i], y_pred_proba[:, i])
+                            y_true_bin[:, i], y_pred_proba[:, i]
+                        )
                         metrics[f'roc_auc_{class_name}'] = roc_auc_class
                     except ValueError:
                         metrics[f'roc_auc_{class_name}'] = np.nan
@@ -170,19 +180,24 @@ class PerformanceMetricsCalculator:
             # PR-AUC (Precision-Recall AUC)
             try:
                 pr_auc_macro = average_precision_score(
-                    y_true_bin, y_pred_proba, average='macro')
+                    y_true_bin, y_pred_proba, average='macro'
+                )
                 metrics['pr_auc_macro'] = pr_auc_macro
 
                 pr_auc_weighted = average_precision_score(
-                    y_true_bin, y_pred_proba, average='weighted')
+                    y_true_bin, y_pred_proba, average='weighted'
+                )
                 metrics['pr_auc_weighted'] = pr_auc_weighted
 
                 # Per-class PR-AUC
                 for i in range(n_classes):
-                    class_name = self.class_names[i] if self.class_names else f'Class_{i}'
+                    class_name = (
+                        self.class_names[i] if self.class_names else f'Class_{i}'
+                    )
                     try:
                         pr_auc_class = average_precision_score(
-                            y_true_bin[:, i], y_pred_proba[:, i])
+                            y_true_bin[:, i], y_pred_proba[:, i]
+                        )
                         metrics[f'pr_auc_{class_name}'] = pr_auc_class
                     except ValueError:
                         metrics[f'pr_auc_{class_name}'] = np.nan
@@ -196,10 +211,11 @@ class PerformanceMetricsCalculator:
             try:
                 brier_scores = []
                 for i in range(n_classes):
-                    brier = brier_score_loss(
-                        y_true_bin[:, i], y_pred_proba[:, i])
+                    brier = brier_score_loss(y_true_bin[:, i], y_pred_proba[:, i])
                     brier_scores.append(brier)
-                    class_name = self.class_names[i] if self.class_names else f'Class_{i}'
+                    class_name = (
+                        self.class_names[i] if self.class_names else f'Class_{i}'
+                    )
                     metrics[f'brier_score_{class_name}'] = brier
 
                 metrics['brier_score_mean'] = np.mean(brier_scores)
@@ -228,7 +244,8 @@ class PerformanceMetricsCalculator:
         return metrics
 
     def _compute_specificity_sensitivity(
-            self, cm: np.ndarray) -> Tuple[List[float], List[float]]:
+        self, cm: np.ndarray
+    ) -> Tuple[List[float], List[float]]:
         """
         Compute per-class specificity and sensitivity from confusion matrix.
 
@@ -260,10 +277,8 @@ class PerformanceMetricsCalculator:
         return specificity_list, sensitivity_list
 
     def _compute_ece(
-            self,
-            y_true: np.ndarray,
-            y_pred_proba: np.ndarray,
-            n_bins: int = 10) -> float:
+        self, y_true: np.ndarray, y_pred_proba: np.ndarray, n_bins: int = 10
+    ) -> float:
         """
         Compute Expected Calibration Error (ECE).
 
@@ -287,7 +302,8 @@ class PerformanceMetricsCalculator:
         for i in range(n_bins):
             # Find samples in this bin
             in_bin = (confidences >= bin_boundaries[i]) & (
-                confidences < bin_boundaries[i + 1])
+                confidences < bin_boundaries[i + 1]
+            )
 
             if np.sum(in_bin) > 0:
                 # Average confidence and accuracy in bin
@@ -296,14 +312,13 @@ class PerformanceMetricsCalculator:
                 bin_size = np.sum(in_bin)
 
                 # ECE contribution
-                ece += (bin_size / len(y_true)) * \
-                    np.abs(avg_confidence - avg_accuracy)
+                ece += (bin_size / len(y_true)) * np.abs(avg_confidence - avg_accuracy)
 
         return ece
 
-    def plot_confusion_matrix(self,
-                              save_path: Optional[str] = None,
-                              figsize: Tuple[int, int] = (12, 10)) -> None:
+    def plot_confusion_matrix(
+        self, save_path: Optional[str] = None, figsize: Tuple[int, int] = (12, 10)
+    ) -> None:
         """
         Plot confusion matrix heatmap.
 
@@ -313,7 +328,8 @@ class PerformanceMetricsCalculator:
         """
         if 'confusion_matrix' not in self.metrics:
             raise ValueError(
-                "Metrics not computed yet. Call compute_all_metrics() first.")
+                "Metrics not computed yet. Call compute_all_metrics() first."
+            )
 
         cm = np.array(self.metrics['confusion_matrix'])
 
@@ -326,16 +342,11 @@ class PerformanceMetricsCalculator:
             fmt='d',
             cmap='Blues',
             ax=axes[0],
-            xticklabels=self.class_names if self.class_names else range(
-                cm.shape[0]),
-            yticklabels=self.class_names if self.class_names else range(
-                cm.shape[0]),
-            cbar_kws={
-                'label': 'Count'})
-        axes[0].set_title(
-            'Confusion Matrix (Counts)',
-            fontsize=16,
-            fontweight='bold')
+            xticklabels=self.class_names if self.class_names else range(cm.shape[0]),
+            yticklabels=self.class_names if self.class_names else range(cm.shape[0]),
+            cbar_kws={'label': 'Count'},
+        )
+        axes[0].set_title('Confusion Matrix (Counts)', fontsize=16, fontweight='bold')
         axes[0].set_xlabel('Predicted Label', fontsize=14)
         axes[0].set_ylabel('True Label', fontsize=14)
 
@@ -347,16 +358,13 @@ class PerformanceMetricsCalculator:
             fmt='.2f',
             cmap='Blues',
             ax=axes[1],
-            xticklabels=self.class_names if self.class_names else range(
-                cm.shape[0]),
-            yticklabels=self.class_names if self.class_names else range(
-                cm.shape[0]),
-            cbar_kws={
-                'label': 'Proportion'})
+            xticklabels=self.class_names if self.class_names else range(cm.shape[0]),
+            yticklabels=self.class_names if self.class_names else range(cm.shape[0]),
+            cbar_kws={'label': 'Proportion'},
+        )
         axes[1].set_title(
-            'Confusion Matrix (Normalized)',
-            fontsize=16,
-            fontweight='bold')
+            'Confusion Matrix (Normalized)', fontsize=16, fontweight='bold'
+        )
         axes[1].set_xlabel('Predicted Label', fontsize=14)
         axes[1].set_ylabel('True Label', fontsize=14)
 
@@ -369,9 +377,9 @@ class PerformanceMetricsCalculator:
 
         plt.close()
 
-    def plot_per_class_metrics(self,
-                               save_path: Optional[str] = None,
-                               figsize: Tuple[int, int] = (14, 8)) -> None:
+    def plot_per_class_metrics(
+        self, save_path: Optional[str] = None, figsize: Tuple[int, int] = (14, 8)
+    ) -> None:
         """
         Plot per-class precision, recall, F1-score.
 
@@ -381,20 +389,18 @@ class PerformanceMetricsCalculator:
         """
         if not self.metrics:
             raise ValueError(
-                "Metrics not computed yet. Call compute_all_metrics() first.")
+                "Metrics not computed yet. Call compute_all_metrics() first."
+            )
 
         # Extract per-class metrics
-        class_names = self.class_names if self.class_names else [
-            f'Class_{i}' for i in range(len(self.metrics['confusion_matrix']))]
+        class_names = (
+            self.class_names
+            if self.class_names
+            else [f'Class_{i}' for i in range(len(self.metrics['confusion_matrix']))]
+        )
 
-        precision_vals = [
-            self.metrics.get(
-                f'precision_{cn}',
-                0) for cn in class_names]
-        recall_vals = [
-            self.metrics.get(
-                f'recall_{cn}',
-                0) for cn in class_names]
+        precision_vals = [self.metrics.get(f'precision_{cn}', 0) for cn in class_names]
+        recall_vals = [self.metrics.get(f'recall_{cn}', 0) for cn in class_names]
         f1_vals = [self.metrics.get(f'f1_{cn}', 0) for cn in class_names]
 
         x = np.arange(len(class_names))
@@ -402,21 +408,13 @@ class PerformanceMetricsCalculator:
 
         fig, ax = plt.subplots(figsize=figsize)
 
-        ax.bar(
-            x - width,
-            precision_vals,
-            width,
-            label='Precision',
-            color='steelblue')
+        ax.bar(x - width, precision_vals, width, label='Precision', color='steelblue')
         ax.bar(x, recall_vals, width, label='Recall', color='coral')
         ax.bar(x + width, f1_vals, width, label='F1-Score', color='seagreen')
 
         ax.set_xlabel('Class', fontsize=14)
         ax.set_ylabel('Score', fontsize=14)
-        ax.set_title(
-            'Per-Class Performance Metrics',
-            fontsize=16,
-            fontweight='bold')
+        ax.set_title('Per-Class Performance Metrics', fontsize=16, fontweight='bold')
         ax.set_xticks(x)
         ax.set_xticklabels(class_names, rotation=45, ha='right')
         ax.legend(fontsize=12)
@@ -441,7 +439,8 @@ class PerformanceMetricsCalculator:
         """
         if not self.metrics:
             raise ValueError(
-                "Metrics not computed yet. Call compute_all_metrics() first.")
+                "Metrics not computed yet. Call compute_all_metrics() first."
+            )
 
         # Convert numpy types to Python native types
         metrics_serializable = {}
@@ -472,7 +471,8 @@ class PerformanceMetricsCalculator:
         """
         if not self.metrics:
             raise ValueError(
-                "Metrics not computed yet. Call compute_all_metrics() first.")
+                "Metrics not computed yet. Call compute_all_metrics() first."
+            )
 
         latex = "\\begin{table}[htbp]\n"
         latex += "\\centering\n"
@@ -499,8 +499,7 @@ class PerformanceMetricsCalculator:
         ]
 
         for metric_name, metric_key in key_metrics:
-            if metric_key in self.metrics and not np.isnan(
-                    self.metrics[metric_key]):
+            if metric_key in self.metrics and not np.isnan(self.metrics[metric_key]):
                 value = self.metrics[metric_key]
                 latex += f"{metric_name} & {value:.3f} \\\\\n"
 
@@ -521,7 +520,8 @@ class PerformanceMetricsCalculator:
         """
         if not self.metrics:
             raise ValueError(
-                "Metrics not computed yet. Call compute_all_metrics() first.")
+                "Metrics not computed yet. Call compute_all_metrics() first."
+            )
 
         print("\n" + "=" * 80)
         print("PERFORMANCE METRICS SUMMARY")
@@ -529,54 +529,45 @@ class PerformanceMetricsCalculator:
 
         print("\n--- Overall Metrics ---")
         print(f"Accuracy:            {self.metrics.get('accuracy', 0):.4f}")
-        print(
-            f"Precision (Macro):   {
+        print(f"Precision (Macro):   {
                 self.metrics.get(
                     'precision_macro',
                     0):.4f}")
-        print(
-            f"Recall (Macro):      {
+        print(f"Recall (Macro):      {
                 self.metrics.get(
                     'recall_macro',
                     0):.4f}")
         print(f"F1-Score (Macro):    {self.metrics.get('f1_macro', 0):.4f}")
-        print(
-            f"ROC-AUC (Macro):     {self.metrics.get('roc_auc_macro', np.nan):.4f}")
+        print(f"ROC-AUC (Macro):     {self.metrics.get('roc_auc_macro', np.nan):.4f}")
         print(f"MCC:                 {self.metrics.get('mcc', 0):.4f}")
         print(f"Cohen's Kappa:       {self.metrics.get('cohen_kappa', 0):.4f}")
 
         if 'brier_score_mean' in self.metrics:
-            print(
-                f"Brier Score (Mean):  {
+            print(f"Brier Score (Mean):  {
                     self.metrics['brier_score_mean']:.4f}")
 
         if 'expected_calibration_error' in self.metrics:
-            print(
-                f"ECE:                 {
+            print(f"ECE:                 {
                     self.metrics['expected_calibration_error']:.4f}")
 
         print("\n--- Per-Class Metrics ---")
         if self.class_names:
             for cn in self.class_names:
                 print(f"\n{cn}:")
-                print(
-                    f"  Precision:   {
+                print(f"  Precision:   {
                         self.metrics.get(
                             f'precision_{cn}',
                             0):.4f}")
-                print(
-                    f"  Recall:      {
+                print(f"  Recall:      {
                         self.metrics.get(
                             f'recall_{cn}',
                             0):.4f}")
                 print(f"  F1-Score:    {self.metrics.get(f'f1_{cn}', 0):.4f}")
-                print(
-                    f"  Sensitivity: {
+                print(f"  Sensitivity: {
                         self.metrics.get(
                             f'sensitivity_{cn}',
                             0):.4f}")
-                print(
-                    f"  Specificity: {
+                print(f"  Specificity: {
                         self.metrics.get(
                             f'specificity_{cn}',
                             0):.4f}")
@@ -602,8 +593,8 @@ def main():
     y_pred = y_true.copy()
     # Add some errors
     error_indices = np.random.choice(
-        n_samples, size=int(
-            n_samples * 0.15), replace=False)
+        n_samples, size=int(n_samples * 0.15), replace=False
+    )
     y_pred[error_indices] = np.random.randint(0, n_classes, len(error_indices))
 
     # Simulate probabilities
@@ -624,19 +615,12 @@ def main():
     output_dir = Path("outputs/performance_metrics")
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    calculator.plot_confusion_matrix(
-        save_path=str(
-            output_dir /
-            "confusion_matrix.png"))
+    calculator.plot_confusion_matrix(save_path=str(output_dir / "confusion_matrix.png"))
     calculator.plot_per_class_metrics(
-        save_path=str(
-            output_dir /
-            "per_class_metrics.png"))
+        save_path=str(output_dir / "per_class_metrics.png")
+    )
     calculator.save_metrics_to_json(save_path=str(output_dir / "metrics.json"))
-    calculator.generate_latex_table(
-        save_path=str(
-            output_dir /
-            "metrics_table.tex"))
+    calculator.generate_latex_table(save_path=str(output_dir / "metrics_table.tex"))
 
     logger.info("=== Metrics computation complete ===")
     logger.info(f"Outputs saved to: {output_dir}")

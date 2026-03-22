@@ -33,16 +33,27 @@ class SupplementaryFigures:
     """
 
     # Color palettes (color-blind friendly)
-    PALETTE_QUALITATIVE = ['#377eb8', '#ff7f00', '#4daf4a', '#f781bf',
-                           '#a65628', '#984ea3', '#999999', '#e41a1c',
-                           '#dede00', '#377eb8']
+    PALETTE_QUALITATIVE = [
+        '#377eb8',
+        '#ff7f00',
+        '#4daf4a',
+        '#f781bf',
+        '#a65628',
+        '#984ea3',
+        '#999999',
+        '#e41a1c',
+        '#dede00',
+        '#377eb8',
+    ]
     PALETTE_SEQUENTIAL = plt.cm.viridis
     PALETTE_DIVERGING = plt.cm.RdYlBu_r
 
-    def __init__(self,
-                 output_dir: str = 'outputs/supplementary_figures',
-                 dpi: int = 600,
-                 format: str = 'png'):
+    def __init__(
+        self,
+        output_dir: str = 'outputs/supplementary_figures',
+        dpi: int = 600,
+        format: str = 'png',
+    ):
         """
         Initialize supplementary figures generator.
 
@@ -58,45 +69,43 @@ class SupplementaryFigures:
 
         self._setup_style()
 
-        logger.info(
-            f"Initialized SupplementaryFigures (DPI={dpi}, format={format})")
+        logger.info(f"Initialized SupplementaryFigures (DPI={dpi}, format={format})")
 
     def _setup_style(self):
         """Configure matplotlib style for professional journal figures"""
         plt.style.use('seaborn-v0_8-paper')
 
-        plt.rcParams.update({
-            # Font settings
-            'font.family': 'serif',
-            'font.serif': ['Times New Roman', 'DejaVu Serif'],
-            'font.size': 9,
-            'axes.labelsize': 10,
-            'axes.titlesize': 11,
-            'xtick.labelsize': 9,
-            'ytick.labelsize': 9,
-            'legend.fontsize': 8,
+        plt.rcParams.update(
+            {
+                # Font settings
+                'font.family': 'serif',
+                'font.serif': ['Times New Roman', 'DejaVu Serif'],
+                'font.size': 9,
+                'axes.labelsize': 10,
+                'axes.titlesize': 11,
+                'xtick.labelsize': 9,
+                'ytick.labelsize': 9,
+                'legend.fontsize': 8,
+                # Line widths
+                'lines.linewidth': 1.5,
+                'axes.linewidth': 0.8,
+                'grid.linewidth': 0.5,
+                'patch.linewidth': 1.2,
+                # Grid
+                'axes.grid': True,
+                'grid.alpha': 0.3,
+                # Figure layout
+                'figure.constrained_layout.use': True,
+                'figure.dpi': 100,
+                'savefig.dpi': self.dpi,
+                'savefig.bbox': 'tight',
+                'savefig.pad_inches': 0.1,
+            }
+        )
 
-            # Line widths
-            'lines.linewidth': 1.5,
-            'axes.linewidth': 0.8,
-            'grid.linewidth': 0.5,
-            'patch.linewidth': 1.2,
-
-            # Grid
-            'axes.grid': True,
-            'grid.alpha': 0.3,
-
-            # Figure layout
-            'figure.constrained_layout.use': True,
-            'figure.dpi': 100,
-            'savefig.dpi': self.dpi,
-            'savefig.bbox': 'tight',
-            'savefig.pad_inches': 0.1,
-        })
-
-    def figS1_constraint_analysis(self,
-                                  archetypes: List[Dict],
-                                  param_space: Any) -> Path:
+    def figS1_constraint_analysis(
+        self, archetypes: List[Dict], param_space: Any
+    ) -> Path:
         """
         Figure S1: Detailed TiTrATE Constraint Analysis
 
@@ -130,7 +139,8 @@ class SupplementaryFigures:
             'Temporal logic',
             'Clinical plausibility',
             'Emergency criteria',
-            'Triage appropriateness']
+            'Triage appropriateness',
+        ]
         satisfaction_rates = [
             98.7,
             97.2,
@@ -141,29 +151,31 @@ class SupplementaryFigures:
             97.6,
             96.9,
             99.4,
-            98.1]
+            98.1,
+        ]
 
-        colors = [self.PALETTE_QUALITATIVE[0] if r >= 95 else '#ff7f00'
-                  for r in satisfaction_rates]
+        colors = [
+            self.PALETTE_QUALITATIVE[0] if r >= 95 else '#ff7f00'
+            for r in satisfaction_rates
+        ]
 
-        bars = ax_a.barh(
-            constraints,
-            satisfaction_rates,
-            color=colors,
-            alpha=0.8)
-        ax_a.axvline(x=95, color='red', linestyle='--', linewidth=1.5,
-                     label='95% threshold')
+        bars = ax_a.barh(constraints, satisfaction_rates, color=colors, alpha=0.8)
+        ax_a.axvline(
+            x=95, color='red', linestyle='--', linewidth=1.5, label='95% threshold'
+        )
         ax_a.set_xlabel('Satisfaction Rate (%)', fontweight='bold')
-        ax_a.set_title(
-            '(A) TiTrATE Constraint Satisfaction',
-            fontweight='bold')
+        ax_a.set_title('(A) TiTrATE Constraint Satisfaction', fontweight='bold')
         ax_a.set_xlim([90, 100])
         ax_a.legend()
 
         # Panel B: Violation breakdown
         ax_b = fig.add_subplot(gs[0, 1])
-        violation_types = ['Minor\n(warning)', 'Moderate\n(fixable)',
-                           'Severe\n(rejected)', 'Critical\n(rejected)']
+        violation_types = [
+            'Minor\n(warning)',
+            'Moderate\n(fixable)',
+            'Severe\n(rejected)',
+            'Critical\n(rejected)',
+        ]
         violation_counts = [145, 78, 23, 8]
 
         wedges, texts, autotexts = ax_b.pie(
@@ -171,7 +183,7 @@ class SupplementaryFigures:
             labels=violation_types,
             autopct='%1.1f%%',
             colors=self.PALETTE_QUALITATIVE[:4],
-            startangle=90
+            startangle=90,
         )
         for autotext in autotexts:
             autotext.set_color('white')
@@ -181,8 +193,7 @@ class SupplementaryFigures:
         # Panel C: Acceptance rate over iterations
         ax_c = fig.add_subplot(gs[1, 0])
         iterations = np.arange(1, 101)
-        acceptance_rate = 100 * \
-            (1 - np.exp(-iterations / 20))  # Convergence curve
+        acceptance_rate = 100 * (1 - np.exp(-iterations / 20))  # Convergence curve
         acceptance_rate += np.random.normal(0, 2, len(iterations))  # Add noise
         acceptance_rate = np.clip(acceptance_rate, 0, 100)
 
@@ -191,16 +202,17 @@ class SupplementaryFigures:
             acceptance_rate,
             color=self.PALETTE_QUALITATIVE[0],
             linewidth=2,
-            label='Acceptance rate')
-        ax_c.axhline(y=95, color='red', linestyle='--', linewidth=1.5,
-                     label='Target (95%)')
-        ax_c.fill_between(iterations, 0, acceptance_rate,
-                          color=self.PALETTE_QUALITATIVE[0], alpha=0.2)
+            label='Acceptance rate',
+        )
+        ax_c.axhline(
+            y=95, color='red', linestyle='--', linewidth=1.5, label='Target (95%)'
+        )
+        ax_c.fill_between(
+            iterations, 0, acceptance_rate, color=self.PALETTE_QUALITATIVE[0], alpha=0.2
+        )
         ax_c.set_xlabel('Iteration', fontweight='bold')
         ax_c.set_ylabel('Acceptance Rate (%)', fontweight='bold')
-        ax_c.set_title(
-            '(C) Acceptance Rate Over Iterations',
-            fontweight='bold')
+        ax_c.set_title('(C) Acceptance Rate Over Iterations', fontweight='bold')
         ax_c.set_ylim([0, 105])
         ax_c.legend()
         ax_c.grid(True, alpha=0.3)
@@ -211,15 +223,22 @@ class SupplementaryFigures:
         n_constraints = len(constraints)
         interaction_matrix = np.random.rand(n_constraints, n_constraints)
         interaction_matrix = (
-            interaction_matrix + interaction_matrix.T) / 2  # Symmetric
+            interaction_matrix + interaction_matrix.T
+        ) / 2  # Symmetric
         np.fill_diagonal(interaction_matrix, 1.0)
 
-        im = ax_d.imshow(interaction_matrix, cmap=self.PALETTE_DIVERGING,
-                         aspect='auto', vmin=0, vmax=1)
+        im = ax_d.imshow(
+            interaction_matrix,
+            cmap=self.PALETTE_DIVERGING,
+            aspect='auto',
+            vmin=0,
+            vmax=1,
+        )
         ax_d.set_xticks(range(n_constraints))
         ax_d.set_yticks(range(n_constraints))
-        ax_d.set_xticklabels([c.split()[0] for c in constraints],
-                             rotation=45, ha='right', fontsize=7)
+        ax_d.set_xticklabels(
+            [c.split()[0] for c in constraints], rotation=45, ha='right', fontsize=7
+        )
         ax_d.set_yticklabels([c.split()[0] for c in constraints], fontsize=7)
         ax_d.set_title('(D) Constraint Interaction Heatmap', fontweight='bold')
 
@@ -235,9 +254,9 @@ class SupplementaryFigures:
         logger.info(f"✓ Figure S1 saved: {filepath}")
         return filepath
 
-    def figS2_nmf_factor_interpretations(self,
-                                         nmf_model: Any,
-                                         feature_names: List[str]) -> Path:
+    def figS2_nmf_factor_interpretations(
+        self, nmf_model: Any, feature_names: List[str]
+    ) -> Path:
         """
         Figure S2: Full NMF Factor Interpretations (20 factors)
 
@@ -265,8 +284,9 @@ class SupplementaryFigures:
 
         # Ensure feature_names length matches
         if len(feature_names) < H.shape[1]:
-            feature_names = feature_names + \
-                [f"Feature_{i}" for i in range(len(feature_names), H.shape[1])]
+            feature_names = feature_names + [
+                f"Feature_{i}" for i in range(len(feature_names), H.shape[1])
+            ]
 
         # Panel A: 20 factor loading heatmaps (5x4 grid)
         for i in range(min(n_factors, 20)):
@@ -282,8 +302,7 @@ class SupplementaryFigures:
 
             # Plot horizontal bar chart
             y_pos = np.arange(len(top_features))
-            colors_grad = plt.cm.viridis(
-                np.linspace(0.3, 0.9, len(top_features)))
+            colors_grad = plt.cm.viridis(np.linspace(0.3, 0.9, len(top_features)))
 
             ax.barh(y_pos, top_values, color=colors_grad, alpha=0.8)
             ax.set_yticks(y_pos)
@@ -303,9 +322,9 @@ class SupplementaryFigures:
         logger.info(f"✓ Figure S2 saved: {filepath}")
         return filepath
 
-    def figS3_shap_distributions(self,
-                                 shap_values: np.ndarray,
-                                 feature_names: List[str]) -> Path:
+    def figS3_shap_distributions(
+        self, shap_values: np.ndarray, feature_names: List[str]
+    ) -> Path:
         """
         Figure S3: SHAP Value Distributions per Feature
 
@@ -353,18 +372,15 @@ class SupplementaryFigures:
                 density=True,
                 color=self.PALETTE_QUALITATIVE[0],
                 alpha=0.6,
-                edgecolor='black')
+                edgecolor='black',
+            )
 
             # Add KDE line
             from scipy.stats import gaussian_kde
+
             kde = gaussian_kde(feature_shap)
             x_range = np.linspace(feature_shap.min(), feature_shap.max(), 100)
-            ax.plot(
-                x_range,
-                kde(x_range),
-                color='red',
-                linewidth=2,
-                label='KDE')
+            ax.plot(x_range, kde(x_range), color='red', linewidth=2, label='KDE')
 
             # Annotations
             ax.axvline(
@@ -373,12 +389,10 @@ class SupplementaryFigures:
                 linestyle='--',
                 linewidth=1.5,
                 label=f'Mean: {
-                    np.mean(feature_shap):.3f}')
+                    np.mean(feature_shap):.3f}',
+            )
 
-            ax.set_title(
-                feature_names[feature_idx],
-                fontsize=7,
-                fontweight='bold')
+            ax.set_title(feature_names[feature_idx], fontsize=7, fontweight='bold')
             ax.set_xlabel('|SHAP value|', fontsize=6)
             ax.set_ylabel('Density', fontsize=6)
             ax.tick_params(labelsize=6)
@@ -395,10 +409,12 @@ class SupplementaryFigures:
         logger.info(f"✓ Figure S3 saved: {filepath}")
         return filepath
 
-    def figS4_diagnosis_breakdown(self,
-                                  predictions: np.ndarray,
-                                  actuals: np.ndarray,
-                                  diagnosis_names: List[str] = None) -> Path:
+    def figS4_diagnosis_breakdown(
+        self,
+        predictions: np.ndarray,
+        actuals: np.ndarray,
+        diagnosis_names: List[str] = None,
+    ) -> Path:
         """
         Figure S4: Complete Diagnosis Breakdown
 
@@ -419,10 +435,23 @@ class SupplementaryFigures:
         logger.info("Generating Figure S4: Diagnosis Breakdown...")
 
         if diagnosis_names is None:
-            diagnosis_names = ['Stroke', 'TIA', 'BPPV', 'VM', 'VN',
-                               'Labyrinthitis', 'Meniere', 'MAV', 'PPPD',
-                               'Vestibular Neuritis', 'Central', 'Peripheral',
-                               'Mixed', 'Uncertain', 'Other']
+            diagnosis_names = [
+                'Stroke',
+                'TIA',
+                'BPPV',
+                'VM',
+                'VN',
+                'Labyrinthitis',
+                'Meniere',
+                'MAV',
+                'PPPD',
+                'Vestibular Neuritis',
+                'Central',
+                'Peripheral',
+                'Mixed',
+                'Uncertain',
+                'Other',
+            ]
 
         fig = plt.figure(figsize=(14, 10))
         gs = gridspec.GridSpec(2, 2, figure=fig, hspace=0.3, wspace=0.3)
@@ -439,24 +468,25 @@ class SupplementaryFigures:
         im = ax_a.imshow(cm, cmap='Blues', aspect='auto')
         ax_a.set_xticks(range(len(top_diagnoses)))
         ax_a.set_yticks(range(len(top_diagnoses)))
-        ax_a.set_xticklabels(
-            top_diagnoses,
-            rotation=45,
-            ha='right',
-            fontsize=8)
+        ax_a.set_xticklabels(top_diagnoses, rotation=45, ha='right', fontsize=8)
         ax_a.set_yticklabels(top_diagnoses, fontsize=8)
         ax_a.set_xlabel('Predicted Diagnosis', fontweight='bold')
         ax_a.set_ylabel('Actual Diagnosis', fontweight='bold')
-        ax_a.set_title(
-            '(A) Confusion Matrix (Top 10 Diagnoses)',
-            fontweight='bold')
+        ax_a.set_title('(A) Confusion Matrix (Top 10 Diagnoses)', fontweight='bold')
 
         # Add text annotations
         for i in range(len(top_diagnoses)):
             for j in range(len(top_diagnoses)):
                 text_color = 'white' if cm[i, j] > cm.max() / 2 else 'black'
-                ax_a.text(j, i, str(cm[i, j]), ha='center', va='center',
-                          color=text_color, fontsize=7)
+                ax_a.text(
+                    j,
+                    i,
+                    str(cm[i, j]),
+                    ha='center',
+                    va='center',
+                    color=text_color,
+                    fontsize=7,
+                )
 
         # Colorbar
         plt.colorbar(im, ax=ax_a, fraction=0.046, pad=0.04)
@@ -472,24 +502,36 @@ class SupplementaryFigures:
         x = np.arange(len(top_diagnoses))
         width = 0.25
 
-        ax_b.bar(x - width, precision, width, label='Precision',
-                 color=self.PALETTE_QUALITATIVE[0], alpha=0.8)
-        ax_b.bar(x, recall, width, label='Recall',
-                 color=self.PALETTE_QUALITATIVE[1], alpha=0.8)
-        ax_b.bar(x + width, f1, width, label='F1-Score',
-                 color=self.PALETTE_QUALITATIVE[2], alpha=0.8)
+        ax_b.bar(
+            x - width,
+            precision,
+            width,
+            label='Precision',
+            color=self.PALETTE_QUALITATIVE[0],
+            alpha=0.8,
+        )
+        ax_b.bar(
+            x,
+            recall,
+            width,
+            label='Recall',
+            color=self.PALETTE_QUALITATIVE[1],
+            alpha=0.8,
+        )
+        ax_b.bar(
+            x + width,
+            f1,
+            width,
+            label='F1-Score',
+            color=self.PALETTE_QUALITATIVE[2],
+            alpha=0.8,
+        )
 
         ax_b.set_xlabel('Diagnosis', fontweight='bold')
         ax_b.set_ylabel('Score', fontweight='bold')
-        ax_b.set_title(
-            '(B) Per-Diagnosis Performance Metrics',
-            fontweight='bold')
+        ax_b.set_title('(B) Per-Diagnosis Performance Metrics', fontweight='bold')
         ax_b.set_xticks(x)
-        ax_b.set_xticklabels(
-            top_diagnoses,
-            rotation=45,
-            ha='right',
-            fontsize=7)
+        ax_b.set_xticklabels(top_diagnoses, rotation=45, ha='right', fontsize=7)
         ax_b.set_ylim([0, 1.1])
         ax_b.legend()
         ax_b.grid(True, alpha=0.3, axis='y')
@@ -500,7 +542,7 @@ class SupplementaryFigures:
         # Calculate misclassification rate per diagnosis
         misclass_rates = []
         for i in range(len(top_diagnoses)):
-            mask_diag = (actuals == i)
+            mask_diag = actuals == i
             if np.sum(mask_diag) > 0:
                 misclass_rate = 1 - np.mean(predictions[mask_diag] == i)
             else:
@@ -512,14 +554,12 @@ class SupplementaryFigures:
         sorted_diagnoses = [top_diagnoses[i] for i in sorted_indices]
         sorted_rates = [misclass_rates[i] for i in sorted_indices]
 
-        colors_difficulty = ['#e41a1c' if r > 20 else '#ff7f00' if r > 10
-                             else '#4daf4a' for r in sorted_rates]
+        colors_difficulty = [
+            '#e41a1c' if r > 20 else '#ff7f00' if r > 10 else '#4daf4a'
+            for r in sorted_rates
+        ]
 
-        ax_c.barh(
-            sorted_diagnoses,
-            sorted_rates,
-            color=colors_difficulty,
-            alpha=0.8)
+        ax_c.barh(sorted_diagnoses, sorted_rates, color=colors_difficulty, alpha=0.8)
         ax_c.set_xlabel('Misclassification Rate (%)', fontweight='bold')
         ax_c.set_title('(C) Diagnosis Difficulty Ranking', fontweight='bold')
         ax_c.grid(True, alpha=0.3, axis='x')
@@ -566,7 +606,7 @@ class SupplementaryFigures:
             'BPPV': np.random.normal(24, 12, 100),
             'VM': np.random.normal(72, 24, 100),
             'VN': np.random.normal(120, 48, 100),
-            'Labyrinthitis': np.random.normal(96, 36, 100)
+            'Labyrinthitis': np.random.normal(96, 36, 100),
         }
 
         positions = np.arange(len(diagnoses))
@@ -574,13 +614,14 @@ class SupplementaryFigures:
             [durations[d] for d in diagnoses],
             positions=positions,
             showmeans=True,
-            showmedians=True
+            showmedians=True,
         )
 
         # Color violins
         for i, pc in enumerate(violin_parts['bodies']):
             pc.set_facecolor(
-                self.PALETTE_QUALITATIVE[i % len(self.PALETTE_QUALITATIVE)])
+                self.PALETTE_QUALITATIVE[i % len(self.PALETTE_QUALITATIVE)]
+            )
             pc.set_alpha(0.7)
 
         ax_a.set_xticks(positions)
@@ -593,17 +634,14 @@ class SupplementaryFigures:
         # Panel B: Onset patterns
         ax_b = fig.add_subplot(gs[0, 1])
 
-        onset_types = [
-            'Acute\n(<1h)',
-            'Gradual\n(1-24h)',
-            'Episodic\n(recurring)']
+        onset_types = ['Acute\n(<1h)', 'Gradual\n(1-24h)', 'Episodic\n(recurring)']
         onset_data = {
             'Stroke': [85, 10, 5],
             'TIA': [90, 8, 2],
             'BPPV': [30, 20, 50],
             'VM': [15, 35, 50],
             'VN': [60, 35, 5],
-            'Labyrinthitis': [50, 45, 5]
+            'Labyrinthitis': [50, 45, 5],
         }
 
         x = np.arange(len(onset_types))
@@ -617,7 +655,8 @@ class SupplementaryFigures:
                 width,
                 label=diagnosis,
                 color=self.PALETTE_QUALITATIVE[i],
-                alpha=0.8)
+                alpha=0.8,
+            )
 
         ax_b.set_xlabel('Onset Pattern', fontweight='bold')
         ax_b.set_ylabel('Frequency (%)', fontweight='bold')
@@ -630,8 +669,13 @@ class SupplementaryFigures:
         # Panel C: Temporal correlation matrix
         ax_c = fig.add_subplot(gs[1, 0])
 
-        temporal_features = ['Duration', 'Onset speed', 'Progression',
-                             'Frequency', 'Trigger delay']
+        temporal_features = [
+            'Duration',
+            'Onset speed',
+            'Progression',
+            'Frequency',
+            'Trigger delay',
+        ]
         n_features = len(temporal_features)
 
         # Simulated correlation matrix
@@ -640,31 +684,29 @@ class SupplementaryFigures:
         corr_matrix = 2 * corr_matrix - 1  # Scale to [-1, 1]
         np.fill_diagonal(corr_matrix, 1.0)
 
-        im = ax_c.imshow(corr_matrix, cmap=self.PALETTE_DIVERGING,
-                         vmin=-1, vmax=1, aspect='auto')
+        im = ax_c.imshow(
+            corr_matrix, cmap=self.PALETTE_DIVERGING, vmin=-1, vmax=1, aspect='auto'
+        )
         ax_c.set_xticks(range(n_features))
         ax_c.set_yticks(range(n_features))
-        ax_c.set_xticklabels(
-            temporal_features,
-            rotation=45,
-            ha='right',
-            fontsize=8)
+        ax_c.set_xticklabels(temporal_features, rotation=45, ha='right', fontsize=8)
         ax_c.set_yticklabels(temporal_features, fontsize=8)
         ax_c.set_title('(C) Temporal Feature Correlations', fontweight='bold')
 
         # Add correlation values
         for i in range(n_features):
             for j in range(n_features):
-                text_color = 'white' if abs(
-                    corr_matrix[i, j]) > 0.5 else 'black'
-                ax_c.text(j,
-                          i,
-                          f'{corr_matrix[i,
+                text_color = 'white' if abs(corr_matrix[i, j]) > 0.5 else 'black'
+                ax_c.text(
+                    j,
+                    i,
+                    f'{corr_matrix[i,
                                          j]:.2f}',
-                          ha='center',
-                          va='center',
-                          color=text_color,
-                          fontsize=7)
+                    ha='center',
+                    va='center',
+                    color=text_color,
+                    fontsize=7,
+                )
 
         plt.colorbar(im, ax=ax_c, fraction=0.046, pad=0.04)
 
@@ -678,13 +720,12 @@ class SupplementaryFigures:
             'BPPV': np.random.exponential(8, 100),
             'VM': np.random.exponential(24, 100),
             'VN': np.random.exponential(6, 100),
-            'Labyrinthitis': np.random.exponential(12, 100)
+            'Labyrinthitis': np.random.exponential(12, 100),
         }
 
         # Box plot
         box_data = [time_to_dx[d] for d in diagnoses]
-        bp = ax_d.boxplot(box_data, labels=diagnoses, patch_artist=True,
-                          showmeans=True)
+        bp = ax_d.boxplot(box_data, labels=diagnoses, patch_artist=True, showmeans=True)
 
         # Color boxes
         for i, patch in enumerate(bp['boxes']):
@@ -738,7 +779,7 @@ class SupplementaryFigures:
             'BPPV': np.random.normal(55, 15, 100),
             'VM': np.random.normal(42, 12, 100),
             'VN': np.random.normal(48, 14, 100),
-            'Labyrinthitis': np.random.normal(45, 13, 100)
+            'Labyrinthitis': np.random.normal(45, 13, 100),
         }
 
         positions = np.arange(len(diagnoses))
@@ -746,7 +787,7 @@ class SupplementaryFigures:
             [age_data[d] for d in diagnoses],
             positions=positions,
             showmeans=True,
-            showmedians=True
+            showmedians=True,
         )
 
         # Color violins
@@ -769,7 +810,7 @@ class SupplementaryFigures:
             'BPPV': [35, 65],
             'VM': [25, 75],
             'VN': [48, 52],
-            'Labyrinthitis': [50, 50]
+            'Labyrinthitis': [50, 50],
         }
 
         x = np.arange(len(diagnoses))
@@ -778,15 +819,26 @@ class SupplementaryFigures:
         male_percentages = [gender_data[d][0] for d in diagnoses]
         female_percentages = [gender_data[d][1] for d in diagnoses]
 
-        ax_b.bar(x, male_percentages, width, label='Male',
-                 color=self.PALETTE_QUALITATIVE[0], alpha=0.8)
-        ax_b.bar(x, female_percentages, width, bottom=male_percentages,
-                 label='Female', color=self.PALETTE_QUALITATIVE[1], alpha=0.8)
+        ax_b.bar(
+            x,
+            male_percentages,
+            width,
+            label='Male',
+            color=self.PALETTE_QUALITATIVE[0],
+            alpha=0.8,
+        )
+        ax_b.bar(
+            x,
+            female_percentages,
+            width,
+            bottom=male_percentages,
+            label='Female',
+            color=self.PALETTE_QUALITATIVE[1],
+            alpha=0.8,
+        )
 
         ax_b.set_ylabel('Percentage (%)', fontweight='bold')
-        ax_b.set_title(
-            '(B) Gender Distribution by Diagnosis',
-            fontweight='bold')
+        ax_b.set_title('(B) Gender Distribution by Diagnosis', fontweight='bold')
         ax_b.set_xticks(x)
         ax_b.set_xticklabels(diagnoses, rotation=45, ha='right')
         ax_b.legend()
@@ -799,11 +851,11 @@ class SupplementaryFigures:
         comorbidities = ['HTN', 'DM', 'CAD', 'AF', 'Migraine']
 
         # Simulated comorbidity prevalence (%)
-        comorbidity_matrix = np.random.rand(
-            len(diagnoses), len(comorbidities)) * 100
+        comorbidity_matrix = np.random.rand(len(diagnoses), len(comorbidities)) * 100
 
-        im = ax_c.imshow(comorbidity_matrix, cmap='YlOrRd', aspect='auto',
-                         vmin=0, vmax=100)
+        im = ax_c.imshow(
+            comorbidity_matrix, cmap='YlOrRd', aspect='auto', vmin=0, vmax=100
+        )
         ax_c.set_xticks(range(len(comorbidities)))
         ax_c.set_yticks(range(len(diagnoses)))
         ax_c.set_xticklabels(comorbidities, fontsize=8)
@@ -815,16 +867,17 @@ class SupplementaryFigures:
         # Add text annotations
         for i in range(len(diagnoses)):
             for j in range(len(comorbidities)):
-                text_color = 'white' if comorbidity_matrix[i,
-                                                           j] > 50 else 'black'
-                ax_c.text(j,
-                          i,
-                          f'{comorbidity_matrix[i,
+                text_color = 'white' if comorbidity_matrix[i, j] > 50 else 'black'
+                ax_c.text(
+                    j,
+                    i,
+                    f'{comorbidity_matrix[i,
                                                 j]:.0f}',
-                          ha='center',
-                          va='center',
-                          color=text_color,
-                          fontsize=7)
+                    ha='center',
+                    va='center',
+                    color=text_color,
+                    fontsize=7,
+                )
 
         # Colorbar
         cbar = plt.colorbar(im, ax=ax_c, fraction=0.046, pad=0.04)
@@ -833,12 +886,20 @@ class SupplementaryFigures:
         # Panel D: Risk factor summary
         ax_d = fig.add_subplot(gs[1, 1])
 
-        risk_factors = ['Age >65', 'HTN', 'Diabetes', 'Smoking',
-                        'Prior CVA', 'Migraine']
+        risk_factors = [
+            'Age >65',
+            'HTN',
+            'Diabetes',
+            'Smoking',
+            'Prior CVA',
+            'Migraine',
+        ]
         prevalence = [42, 58, 28, 22, 15, 35]
 
-        colors_risk = [self.PALETTE_QUALITATIVE[0] if p > 30
-                       else self.PALETTE_QUALITATIVE[2] for p in prevalence]
+        colors_risk = [
+            self.PALETTE_QUALITATIVE[0] if p > 30 else self.PALETTE_QUALITATIVE[2]
+            for p in prevalence
+        ]
 
         ax_d.barh(risk_factors, prevalence, color=colors_risk, alpha=0.8)
         ax_d.set_xlabel('Prevalence (%)', fontweight='bold')
@@ -945,7 +1006,8 @@ class SupplementaryFigures:
                 dpi=self.dpi if fmt == 'png' else 600,
                 bbox_inches='tight',
                 facecolor='white',
-                edgecolor='none')
+                edgecolor='none',
+            )
             if fmt == self.format:
                 primary_path = filepath
 
@@ -956,9 +1018,10 @@ class SupplementaryFigures:
 if __name__ == '__main__':
     # Example usage
     import sys
+
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     )
 
     logger.info("Supplementary Figures Generator - Demo Mode")
@@ -972,8 +1035,10 @@ if __name__ == '__main__':
     n_features = 50
 
     # Simulate archetypes
-    archetypes = [{'diagnosis': np.random.choice(
-        ['Stroke', 'BPPV', 'VM', 'VN'])} for _ in range(n_samples)]
+    archetypes = [
+        {'diagnosis': np.random.choice(['Stroke', 'BPPV', 'VM', 'VN'])}
+        for _ in range(n_samples)
+    ]
 
     # Simulate SHAP values
     shap_values = np.random.randn(n_samples, n_features)
@@ -987,13 +1052,13 @@ if __name__ == '__main__':
     figures = supp_viz.generate_all_supplementary(
         archetypes=archetypes,
         param_space=None,  # Would be actual param_space object
-        nmf_model=type('obj', (object,), {
-            'components_': np.random.rand(20, n_features)
-        })(),
+        nmf_model=type(
+            'obj', (object,), {'components_': np.random.rand(20, n_features)}
+        )(),
         shap_values=shap_values,
         feature_names=feature_names,
         predictions=predictions,
-        actuals=actuals
+        actuals=actuals,
     )
 
     logger.info(f"Demo complete. Generated {len(figures)} figures.")

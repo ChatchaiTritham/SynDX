@@ -7,8 +7,9 @@ Author: Chatchai Tritham
 Date: 2026-01-25
 """
 
-import pytest
 import numpy as np
+import pytest
+
 from syndx.phase3_validation.xai_fidelity import XAIFidelity
 
 
@@ -31,9 +32,7 @@ class TestXAIFidelityInit:
     def test_custom_initialization(self):
         """Test initialization with custom parameters."""
         fidelity = XAIFidelity(
-            model_type='xgboost',
-            background_samples=50,
-            random_state=123
+            model_type='xgboost', background_samples=50, random_state=123
         )
 
         assert fidelity.background_samples == 50
@@ -108,11 +107,16 @@ class TestFitModels:
         fidelity = XAIFidelity()
         fidelity.fit_archetype_model(X, y)
 
-        # For multi-class, SHAP values are a list
+        # For multi-class, SHAP values are a list or 3D array
+        shap_arr = np.array(fidelity.archetype_shap)
         if isinstance(fidelity.archetype_shap, list):
             for shap_vals in fidelity.archetype_shap:
                 assert shap_vals.shape[0] == X.shape[0]
                 assert shap_vals.shape[1] == X.shape[1]
+        elif shap_arr.ndim == 3:
+            # Newer SHAP versions: (n_samples, n_features, n_classes)
+            assert shap_arr.shape[0] == X.shape[0]
+            assert shap_arr.shape[1] == X.shape[1]
         else:
             # Binary case
             assert fidelity.archetype_shap.shape == X.shape
@@ -123,7 +127,9 @@ class TestFitModels:
 class TestSHAPCorrelation:
     """Test SHAP correlation computation."""
 
-    def test_compute_shap_correlation_basic(self, mock_archetype_data, mock_synthetic_data):
+    def test_compute_shap_correlation_basic(
+        self, mock_archetype_data, mock_synthetic_data
+    ):
         """Test basic SHAP correlation computation."""
         X_arch, y_arch = mock_archetype_data
         X_synth, y_synth = mock_synthetic_data
@@ -165,7 +171,9 @@ class TestSHAPCorrelation:
 class TestRankAgreement:
     """Test feature ranking agreement."""
 
-    def test_compute_rank_agreement_basic(self, mock_archetype_data, mock_synthetic_data):
+    def test_compute_rank_agreement_basic(
+        self, mock_archetype_data, mock_synthetic_data
+    ):
         """Test basic rank agreement computation."""
         X_arch, y_arch = mock_archetype_data
         X_synth, y_synth = mock_synthetic_data
@@ -205,7 +213,9 @@ class TestRankAgreement:
 class TestFeatureImportanceMSE:
     """Test feature importance MSE computation."""
 
-    def test_compute_importance_mse_basic(self, mock_archetype_data, mock_synthetic_data):
+    def test_compute_importance_mse_basic(
+        self, mock_archetype_data, mock_synthetic_data
+    ):
         """Test basic importance MSE computation."""
         X_arch, y_arch = mock_archetype_data
         X_synth, y_synth = mock_synthetic_data
@@ -245,7 +255,9 @@ class TestFeatureImportanceMSE:
 class TestTopKOverlap:
     """Test top-k feature overlap computation."""
 
-    def test_compute_top_k_overlap_basic(self, mock_archetype_data, mock_synthetic_data):
+    def test_compute_top_k_overlap_basic(
+        self, mock_archetype_data, mock_synthetic_data
+    ):
         """Test basic top-k overlap computation."""
         X_arch, y_arch = mock_archetype_data
         X_synth, y_synth = mock_synthetic_data
@@ -259,7 +271,9 @@ class TestTopKOverlap:
         assert 0.0 <= overlap <= 1.0
         assert 'top_10_overlap' in fidelity.fidelity_scores
 
-    def test_top_k_overlap_different_k_values(self, mock_archetype_data, mock_synthetic_data):
+    def test_top_k_overlap_different_k_values(
+        self, mock_archetype_data, mock_synthetic_data
+    ):
         """Test top-k overlap with different k values."""
         X_arch, y_arch = mock_archetype_data
         X_synth, y_synth = mock_synthetic_data
@@ -351,8 +365,9 @@ class TestComputeAllMetrics:
         assert 'top_20_overlap' in scores
         assert 'overall_fidelity' in scores
 
-    def test_compute_all_metrics_with_interactions(self, mock_archetype_data,
-                                                   mock_synthetic_data, mock_nmf_matrices):
+    def test_compute_all_metrics_with_interactions(
+        self, mock_archetype_data, mock_synthetic_data, mock_nmf_matrices
+    ):
         """Test computing all metrics including interactions."""
         X_arch, y_arch = mock_archetype_data
         X_synth, y_synth = mock_synthetic_data
@@ -367,7 +382,9 @@ class TestComputeAllMetrics:
         assert 'interaction_fidelity' in scores
         assert scores['interaction_fidelity'] > 0
 
-    def test_overall_fidelity_calculation(self, mock_archetype_data, mock_synthetic_data):
+    def test_overall_fidelity_calculation(
+        self, mock_archetype_data, mock_synthetic_data
+    ):
         """Test overall fidelity score calculation."""
         X_arch, y_arch = mock_archetype_data
         X_synth, y_synth = mock_synthetic_data
@@ -380,14 +397,16 @@ class TestComputeAllMetrics:
 
         # Overall fidelity should be weighted average
         expected = (
-            0.40 * scores['shap_correlation'] +
-            0.30 * scores['rank_agreement'] +
-            0.30 * scores['top_20_overlap']
+            0.40 * scores['shap_correlation']
+            + 0.30 * scores['rank_agreement']
+            + 0.30 * scores['top_20_overlap']
         )
 
         assert scores['overall_fidelity'] == pytest.approx(expected)
 
-    def test_overall_fidelity_in_valid_range(self, mock_archetype_data, mock_synthetic_data):
+    def test_overall_fidelity_in_valid_range(
+        self, mock_archetype_data, mock_synthetic_data
+    ):
         """Test that overall fidelity is in [0, 1]."""
         X_arch, y_arch = mock_archetype_data
         X_synth, y_synth = mock_synthetic_data
@@ -498,7 +517,9 @@ class TestXAIFidelityIntegration:
         assert summary['status'] == 'evaluated'
         assert 0.0 <= scores['overall_fidelity'] <= 1.0
 
-    def test_reproducibility_with_random_state(self, mock_archetype_data, mock_synthetic_data):
+    def test_reproducibility_with_random_state(
+        self, mock_archetype_data, mock_synthetic_data
+    ):
         """Test reproducibility with fixed random state."""
         X_arch, y_arch = mock_archetype_data
         X_synth, y_synth = mock_synthetic_data

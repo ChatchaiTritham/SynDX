@@ -6,7 +6,7 @@ Demonstrates basic usage of the SynDX-Hybrid framework for synthetic medical dat
 
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
 from syn_dx_hybrid.pipeline import SynDXHybridPipeline
 

@@ -8,17 +8,23 @@ Author: Chatchai Tritham
 Date: 2026-01-25
 """
 
-import pytest
+import shutil
+import sys
+import tempfile
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
-from pathlib import Path
-import tempfile
-import shutil
+import pytest
 
+SRC_PATH = Path(__file__).resolve().parents[1] / "src"
+if str(SRC_PATH) not in sys.path:
+    sys.path.insert(0, str(SRC_PATH))
 
 # ============================================================================
 # Test Configuration
 # ============================================================================
+
 
 @pytest.fixture(scope="session")
 def test_config():
@@ -30,13 +36,14 @@ def test_config():
         'n_classes': 4,
         'epsilon': 1.0,
         'delta': 1e-5,
-        'clip_norm': 1.0
+        'clip_norm': 1.0,
     }
 
 
 # ============================================================================
 # Data Fixtures
 # ============================================================================
+
 
 @pytest.fixture(scope="function")
 def mock_archetype_data(test_config):
@@ -110,17 +117,32 @@ def mock_patient_data(test_config):
     patient = np.random.randn(n_features)
 
     # Set specific feature values for testing
-    patient[0] = 1.0   # Age
-    patient[1] = 0.0   # Gender
-    patient[2] = 1.5   # Duration
-    patient[3] = 3.0   # Trigger type
+    patient[0] = 1.0  # Age
+    patient[1] = 0.0  # Gender
+    patient[2] = 1.5  # Duration
+    patient[3] = 3.0  # Trigger type
 
     feature_names = [
-        'age', 'gender', 'duration', 'trigger', 'nystagmus', 'nyst_direction',
-        'vertigo_intensity', 'episode_duration', 'hearing_loss', 'tinnitus',
-        'headache', 'aura', 'family_history', 'previous_episodes',
-        'medication_response', 'dix_hallpike_positive', 'head_impulse_test',
-        'cerebellar_signs', 'autonomic_symptoms', 'photophobia'
+        'age',
+        'gender',
+        'duration',
+        'trigger',
+        'nystagmus',
+        'nyst_direction',
+        'vertigo_intensity',
+        'episode_duration',
+        'hearing_loss',
+        'tinnitus',
+        'headache',
+        'aura',
+        'family_history',
+        'previous_episodes',
+        'medication_response',
+        'dix_hallpike_positive',
+        'head_impulse_test',
+        'cerebellar_signs',
+        'autonomic_symptoms',
+        'photophobia',
     ]
 
     return patient, feature_names
@@ -168,6 +190,7 @@ def mock_nmf_matrices(test_config):
 # File System Fixtures
 # ============================================================================
 
+
 @pytest.fixture(scope="function")
 def temp_output_dir():
     """Create a temporary output directory for test files."""
@@ -190,6 +213,7 @@ def temp_figure_dir(temp_output_dir):
 # Cleanup Fixtures
 # ============================================================================
 
+
 @pytest.fixture(scope="function", autouse=True)
 def reset_random_state(test_config):
     """Reset random state before each test."""
@@ -203,6 +227,7 @@ def setup_test_environment():
     """Setup test environment before all tests."""
     # Suppress warnings during tests
     import warnings
+
     warnings.filterwarnings("ignore", category=DeprecationWarning)
     warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -216,6 +241,7 @@ def setup_test_environment():
 # Pytest Hooks
 # ============================================================================
 
+
 def pytest_configure(config):
     """Configure pytest with custom markers."""
     config.addinivalue_line("markers", "unit: Unit tests")
@@ -225,4 +251,6 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "visualization: Visualization tests")
     config.addinivalue_line("markers", "privacy: Privacy mechanism tests")
     config.addinivalue_line("markers", "fidelity: XAI fidelity tests")
-    config.addinivalue_line("markers", "counterfactual: Counterfactual generation tests")
+    config.addinivalue_line(
+        "markers", "counterfactual: Counterfactual generation tests"
+    )

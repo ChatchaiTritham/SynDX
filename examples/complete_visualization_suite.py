@@ -12,12 +12,8 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import sys
 import os
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            '..')))
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 warnings.filterwarnings('ignore')
 
@@ -30,8 +26,9 @@ class CompleteSynDXVisualizationSuite:
     Generates all 10 figures for manuscript submission
     """
 
-    def __init__(self, output_dir: str = "outputs/publication_figures",
-                 format: str = 'png'):
+    def __init__(
+        self, output_dir: str = "outputs/publication_figures", format: str = 'png'
+    ):
         """
         Initialize complete visualization suite
 
@@ -46,8 +43,7 @@ class CompleteSynDXVisualizationSuite:
         # Initialize sub-visualizers
         self.academic_viz = AcademicVisualizer(self.output_dir, format)
         self.advanced_charts = AdvancedAcademicCharts(self.output_dir, format)
-        self.comparative_charts = ComparativeAcademicCharts(
-            self.output_dir, format)
+        self.comparative_charts = ComparativeAcademicCharts(self.output_dir, format)
 
         print("\n" + "=" * 80)
         print(" " * 15 + "SYNDX COMPLETE VISUALIZATION SUITE")
@@ -94,9 +90,7 @@ class CompleteSynDXVisualizationSuite:
 
         # Figure 2: Parameter Space Characterization
         print("Creating Figure 2: Parameter Space Characterization...")
-        self.academic_viz.fig2_parameter_space_characterization(
-            param_space, explorer
-        )
+        self.academic_viz.fig2_parameter_space_characterization(param_space, explorer)
 
         # Figure 3: XAI-Guided Exploration Workflow
         print("Creating Figure 3: XAI-Guided Exploration Workflow...")
@@ -113,18 +107,14 @@ class CompleteSynDXVisualizationSuite:
         # Figure 4: NMF Factor Analysis
         if explorer.nmf_model:
             print("Creating Figure 4: NMF Factor Analysis...")
-            self.advanced_charts.fig4_nmf_analysis(
-                explorer.nmf_model, explorer
-            )
+            self.advanced_charts.fig4_nmf_analysis(explorer.nmf_model, explorer)
         else:
             print("⚠ Skipping Figure 4: NMF model not available")
 
         # Figure 5: SHAP Feature Importance
         if explorer.shap_model:
             print("Creating Figure 5: SHAP Feature Importance...")
-            self.advanced_charts.fig5_shap_importance(
-                explorer.shap_model, explorer
-            )
+            self.advanced_charts.fig5_shap_importance(explorer.shap_model, explorer)
         else:
             print("⚠ Skipping Figure 5: SHAP model not available")
 
@@ -154,9 +144,7 @@ class CompleteSynDXVisualizationSuite:
 
         # Figure 8: Comparative Performance Analysis
         print("Creating Figure 8: Comparative Performance Analysis...")
-        self.comparative_charts.fig8_comparative_performance(
-            explorer, param_space
-        )
+        self.comparative_charts.fig8_comparative_performance(explorer, param_space)
 
         # Figure 9: Epidemiological Fidelity
         print("Creating Figure 9: Epidemiological Fidelity...")
@@ -166,9 +154,7 @@ class CompleteSynDXVisualizationSuite:
 
         # Figure 10: Critical Scenario Coverage
         print("Creating Figure 10: Critical Scenario Coverage...")
-        self.comparative_charts.fig10_critical_coverage(
-            archetypes, param_space
-        )
+        self.comparative_charts.fig10_critical_coverage(archetypes, param_space)
 
         print()
 
@@ -204,7 +190,7 @@ class CompleteSynDXVisualizationSuite:
             "Figure 7:  Clinical Validity Assessment ✓",
             "Figure 8:  Comparative Performance Analysis ✓",
             "Figure 9:  Epidemiological Fidelity ✓",
-            "Figure 10: Critical Scenario Coverage ✓"
+            "Figure 10: Critical Scenario Coverage ✓",
         ]
 
         for fig in figures:
@@ -215,17 +201,16 @@ class CompleteSynDXVisualizationSuite:
         print("-" * 80)
         print(f"  Total Archetypes Generated: {stats['final_count']:,}")
         print(f"  Target Archetypes: {stats['configuration']['n_target']:,}")
-        print(
-            f"  Achievement Rate: {
+        print(f"  Achievement Rate: {
                 stats['final_count'] / stats['configuration']['n_target'] * 100:.1f}%")
         print(f"  Parameter Space Size: {param_space.space_size:,}")
         print(
-            f"  Valid Space Size: {int(param_space.space_size * param_space.acceptance_rate):,}")
+            f"  Valid Space Size: {int(param_space.space_size * param_space.acceptance_rate):,}"
+        )
         print(f"  NMF Factors: {stats['configuration']['nmf_factors']}")
 
         if stats['nmf_summary']:
-            print(
-                f"  NMF Reconstruction Error: {
+            print(f"  NMF Reconstruction Error: {
                     stats['nmf_summary']['reconstruction_error']:.4f}")
 
         print("\n" + "-" * 80)
@@ -287,26 +272,26 @@ class CompleteSynDXVisualizationSuite:
                 'dpi': 600,
                 'format': 'pdf',
                 'max_width_mm': 183,
-                'font_family': 'Arial'
+                'font_family': 'Arial',
             },
             'jama': {
                 'dpi': 600,
                 'format': 'tiff',
                 'max_width_mm': 177,
-                'font_family': 'Arial'
+                'font_family': 'Arial',
             },
             'ieee': {
                 'dpi': 600,
                 'format': 'pdf',
                 'max_width_mm': 190,
-                'font_family': 'Times New Roman'
+                'font_family': 'Times New Roman',
             },
             'bmj': {
                 'dpi': 600,
                 'format': 'pdf',
                 'max_width_mm': 170,
-                'font_family': 'Arial'
-            }
+                'font_family': 'Arial',
+            },
         }
 
         specs = journal_specs.get(journal, journal_specs['nature'])
@@ -327,9 +312,14 @@ class CompleteSynDXVisualizationSuite:
 # Quick Access Functions
 # ============================================================================
 
-def create_publication_figures(explorer, archetypes, param_space,
-                               output_dir="outputs/publication_figures",
-                               format='png'):
+
+def create_publication_figures(
+    explorer,
+    archetypes,
+    param_space,
+    output_dir="outputs/publication_figures",
+    format='png',
+):
     """
     Quick function to create all publication figures
 
@@ -346,10 +336,8 @@ def create_publication_figures(explorer, archetypes, param_space,
 
 
 def create_manuscript_and_supplementary(
-        explorer,
-        archetypes,
-        param_space,
-        output_dir="outputs/publication_figures"):
+    explorer, archetypes, param_space, output_dir="outputs/publication_figures"
+):
     """
     Create both manuscript and supplementary figures
 
@@ -365,9 +353,13 @@ def create_manuscript_and_supplementary(
     return suite
 
 
-def prepare_journal_submission(explorer, archetypes, param_space,
-                               journal='nature',
-                               output_dir="outputs/publication_figures"):
+def prepare_journal_submission(
+    explorer,
+    archetypes,
+    param_space,
+    journal='nature',
+    output_dir="outputs/publication_figures",
+):
     """
     Prepare figures for specific journal submission
 

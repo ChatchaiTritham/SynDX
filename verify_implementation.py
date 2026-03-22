@@ -13,7 +13,7 @@ import pandas as pd
 from pathlib import Path
 
 # Add the project root to the path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
 def verify_implementation():
     """Verify that the implementation matches the manuscript specifications."""

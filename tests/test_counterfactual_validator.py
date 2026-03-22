@@ -7,9 +7,11 @@ Author: Chatchai Tritham
 Date: 2026-01-25
 """
 
-import pytest
 import numpy as np
-from syndx.phase2_synthesis.counterfactual_validator import CounterfactualValidator
+import pytest
+
+from syndx.phase2_synthesis.counterfactual_validator import \
+    CounterfactualValidator
 
 
 @pytest.mark.unit
@@ -32,7 +34,7 @@ class TestCounterfactualValidatorInit:
             constraint_checker=None,
             max_iterations=50,
             distance_metric='l1',
-            random_state=123
+            random_state=123,
         )
 
         assert validator.max_iterations == 50
@@ -60,9 +62,7 @@ class TestGenerateCounterfactual:
         validator = CounterfactualValidator(constraint_checker=None, max_iterations=50)
 
         cf = validator.generate_counterfactual(
-            patient,
-            target_diagnosis='VM',
-            feature_names=feature_names
+            patient, target_diagnosis='VM', feature_names=feature_names
         )
 
         # May or may not find valid counterfactual with mock validation
@@ -85,7 +85,7 @@ class TestGenerateCounterfactual:
             patient,
             target_diagnosis='BPPV',
             feature_names=feature_names,
-            modifiable_features=modifiable
+            modifiable_features=modifiable,
         )
 
         if cf is not None and cf['changes']:
@@ -101,9 +101,7 @@ class TestGenerateCounterfactual:
         validator = CounterfactualValidator(constraint_checker=None, max_iterations=50)
 
         cf = validator.generate_counterfactual(
-            patient,
-            target_diagnosis='VN',
-            feature_names=feature_names
+            patient, target_diagnosis='VN', feature_names=feature_names
         )
 
         if cf is not None:
@@ -124,7 +122,7 @@ class TestGenerateCounterfactuals:
             patient,
             target_diagnosis='BPPV',
             n_counterfactuals=3,
-            feature_names=feature_names
+            feature_names=feature_names,
         )
 
         assert isinstance(counterfactuals, list)
@@ -144,7 +142,7 @@ class TestGenerateCounterfactuals:
             patient,
             target_diagnosis='VM',
             n_counterfactuals=5,
-            feature_names=feature_names
+            feature_names=feature_names,
         )
 
         if len(counterfactuals) >= 2:
@@ -209,7 +207,9 @@ class TestComputeDistance:
 
     def test_compute_distance_l2(self):
         """Test L2 distance computation."""
-        validator = CounterfactualValidator(constraint_checker=None, distance_metric='l2')
+        validator = CounterfactualValidator(
+            constraint_checker=None, distance_metric='l2'
+        )
 
         original = np.array([0, 0, 0])
         counterfactual = np.array([3, 4, 0])
@@ -220,7 +220,9 @@ class TestComputeDistance:
 
     def test_compute_distance_l1(self):
         """Test L1 distance computation."""
-        validator = CounterfactualValidator(constraint_checker=None, distance_metric='l1')
+        validator = CounterfactualValidator(
+            constraint_checker=None, distance_metric='l1'
+        )
 
         original = np.array([0, 0, 0])
         counterfactual = np.array([3, 4, 0])
@@ -318,7 +320,10 @@ class TestValidatePlausibility:
         plausibility_few = validator.validate_plausibility(patient, cf_few)
         plausibility_many = validator.validate_plausibility(patient, cf_many)
 
-        assert plausibility_few['plausibility_score'] > plausibility_many['plausibility_score']
+        assert (
+            plausibility_few['plausibility_score']
+            > plausibility_many['plausibility_score']
+        )
 
 
 @pytest.mark.unit
@@ -332,7 +337,9 @@ class TestActionableInsights:
         validator = CounterfactualValidator(constraint_checker=None, max_iterations=30)
 
         diagnoses = ['BPPV', 'VM', 'VN']
-        insights = validator.compute_actionable_insights(patient, diagnoses, feature_names)
+        insights = validator.compute_actionable_insights(
+            patient, diagnoses, feature_names
+        )
 
         assert len(insights) == len(diagnoses)
 
@@ -348,7 +355,9 @@ class TestActionableInsights:
         validator = CounterfactualValidator(constraint_checker=None, max_iterations=30)
 
         diagnoses = ['BPPV', 'VM', 'VN', 'Stroke']
-        insights = validator.compute_actionable_insights(patient, diagnoses, feature_names)
+        insights = validator.compute_actionable_insights(
+            patient, diagnoses, feature_names
+        )
 
         distances = [ins['distance'] for ins in insights]
 
@@ -411,7 +420,7 @@ class TestCounterfactualValidatorIntegration:
                 patient,
                 target_diagnosis=diagnosis,
                 n_counterfactuals=2,
-                feature_names=feature_names
+                feature_names=feature_names,
             )
             all_counterfactuals.extend(cfs)
 
@@ -427,12 +436,16 @@ class TestCounterfactualValidatorIntegration:
 
         # Run 1
         np.random.seed(42)
-        validator1 = CounterfactualValidator(constraint_checker=None, random_state=42, max_iterations=20)
+        validator1 = CounterfactualValidator(
+            constraint_checker=None, random_state=42, max_iterations=20
+        )
         cf1 = validator1.generate_counterfactual(patient, 'BPPV', feature_names)
 
         # Run 2
         np.random.seed(42)
-        validator2 = CounterfactualValidator(constraint_checker=None, random_state=42, max_iterations=20)
+        validator2 = CounterfactualValidator(
+            constraint_checker=None, random_state=42, max_iterations=20
+        )
         cf2 = validator2.generate_counterfactual(patient, 'BPPV', feature_names)
 
         # Should give similar results (with mock validation, may have randomness)

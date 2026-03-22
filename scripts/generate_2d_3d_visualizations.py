@@ -64,9 +64,9 @@ class SynDXVisualizer:
 
     # ========== Phase 1: Knowledge Extraction Visualizations ==========
 
-    def plot_parameter_space_2d(self,
-                                archetypes_df: pd.DataFrame,
-                                save_name: str = "parameter_space_2d"):
+    def plot_parameter_space_2d(
+        self, archetypes_df: pd.DataFrame, save_name: str = "parameter_space_2d"
+    ):
         """
         2D scatter plot of parameter space coverage.
 
@@ -83,73 +83,73 @@ class SynDXVisualizer:
             style='timing',
             s=100,
             alpha=0.6,
-            ax=axes[0, 0]
+            ax=axes[0, 0],
         )
-        axes[0, 0].set_title('Parameter Space: Age × Diagnosis',
-                             fontsize=16, fontweight='bold')
+        axes[0, 0].set_title(
+            'Parameter Space: Age × Diagnosis', fontsize=16, fontweight='bold'
+        )
         axes[0, 0].set_xlabel('Age (years)', fontsize=14)
         axes[0, 0].set_ylabel('Diagnosis Category', fontsize=14)
 
         # Timing vs Trigger distribution
-        timing_trigger = pd.crosstab(
-            archetypes_df['timing'],
-            archetypes_df['trigger'],
-            normalize='index'
-        ) * 100
+        timing_trigger = (
+            pd.crosstab(
+                archetypes_df['timing'], archetypes_df['trigger'], normalize='index'
+            )
+            * 100
+        )
         sns.heatmap(
             timing_trigger,
             annot=True,
             fmt='.1f',
             cmap='YlOrRd',
             ax=axes[0, 1],
-            cbar_kws={'label': 'Percentage (%)'}
+            cbar_kws={'label': 'Percentage (%)'},
         )
-        axes[0, 1].set_title('Timing × Trigger Distribution',
-                             fontsize=16, fontweight='bold')
+        axes[0, 1].set_title(
+            'Timing × Trigger Distribution', fontsize=16, fontweight='bold'
+        )
         axes[0, 1].set_xlabel('Trigger Type', fontsize=14)
         axes[0, 1].set_ylabel('Timing Pattern', fontsize=14)
 
         # Diagnosis distribution
         diagnosis_counts = archetypes_df['diagnosis'].value_counts()
-        axes[1, 0].barh(diagnosis_counts.index,
-                        diagnosis_counts.values, color='steelblue')
-        axes[1, 0].set_title('Diagnosis Distribution',
-                             fontsize=16, fontweight='bold')
+        axes[1, 0].barh(
+            diagnosis_counts.index, diagnosis_counts.values, color='steelblue'
+        )
+        axes[1, 0].set_title('Diagnosis Distribution', fontsize=16, fontweight='bold')
         axes[1, 0].set_xlabel('Count', fontsize=14)
         axes[1, 0].set_ylabel('Diagnosis', fontsize=14)
 
         # Urgency vs Timing
-        urgency_timing = pd.crosstab(
-            archetypes_df['urgency'],
-            archetypes_df['timing']
+        urgency_timing = pd.crosstab(archetypes_df['urgency'], archetypes_df['timing'])
+        urgency_timing.plot(
+            kind='bar',
+            stacked=True,
+            ax=axes[1, 1],
+            color=['#1f77b4', '#ff7f0e', '#2ca02c'],
         )
-        urgency_timing.plot(kind='bar', stacked=True, ax=axes[1, 1], color=[
-                            '#1f77b4', '#ff7f0e', '#2ca02c'])
-        axes[1, 1].set_title('Urgency × Timing Pattern',
-                             fontsize=16, fontweight='bold')
+        axes[1, 1].set_title('Urgency × Timing Pattern', fontsize=16, fontweight='bold')
         axes[1, 1].set_xlabel('Urgency Level', fontsize=14)
         axes[1, 1].set_ylabel('Count', fontsize=14)
         axes[1, 1].legend(title='Timing', fontsize=12)
 
         plt.tight_layout()
         plt.savefig(
-            self.output_dir /
-            "phase1" /
-            f"{save_name}.png",
+            self.output_dir / "phase1" / f"{save_name}.png",
             dpi=600,
-            bbox_inches='tight')
+            bbox_inches='tight',
+        )
         plt.savefig(
-            self.output_dir /
-            "phase1" /
-            f"{save_name}.pdf",
-            bbox_inches='tight')
+            self.output_dir / "phase1" / f"{save_name}.pdf", bbox_inches='tight'
+        )
         plt.close()
 
         logger.info(f"Saved: {save_name}")
 
-    def plot_parameter_space_3d(self,
-                                archetypes_df: pd.DataFrame,
-                                save_name: str = "parameter_space_3d"):
+    def plot_parameter_space_3d(
+        self, archetypes_df: pd.DataFrame, save_name: str = "parameter_space_3d"
+    ):
         """
         3D interactive visualization of parameter space.
 
@@ -160,11 +160,8 @@ class SynDXVisualizer:
                 go.Scatter3d(
                     x=archetypes_df['age'],
                     y=archetypes_df.get(
-                        'symptom_severity',
-                        np.random.randint(
-                            1,
-                            11,
-                            len(archetypes_df))),
+                        'symptom_severity', np.random.randint(1, 11, len(archetypes_df))
+                    ),
                     z=archetypes_df['urgency'],
                     mode='markers',
                     marker=dict(
@@ -172,34 +169,39 @@ class SynDXVisualizer:
                         color=archetypes_df['urgency'],
                         colorscale='Viridis',
                         showscale=True,
-                        colorbar=dict(
-                            title="Urgency Level")),
+                        colorbar=dict(title="Urgency Level"),
+                    ),
                     text=archetypes_df['diagnosis'],
-                    hovertemplate='<b>Age:</b> %{x}<br>' +
-                    '<b>Severity:</b> %{y}<br>' +
-                    '<b>Urgency:</b> %{z}<br>' +
-                    '<b>Diagnosis:</b> %{text}<extra></extra>')])
+                    hovertemplate='<b>Age:</b> %{x}<br>'
+                    + '<b>Severity:</b> %{y}<br>'
+                    + '<b>Urgency:</b> %{z}<br>'
+                    + '<b>Diagnosis:</b> %{text}<extra></extra>',
+                )
+            ]
+        )
 
         fig.update_layout(
             title='3D Parameter Space: Age × Severity × Urgency',
             scene=dict(
                 xaxis_title='Age (years)',
                 yaxis_title='Symptom Severity (1-10)',
-                zaxis_title='Urgency Level (0-2)'
+                zaxis_title='Urgency Level (0-2)',
             ),
             font=dict(family="Times New Roman", size=14),
             width=1200,
-            height=900
+            height=900,
         )
 
         fig.write_html(self.output_dir / "3d" / f"{save_name}.html")
         logger.info(f"Saved: {save_name}.html")
 
-    def plot_nmf_factors(self,
-                         W: np.ndarray,
-                         H: np.ndarray,
-                         feature_names: List[str],
-                         save_name: str = "nmf_factors"):
+    def plot_nmf_factors(
+        self,
+        W: np.ndarray,
+        H: np.ndarray,
+        feature_names: List[str],
+        save_name: str = "nmf_factors",
+    ):
         """
         Visualize NMF latent factors (W and H matrices).
 
@@ -221,47 +223,51 @@ class SynDXVisualizer:
             center=0,
             ax=axes[0],
             cbar_kws={'label': 'Factor Loading'},
-            xticklabels=feature_names[:top_features] if len(feature_names) >= top_features else feature_names,
-            yticklabels=[f'Factor {i + 1}' for i in range(r)]
+            xticklabels=(
+                feature_names[:top_features]
+                if len(feature_names) >= top_features
+                else feature_names
+            ),
+            yticklabels=[f'Factor {i + 1}' for i in range(r)],
         )
         axes[0].set_title(
-            f'NMF Latent Factor Loadings (r={r})',
-            fontsize=16,
-            fontweight='bold')
+            f'NMF Latent Factor Loadings (r={r})', fontsize=16, fontweight='bold'
+        )
         axes[0].set_xlabel('Features (Top 30)', fontsize=14)
         axes[0].set_ylabel('Latent Factors', fontsize=14)
 
         # W matrix distribution (archetype weights)
-        axes[1].boxplot([W[:, i] for i in range(r)], tick_labels=[
-                        f'F{i + 1}' for i in range(r)])
+        axes[1].boxplot(
+            [W[:, i] for i in range(r)], tick_labels=[f'F{i + 1}' for i in range(r)]
+        )
         axes[1].set_title(
             'Distribution of Archetype Weights Across Factors',
             fontsize=16,
-            fontweight='bold')
+            fontweight='bold',
+        )
         axes[1].set_xlabel('Latent Factor', fontsize=14)
         axes[1].set_ylabel('Weight', fontsize=14)
         axes[1].grid(True, alpha=0.3)
 
         plt.tight_layout()
         plt.savefig(
-            self.output_dir /
-            "phase1" /
-            f"{save_name}.png",
+            self.output_dir / "phase1" / f"{save_name}.png",
             dpi=600,
-            bbox_inches='tight')
+            bbox_inches='tight',
+        )
         plt.savefig(
-            self.output_dir /
-            "phase1" /
-            f"{save_name}.pdf",
-            bbox_inches='tight')
+            self.output_dir / "phase1" / f"{save_name}.pdf", bbox_inches='tight'
+        )
         plt.close()
 
         logger.info(f"Saved: {save_name}")
 
-    def plot_shap_importance(self,
-                             shap_values: np.ndarray,
-                             feature_names: List[str],
-                             save_name: str = "shap_importance"):
+    def plot_shap_importance(
+        self,
+        shap_values: np.ndarray,
+        feature_names: List[str],
+        save_name: str = "shap_importance",
+    ):
         """
         Visualize SHAP feature importance.
 
@@ -279,66 +285,47 @@ class SynDXVisualizer:
 
         # Bar plot
         axes[0].barh(
-            range(len(sorted_indices)),
-            mean_abs_shap[sorted_indices],
-            color='steelblue'
+            range(len(sorted_indices)), mean_abs_shap[sorted_indices], color='steelblue'
         )
         axes[0].set_yticks(range(len(sorted_indices)))
         axes[0].set_yticklabels([feature_names[i] for i in sorted_indices])
         axes[0].set_title(
-            'Top 20 Features by SHAP Importance',
-            fontsize=16,
-            fontweight='bold')
+            'Top 20 Features by SHAP Importance', fontsize=16, fontweight='bold'
+        )
         axes[0].set_xlabel('Mean |SHAP Value|', fontsize=14)
 
         # Violin plot for top 10 features
         top_10_indices = sorted_indices[-10:]
         shap_df = pd.DataFrame(
             shap_values[:, top_10_indices],
-            columns=[feature_names[i] for i in top_10_indices]
+            columns=[feature_names[i] for i in top_10_indices],
         )
-        shap_df_melted = shap_df.melt(
-            var_name='Feature', value_name='SHAP Value')
+        shap_df_melted = shap_df.melt(var_name='Feature', value_name='SHAP Value')
 
-        sns.violinplot(
-            data=shap_df_melted,
-            y='Feature',
-            x='SHAP Value',
-            ax=axes[1]
-        )
+        sns.violinplot(data=shap_df_melted, y='Feature', x='SHAP Value', ax=axes[1])
         axes[1].set_title(
-            'SHAP Value Distribution (Top 10 Features)',
-            fontsize=16,
-            fontweight='bold')
-        axes[1].axvline(
-            x=0,
-            color='red',
-            linestyle='--',
-            linewidth=2,
-            alpha=0.5)
+            'SHAP Value Distribution (Top 10 Features)', fontsize=16, fontweight='bold'
+        )
+        axes[1].axvline(x=0, color='red', linestyle='--', linewidth=2, alpha=0.5)
 
         plt.tight_layout()
         plt.savefig(
-            self.output_dir /
-            "phase1" /
-            f"{save_name}.png",
+            self.output_dir / "phase1" / f"{save_name}.png",
             dpi=600,
-            bbox_inches='tight')
+            bbox_inches='tight',
+        )
         plt.savefig(
-            self.output_dir /
-            "phase1" /
-            f"{save_name}.pdf",
-            bbox_inches='tight')
+            self.output_dir / "phase1" / f"{save_name}.pdf", bbox_inches='tight'
+        )
         plt.close()
 
         logger.info(f"Saved: {save_name}")
 
     # ========== Phase 2: Synthesis Visualizations ==========
 
-    def plot_vae_latent_space_2d(self,
-                                 z_mean: np.ndarray,
-                                 labels: np.ndarray,
-                                 save_name: str = "vae_latent_2d"):
+    def plot_vae_latent_space_2d(
+        self, z_mean: np.ndarray, labels: np.ndarray, save_name: str = "vae_latent_2d"
+    ):
         """
         2D visualization of VAE latent space (first 2 dimensions).
 
@@ -350,17 +337,11 @@ class SynDXVisualizer:
 
         # Scatter plot colored by diagnosis
         scatter = axes[0].scatter(
-            z_mean[:, 0],
-            z_mean[:, 1],
-            c=labels,
-            cmap='tab20',
-            alpha=0.6,
-            s=50
+            z_mean[:, 0], z_mean[:, 1], c=labels, cmap='tab20', alpha=0.6, s=50
         )
         axes[0].set_title(
-            'VAE Latent Space (2D Projection)',
-            fontsize=16,
-            fontweight='bold')
+            'VAE Latent Space (2D Projection)', fontsize=16, fontweight='bold'
+        )
         axes[0].set_xlabel('Latent Dimension 1', fontsize=14)
         axes[0].set_ylabel('Latent Dimension 2', fontsize=14)
         axes[0].grid(True, alpha=0.3)
@@ -368,20 +349,13 @@ class SynDXVisualizer:
 
         # Density plot
         from scipy.stats import gaussian_kde
+
         xy = np.vstack([z_mean[:, 0], z_mean[:, 1]])
         z = gaussian_kde(xy)(xy)
         scatter2 = axes[1].scatter(
-            z_mean[:, 0],
-            z_mean[:, 1],
-            c=z,
-            cmap='YlOrRd',
-            alpha=0.6,
-            s=50
+            z_mean[:, 0], z_mean[:, 1], c=z, cmap='YlOrRd', alpha=0.6, s=50
         )
-        axes[1].set_title(
-            'VAE Latent Space Density',
-            fontsize=16,
-            fontweight='bold')
+        axes[1].set_title('VAE Latent Space Density', fontsize=16, fontweight='bold')
         axes[1].set_xlabel('Latent Dimension 1', fontsize=14)
         axes[1].set_ylabel('Latent Dimension 2', fontsize=14)
         axes[1].grid(True, alpha=0.3)
@@ -389,25 +363,24 @@ class SynDXVisualizer:
 
         plt.tight_layout()
         plt.savefig(
-            self.output_dir /
-            "phase2" /
-            f"{save_name}.png",
+            self.output_dir / "phase2" / f"{save_name}.png",
             dpi=600,
-            bbox_inches='tight')
+            bbox_inches='tight',
+        )
         plt.savefig(
-            self.output_dir /
-            "phase2" /
-            f"{save_name}.pdf",
-            bbox_inches='tight')
+            self.output_dir / "phase2" / f"{save_name}.pdf", bbox_inches='tight'
+        )
         plt.close()
 
         logger.info(f"Saved: {save_name}")
 
-    def plot_vae_latent_space_3d(self,
-                                 z_mean: np.ndarray,
-                                 labels: np.ndarray,
-                                 label_names: List[str],
-                                 save_name: str = "vae_latent_3d"):
+    def plot_vae_latent_space_3d(
+        self,
+        z_mean: np.ndarray,
+        labels: np.ndarray,
+        label_names: List[str],
+        save_name: str = "vae_latent_3d",
+    ):
         """
         3D interactive visualization of VAE latent space.
 
@@ -416,43 +389,54 @@ class SynDXVisualizer:
             labels: Diagnosis labels
             label_names: Names of diagnosis categories
         """
-        fig = go.Figure(data=[go.Scatter3d(
-            x=z_mean[:, 0],
-            y=z_mean[:, 1],
-            z=z_mean[:, 2],
-            mode='markers',
-            marker=dict(
-                size=4,
-                color=labels,
-                colorscale='Viridis',
-                showscale=True,
-                colorbar=dict(title="Diagnosis")
-            ),
-            text=[label_names[int(l)] if int(l) < len(label_names) else f"Label {int(l)}" for l in labels],
-            hovertemplate='<b>Latent 1:</b> %{x:.3f}<br>' +
-                          '<b>Latent 2:</b> %{y:.3f}<br>' +
-                          '<b>Latent 3:</b> %{z:.3f}<br>' +
-                          '<b>Diagnosis:</b> %{text}<extra></extra>'
-        )])
+        fig = go.Figure(
+            data=[
+                go.Scatter3d(
+                    x=z_mean[:, 0],
+                    y=z_mean[:, 1],
+                    z=z_mean[:, 2],
+                    mode='markers',
+                    marker=dict(
+                        size=4,
+                        color=labels,
+                        colorscale='Viridis',
+                        showscale=True,
+                        colorbar=dict(title="Diagnosis"),
+                    ),
+                    text=[
+                        (
+                            label_names[int(l)]
+                            if int(l) < len(label_names)
+                            else f"Label {int(l)}"
+                        )
+                        for l in labels
+                    ],
+                    hovertemplate='<b>Latent 1:</b> %{x:.3f}<br>'
+                    + '<b>Latent 2:</b> %{y:.3f}<br>'
+                    + '<b>Latent 3:</b> %{z:.3f}<br>'
+                    + '<b>Diagnosis:</b> %{text}<extra></extra>',
+                )
+            ]
+        )
 
         fig.update_layout(
             title='VAE Latent Space (3D Visualization)',
             scene=dict(
                 xaxis_title='Latent Dimension 1',
                 yaxis_title='Latent Dimension 2',
-                zaxis_title='Latent Dimension 3'
+                zaxis_title='Latent Dimension 3',
             ),
             font=dict(family="Times New Roman", size=14),
             width=1200,
-            height=900
+            height=900,
         )
 
         fig.write_html(self.output_dir / "3d" / f"{save_name}.html")
         logger.info(f"Saved: {save_name}.html")
 
-    def plot_privacy_budget_tracking(self,
-                                     privacy_history: List[Dict],
-                                     save_name: str = "privacy_budget"):
+    def plot_privacy_budget_tracking(
+        self, privacy_history: List[Dict], save_name: str = "privacy_budget"
+    ):
         """
         Visualize differential privacy budget consumption over epochs.
 
@@ -468,15 +452,11 @@ class SynDXVisualizer:
         # Epsilon over epochs
         axes[0].plot(epochs, epsilons, 'b-', linewidth=2, label='ε (epsilon)')
         axes[0].axhline(
-            y=1.0,
-            color='r',
-            linestyle='--',
-            linewidth=2,
-            label='Target ε=1.0')
+            y=1.0, color='r', linestyle='--', linewidth=2, label='Target ε=1.0'
+        )
         axes[0].set_title(
-            'Privacy Budget: Epsilon (ε) Consumption',
-            fontsize=16,
-            fontweight='bold')
+            'Privacy Budget: Epsilon (ε) Consumption', fontsize=16, fontweight='bold'
+        )
         axes[0].set_xlabel('Epoch', fontsize=14)
         axes[0].set_ylabel('ε', fontsize=14)
         axes[0].legend(fontsize=12)
@@ -485,15 +465,11 @@ class SynDXVisualizer:
         # Delta over epochs
         axes[1].plot(epochs, deltas, 'g-', linewidth=2, label='δ (delta)')
         axes[1].axhline(
-            y=1e-5,
-            color='r',
-            linestyle='--',
-            linewidth=2,
-            label='Target δ=10⁻⁵')
+            y=1e-5, color='r', linestyle='--', linewidth=2, label='Target δ=10⁻⁵'
+        )
         axes[1].set_title(
-            'Privacy Budget: Delta (δ) Consumption',
-            fontsize=16,
-            fontweight='bold')
+            'Privacy Budget: Delta (δ) Consumption', fontsize=16, fontweight='bold'
+        )
         axes[1].set_xlabel('Epoch', fontsize=14)
         axes[1].set_ylabel('δ', fontsize=14)
         axes[1].set_yscale('log')
@@ -502,26 +478,24 @@ class SynDXVisualizer:
 
         plt.tight_layout()
         plt.savefig(
-            self.output_dir /
-            "phase2" /
-            f"{save_name}.png",
+            self.output_dir / "phase2" / f"{save_name}.png",
             dpi=600,
-            bbox_inches='tight')
+            bbox_inches='tight',
+        )
         plt.savefig(
-            self.output_dir /
-            "phase2" /
-            f"{save_name}.pdf",
-            bbox_inches='tight')
+            self.output_dir / "phase2" / f"{save_name}.pdf", bbox_inches='tight'
+        )
         plt.close()
 
         logger.info(f"Saved: {save_name}")
 
     def plot_counterfactual_examples(
-            self,
-            original: np.ndarray,
-            counterfactual: np.ndarray,
-            feature_names: List[str],
-            save_name: str = "counterfactual_examples"):
+        self,
+        original: np.ndarray,
+        counterfactual: np.ndarray,
+        feature_names: List[str],
+        save_name: str = "counterfactual_examples",
+    ):
         """
         Visualize counterfactual examples showing feature changes.
 
@@ -532,8 +506,7 @@ class SynDXVisualizer:
         """
         # Calculate differences
         diff = counterfactual - original
-        changed_indices = np.where(np.abs(diff) > 0.01)[
-            0][:15]  # Top 15 changes
+        changed_indices = np.where(np.abs(diff) > 0.01)[0][:15]  # Top 15 changes
 
         fig, ax = plt.subplots(figsize=(14, 8))
 
@@ -545,45 +518,45 @@ class SynDXVisualizer:
             original[changed_indices],
             width,
             label='Original',
-            color='steelblue')
+            color='steelblue',
+        )
         ax.barh(
             x + width / 2,
             counterfactual[changed_indices],
             width,
             label='Counterfactual',
-            color='coral')
+            color='coral',
+        )
 
         ax.set_yticks(x)
         ax.set_yticklabels([feature_names[i] for i in changed_indices])
         ax.set_xlabel('Feature Value', fontsize=14)
         ax.set_title(
-            'Counterfactual Example: Feature Changes',
-            fontsize=16,
-            fontweight='bold')
+            'Counterfactual Example: Feature Changes', fontsize=16, fontweight='bold'
+        )
         ax.legend(fontsize=12)
         ax.grid(True, alpha=0.3, axis='x')
 
         plt.tight_layout()
         plt.savefig(
-            self.output_dir /
-            "phase2" /
-            f"{save_name}.png",
+            self.output_dir / "phase2" / f"{save_name}.png",
             dpi=600,
-            bbox_inches='tight')
+            bbox_inches='tight',
+        )
         plt.savefig(
-            self.output_dir /
-            "phase2" /
-            f"{save_name}.pdf",
-            bbox_inches='tight')
+            self.output_dir / "phase2" / f"{save_name}.pdf", bbox_inches='tight'
+        )
         plt.close()
 
         logger.info(f"Saved: {save_name}")
 
     # ========== Phase 3: Validation Visualizations ==========
 
-    def plot_performance_comparison(self,
-                                    metrics_dict: Dict[str, Dict[str, float]],
-                                    save_name: str = "performance_comparison"):
+    def plot_performance_comparison(
+        self,
+        metrics_dict: Dict[str, Dict[str, float]],
+        save_name: str = "performance_comparison",
+    ):
         """
         Compare performance metrics across models.
 
@@ -598,10 +571,11 @@ class SynDXVisualizer:
         df[['accuracy', 'precision', 'recall', 'f1_score']].plot(
             kind='bar',
             ax=axes[0, 0],
-            color=['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
+            color=['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728'],
         )
         axes[0, 0].set_title(
-            'Classification Metrics Comparison', fontsize=16, fontweight='bold')
+            'Classification Metrics Comparison', fontsize=16, fontweight='bold'
+        )
         axes[0, 0].set_xlabel('Model', fontsize=14)
         axes[0, 0].set_ylabel('Score', fontsize=14)
         axes[0, 0].legend(title='Metric', fontsize=12)
@@ -611,8 +585,7 @@ class SynDXVisualizer:
         # ROC-AUC comparison
         if 'roc_auc' in df.columns:
             df['roc_auc'].plot(kind='barh', ax=axes[0, 1], color='steelblue')
-            axes[0, 1].set_title(
-                'ROC-AUC Scores', fontsize=16, fontweight='bold')
+            axes[0, 1].set_title('ROC-AUC Scores', fontsize=16, fontweight='bold')
             axes[0, 1].set_xlabel('ROC-AUC', fontsize=14)
             axes[0, 1].set_xlim([0, 1])
             axes[0, 1].grid(True, alpha=0.3, axis='x')
@@ -626,10 +599,9 @@ class SynDXVisualizer:
             vmin=0,
             vmax=1,
             ax=axes[1, 0],
-            cbar_kws={'label': 'Score'}
+            cbar_kws={'label': 'Score'},
         )
-        axes[1, 0].set_title('All Metrics Heatmap',
-                             fontsize=16, fontweight='bold')
+        axes[1, 0].set_title('All Metrics Heatmap', fontsize=16, fontweight='bold')
         axes[1, 0].set_xlabel('Metric', fontsize=14)
         axes[1, 0].set_ylabel('Model', fontsize=14)
 
@@ -639,11 +611,7 @@ class SynDXVisualizer:
             metrics = ['accuracy', 'precision', 'recall', 'f1_score']
             values = [metrics_dict[first_model].get(m, 0) for m in metrics]
 
-            angles = np.linspace(
-                0,
-                2 * np.pi,
-                len(metrics),
-                endpoint=False).tolist()
+            angles = np.linspace(0, 2 * np.pi, len(metrics), endpoint=False).tolist()
             values += values[:1]
             angles += angles[:1]
 
@@ -654,31 +622,26 @@ class SynDXVisualizer:
             ax_polar.set_xticklabels(metrics, fontsize=12)
             ax_polar.set_ylim(0, 1)
             ax_polar.set_title(
-                f'{first_model} Metrics',
-                fontsize=14,
-                fontweight='bold',
-                pad=20)
+                f'{first_model} Metrics', fontsize=14, fontweight='bold', pad=20
+            )
             ax_polar.grid(True)
 
         plt.tight_layout()
         plt.savefig(
-            self.output_dir /
-            "phase3" /
-            f"{save_name}.png",
+            self.output_dir / "phase3" / f"{save_name}.png",
             dpi=600,
-            bbox_inches='tight')
+            bbox_inches='tight',
+        )
         plt.savefig(
-            self.output_dir /
-            "phase3" /
-            f"{save_name}.pdf",
-            bbox_inches='tight')
+            self.output_dir / "phase3" / f"{save_name}.pdf", bbox_inches='tight'
+        )
         plt.close()
 
         logger.info(f"Saved: {save_name}")
 
-    def plot_xai_fidelity_scores(self,
-                                 fidelity_scores: Dict[str, float],
-                                 save_name: str = "xai_fidelity"):
+    def plot_xai_fidelity_scores(
+        self, fidelity_scores: Dict[str, float], save_name: str = "xai_fidelity"
+    ):
         """
         Visualize XAI fidelity metrics.
 
@@ -691,14 +654,13 @@ class SynDXVisualizer:
         metrics = list(fidelity_scores.keys())
         values = list(fidelity_scores.values())
 
-        colors = ['#1f77b4' if v >= 0.8 else '#ff7f0e' if v >=
-                  0.6 else '#d62728' for v in values]
+        colors = [
+            '#1f77b4' if v >= 0.8 else '#ff7f0e' if v >= 0.6 else '#d62728'
+            for v in values
+        ]
 
         axes[0].barh(metrics, values, color=colors)
-        axes[0].set_title(
-            'XAI Fidelity Scores',
-            fontsize=16,
-            fontweight='bold')
+        axes[0].set_title('XAI Fidelity Scores', fontsize=16, fontweight='bold')
         axes[0].set_xlabel('Score', fontsize=14)
         axes[0].set_xlim([0, 1])
         axes[0].axvline(
@@ -707,14 +669,16 @@ class SynDXVisualizer:
             linestyle='--',
             linewidth=2,
             alpha=0.5,
-            label='Excellent (≥0.8)')
+            label='Excellent (≥0.8)',
+        )
         axes[0].axvline(
             x=0.6,
             color='orange',
             linestyle='--',
             linewidth=2,
             alpha=0.5,
-            label='Good (≥0.6)')
+            label='Good (≥0.6)',
+        )
         axes[0].legend(fontsize=11)
         axes[0].grid(True, alpha=0.3, axis='x')
 
@@ -729,35 +693,29 @@ class SynDXVisualizer:
                 autopct='%1.1f%%',
                 startangle=90,
                 colors=['steelblue', 'lightgray'],
-                wedgeprops=dict(width=0.4)
+                wedgeprops=dict(width=0.4),
             )
-            axes[1].set_title(
-                f'Overall XAI Fidelity: {
-                    overall:.3f}',
-                fontsize=16,
-                fontweight='bold')
+            axes[1].set_title(f'Overall XAI Fidelity: {
+                    overall:.3f}', fontsize=16, fontweight='bold')
 
         plt.tight_layout()
         plt.savefig(
-            self.output_dir /
-            "phase3" /
-            f"{save_name}.png",
+            self.output_dir / "phase3" / f"{save_name}.png",
             dpi=600,
-            bbox_inches='tight')
+            bbox_inches='tight',
+        )
         plt.savefig(
-            self.output_dir /
-            "phase3" /
-            f"{save_name}.pdf",
-            bbox_inches='tight')
+            self.output_dir / "phase3" / f"{save_name}.pdf", bbox_inches='tight'
+        )
         plt.close()
 
         logger.info(f"Saved: {save_name}")
 
-    def plot_statistical_validation(self,
-                                    chi_squared_results: Dict[str,
-                                                              Tuple[float,
-                                                                    float]],
-                                    save_name: str = "statistical_validation"):
+    def plot_statistical_validation(
+        self,
+        chi_squared_results: Dict[str, Tuple[float, float]],
+        save_name: str = "statistical_validation",
+    ):
         """
         Visualize statistical validation results (chi-squared tests).
 
@@ -773,9 +731,8 @@ class SynDXVisualizer:
         # Chi-squared statistics
         axes[0].barh(features, chi2_stats, color='steelblue')
         axes[0].set_title(
-            'Chi-Squared Statistics by Feature',
-            fontsize=16,
-            fontweight='bold')
+            'Chi-Squared Statistics by Feature', fontsize=16, fontweight='bold'
+        )
         axes[0].set_xlabel('χ² Statistic', fontsize=14)
         axes[0].grid(True, alpha=0.3, axis='x')
 
@@ -783,15 +740,11 @@ class SynDXVisualizer:
         colors = ['green' if p > 0.05 else 'red' for p in p_values]
         axes[1].barh(features, p_values, color=colors)
         axes[1].axvline(
-            x=0.05,
-            color='red',
-            linestyle='--',
-            linewidth=2,
-            label='α=0.05')
+            x=0.05, color='red', linestyle='--', linewidth=2, label='α=0.05'
+        )
         axes[1].set_title(
-            'P-Values (Distribution Match Test)',
-            fontsize=16,
-            fontweight='bold')
+            'P-Values (Distribution Match Test)', fontsize=16, fontweight='bold'
+        )
         axes[1].set_xlabel('P-Value', fontsize=14)
         axes[1].set_xscale('log')
         axes[1].legend(fontsize=12)
@@ -799,16 +752,13 @@ class SynDXVisualizer:
 
         plt.tight_layout()
         plt.savefig(
-            self.output_dir /
-            "phase3" /
-            f"{save_name}.png",
+            self.output_dir / "phase3" / f"{save_name}.png",
             dpi=600,
-            bbox_inches='tight')
+            bbox_inches='tight',
+        )
         plt.savefig(
-            self.output_dir /
-            "phase3" /
-            f"{save_name}.pdf",
-            bbox_inches='tight')
+            self.output_dir / "phase3" / f"{save_name}.pdf", bbox_inches='tight'
+        )
         plt.close()
 
         logger.info(f"Saved: {save_name}")
@@ -828,13 +778,17 @@ def main():
     n_samples = 1000
 
     # Sample archetype data
-    archetypes_df = pd.DataFrame({
-        'age': np.random.randint(18, 90, n_samples),
-        'diagnosis': np.random.choice(['BPPV', 'Stroke', 'VM', 'VN'], n_samples),
-        'timing': np.random.choice(['acute', 'episodic', 'chronic'], n_samples),
-        'trigger': np.random.choice(['spontaneous', 'positional', 'head_movement'], n_samples),
-        'urgency': np.random.choice([0, 1, 2], n_samples)
-    })
+    archetypes_df = pd.DataFrame(
+        {
+            'age': np.random.randint(18, 90, n_samples),
+            'diagnosis': np.random.choice(['BPPV', 'Stroke', 'VM', 'VN'], n_samples),
+            'timing': np.random.choice(['acute', 'episodic', 'chronic'], n_samples),
+            'trigger': np.random.choice(
+                ['spontaneous', 'positional', 'head_movement'], n_samples
+            ),
+            'urgency': np.random.choice([0, 1, 2], n_samples),
+        }
+    )
 
     # Phase 1 visualizations
     logger.info("Generating Phase 1 visualizations...")
@@ -861,16 +815,14 @@ def main():
 
     # Privacy budget
     privacy_history = [
-        {'epoch': i, 'epsilon': 0.1 * i, 'delta': 1e-5}
-        for i in range(1, 11)
+        {'epoch': i, 'epsilon': 0.1 * i, 'delta': 1e-5} for i in range(1, 11)
     ]
     visualizer.plot_privacy_budget_tracking(privacy_history)
 
     # Counterfactual
     original = np.random.rand(150)
     counterfactual = original + np.random.randn(150) * 0.2
-    visualizer.plot_counterfactual_examples(
-        original, counterfactual, feature_names)
+    visualizer.plot_counterfactual_examples(original, counterfactual, feature_names)
 
     # Phase 3 visualizations
     logger.info("Generating Phase 3 visualizations...")
@@ -880,15 +832,15 @@ def main():
             'precision': 0.90,
             'recall': 0.88,
             'f1_score': 0.89,
-            'roc_auc': 0.94
+            'roc_auc': 0.94,
         },
         'Synthetic Model': {
             'accuracy': 0.89,
             'precision': 0.87,
             'recall': 0.85,
             'f1_score': 0.86,
-            'roc_auc': 0.91
-        }
+            'roc_auc': 0.91,
+        },
     }
     visualizer.plot_performance_comparison(metrics_dict)
 
@@ -897,14 +849,13 @@ def main():
         'shap_correlation': 0.87,
         'rank_agreement': 0.82,
         'top_k_overlap': 0.85,
-        'overall_fidelity': 0.84
+        'overall_fidelity': 0.84,
     }
     visualizer.plot_xai_fidelity_scores(fidelity_scores)
 
     # Statistical validation
     chi_squared_results = {
-        f'Feature_{i}': (np.random.rand() * 10, np.random.rand())
-        for i in range(10)
+        f'Feature_{i}': (np.random.rand() * 10, np.random.rand()) for i in range(10)
     }
     visualizer.plot_statistical_validation(chi_squared_results)
 

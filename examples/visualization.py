@@ -22,10 +22,7 @@ plt.rcParams['legend.fontsize'] = 9
 
 
 def create_all_visualizations(
-    explorer,
-    archetypes: List,
-    param_space,
-    output_dir: Path
+    explorer, archetypes: List, param_space, output_dir: Path
 ):
     """
     Create all visualizations for the paper
@@ -47,56 +44,39 @@ def create_all_visualizations(
 
     # Figure 1: Parameter Space Overview
     plot_parameter_space_overview(
-        param_space,
-        explorer,
-        output_dir / "fig1_parameter_space.png"
+        param_space, explorer, output_dir / "fig1_parameter_space.png"
     )
 
     # Figure 2: Diagnosis Distribution
     plot_diagnosis_distribution(
         archetypes,
         param_space.epidemiology,
-        output_dir / "fig2_diagnosis_distribution.png"
+        output_dir / "fig2_diagnosis_distribution.png",
     )
 
     # Figure 3: NMF Factor Heatmap
     if explorer.nmf_model:
-        plot_nmf_factors(
-            explorer.nmf_model,
-            output_dir / "fig3_nmf_factors.png"
-        )
+        plot_nmf_factors(explorer.nmf_model, output_dir / "fig3_nmf_factors.png")
 
     # Figure 4: SHAP Importance
     if explorer.shap_model:
         plot_shap_importance(
-            explorer.shap_model,
-            output_dir / "fig4_shap_importance.png"
+            explorer.shap_model, output_dir / "fig4_shap_importance.png"
         )
 
     # Figure 5: Age Distribution
     plot_age_distribution(
-        archetypes,
-        param_space.epidemiology,
-        output_dir / "fig5_age_distribution.png"
+        archetypes, param_space.epidemiology, output_dir / "fig5_age_distribution.png"
     )
 
     # Figure 6: Sampling Statistics
-    plot_sampling_statistics(
-        explorer.stats,
-        output_dir / "fig6_sampling_stats.png"
-    )
+    plot_sampling_statistics(explorer.stats, output_dir / "fig6_sampling_stats.png")
 
     # Figure 7: Critical Scenario Coverage
-    plot_critical_coverage(
-        archetypes,
-        output_dir / "fig7_critical_coverage.png"
-    )
+    plot_critical_coverage(archetypes, output_dir / "fig7_critical_coverage.png")
 
     # Figure 8: Acceptance Rates
-    plot_acceptance_rates(
-        explorer.stats,
-        output_dir / "fig8_acceptance_rates.png"
-    )
+    plot_acceptance_rates(explorer.stats, output_dir / "fig8_acceptance_rates.png")
 
     print(f"✓ All visualizations saved to {output_dir}")
 
@@ -105,14 +85,14 @@ def create_all_visualizations(
 # Figure 1: Parameter Space Overview
 # ============================================================================
 
+
 def plot_parameter_space_overview(param_space, explorer, save_path: Path):
     """Comprehensive parameter space overview"""
 
     fig, axes = plt.subplots(2, 2, figsize=(12, 10))
     fig.suptitle(
-        'Parameter Space Overview: Vestibular Domain',
-        fontsize=14,
-        fontweight='bold')
+        'Parameter Space Overview: Vestibular Domain', fontsize=14, fontweight='bold'
+    )
 
     # (A) Space size components
     ax = axes[0, 0]
@@ -122,7 +102,7 @@ def plot_parameter_space_overview(param_space, explorer, save_path: Path):
         'HINTS Exam': 400,
         'Diagnoses': 15,
         'Risk Factors': 16,
-        'Demographics': 102
+        'Demographics': 102,
     }
     colors = plt.cm.Set3(np.linspace(0, 1, len(components)))
     ax.bar(range(len(components)), components.values(), color=colors)
@@ -145,17 +125,13 @@ def plot_parameter_space_overview(param_space, explorer, save_path: Path):
         'Statistical\nRequirement': stats['configuration']['n_target'] * 0.014,
         'Coverage\nRequirement': stats['configuration']['n_target'] * 0.134,
         'Clinical\nRequirement': stats['configuration']['n_target'] * 0.15,
-        'Final\nTarget': stats['configuration']['n_target']
+        'Final\nTarget': stats['configuration']['n_target'],
     }
     bars = ax.barh(
-        range(
-            len(breakdown)),
+        range(len(breakdown)),
         breakdown.values(),
-        color=[
-            'lightblue',
-            'lightgreen',
-            'salmon',
-            'gold'])
+        color=['lightblue', 'lightgreen', 'salmon', 'gold'],
+    )
     ax.set_yticks(range(len(breakdown)))
     ax.set_yticklabels(breakdown.keys())
     ax.set_xlabel('Number of Archetypes')
@@ -171,9 +147,10 @@ def plot_parameter_space_overview(param_space, explorer, save_path: Path):
     sizes = {
         'Total\nCombinations\n|P|': param_space.space_size,
         'Valid\nArchetypes\n|A|': int(
-            param_space.space_size *
-            param_space.acceptance_rate),
-        'Target\nGenerated\nn_target': stats['configuration']['n_target']}
+            param_space.space_size * param_space.acceptance_rate
+        ),
+        'Target\nGenerated\nn_target': stats['configuration']['n_target'],
+    }
     colors_pie = ['#ff9999', '#66b3ff', '#99ff99']
     # Show as bar chart instead of pie for clarity
     ax.bar(range(len(sizes)), sizes.values(), color=colors_pie)
@@ -186,15 +163,15 @@ def plot_parameter_space_overview(param_space, explorer, save_path: Path):
 
     # Add values
     for i, (k, v) in enumerate(sizes.items()):
-        ax.text(i, v, f'{v:,}', ha='center',
-                va='bottom', fontsize=7, rotation=0)
+        ax.text(i, v, f'{v:,}', ha='center', va='bottom', fontsize=7, rotation=0)
 
     # (D) Phase allocation
     ax = axes[1, 1]
     phases = [
         'Importance\nWeighted\n(60%)',
         'Critical\nScenarios\n(30%)',
-        'Diversity\nOriented\n(10%)']
+        'Diversity\nOriented\n(10%)',
+    ]
     counts = [explorer.n_importance, explorer.n_critical, explorer.n_diversity]
     colors_phases = ['steelblue', 'crimson', 'darkorange']
     wedges, texts, autotexts = ax.pie(
@@ -203,7 +180,7 @@ def plot_parameter_space_overview(param_space, explorer, save_path: Path):
         autopct='%1.1f%%',
         colors=colors_phases,
         startangle=90,
-        textprops={'fontsize': 9}
+        textprops={'fontsize': 9},
     )
     ax.set_title('(D) Multi-Phase Sampling Allocation')
 
@@ -217,6 +194,7 @@ def plot_parameter_space_overview(param_space, explorer, save_path: Path):
 # Figure 2: Diagnosis Distribution
 # ============================================================================
 
+
 def plot_diagnosis_distribution(archetypes, epidemiology, save_path: Path):
     """Compare observed vs expected diagnosis distribution"""
 
@@ -224,20 +202,24 @@ def plot_diagnosis_distribution(archetypes, epidemiology, save_path: Path):
 
     # Count observed
     observed = Counter([a.diagnosis for a in archetypes])
-    diagnoses = sorted(epidemiology.diagnosis_dist.keys(),
-                       key=lambda x: epidemiology.diagnosis_dist[x],
-                       reverse=True)
+    diagnoses = sorted(
+        epidemiology.diagnosis_dist.keys(),
+        key=lambda x: epidemiology.diagnosis_dist[x],
+        reverse=True,
+    )
 
     # Expected counts
     n_total = len(archetypes)
     expected = {d: epidemiology.expected_count(d, n_total) for d in diagnoses}
 
     # Create dataframe for plotting
-    df = pd.DataFrame({
-        'Diagnosis': diagnoses,
-        'Expected': [expected[d] for d in diagnoses],
-        'Observed': [observed.get(d, 0) for d in diagnoses]
-    })
+    df = pd.DataFrame(
+        {
+            'Diagnosis': diagnoses,
+            'Expected': [expected[d] for d in diagnoses],
+            'Observed': [observed.get(d, 0) for d in diagnoses],
+        }
+    )
 
     x = np.arange(len(diagnoses))
     width = 0.35
@@ -248,21 +230,22 @@ def plot_diagnosis_distribution(archetypes, epidemiology, save_path: Path):
         width,
         label='Expected (Epidemiology)',
         color='lightblue',
-        alpha=0.8)
+        alpha=0.8,
+    )
     ax.bar(
         x + width / 2,
         df['Observed'],
         width,
         label='Observed (Generated)',
         color='coral',
-        alpha=0.8)
+        alpha=0.8,
+    )
 
     ax.set_xlabel('Diagnosis')
     ax.set_ylabel('Count')
     ax.set_title(
-        'Diagnosis Distribution: Expected vs Observed',
-        fontsize=13,
-        fontweight='bold')
+        'Diagnosis Distribution: Expected vs Observed', fontsize=13, fontweight='bold'
+    )
     ax.set_xticks(x)
     ax.set_xticklabels(diagnoses, rotation=45, ha='right')
     ax.legend()
@@ -275,8 +258,16 @@ def plot_diagnosis_distribution(archetypes, epidemiology, save_path: Path):
         validation['p_value']:.4f}\n"
     textstr += f"{'PASS' if validation['accept'] else 'FAIL'} (α = 0.05)"
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-    ax.text(0.98, 0.97, textstr, transform=ax.transAxes, fontsize=9,
-            verticalalignment='top', horizontalalignment='right', bbox=props)
+    ax.text(
+        0.98,
+        0.97,
+        textstr,
+        transform=ax.transAxes,
+        fontsize=9,
+        verticalalignment='top',
+        horizontalalignment='right',
+        bbox=props,
+    )
 
     plt.tight_layout()
     plt.savefig(save_path, bbox_inches='tight')
@@ -287,6 +278,7 @@ def plot_diagnosis_distribution(archetypes, epidemiology, save_path: Path):
 # ============================================================================
 # Figure 3: NMF Factor Heatmap
 # ============================================================================
+
 
 def plot_nmf_factors(nmf_model, save_path: Path):
     """Heatmap of NMF factor loadings"""
@@ -313,23 +305,18 @@ def plot_nmf_factors(nmf_model, save_path: Path):
         cbar_kws={'label': 'Factor Weight'},
         xticklabels=False,
         yticklabels=[f"Factor {i}" for i in range(H.shape[0])],
-        ax=ax
+        ax=ax,
     )
 
     ax.set_xlabel('Features')
     ax.set_ylabel('NMF Factors')
-    ax.set_title(
-        f'NMF Factor Loadings (r={
-            nmf_model.n_components})',
-        fontsize=13,
-        fontweight='bold')
+    ax.set_title(f'NMF Factor Loadings (r={
+            nmf_model.n_components})', fontsize=13, fontweight='bold')
 
     # Add factor interpretations on the right
     for i, interp in enumerate(nmf_model.factor_interpretations_):
         ax.text(
-            H.shape[1] + 5, i + 0.5,
-            interp['clinical_pattern'],
-            va='center', fontsize=8
+            H.shape[1] + 5, i + 0.5, interp['clinical_pattern'], va='center', fontsize=8
         )
 
     plt.tight_layout()
@@ -341,6 +328,7 @@ def plot_nmf_factors(nmf_model, save_path: Path):
 # ============================================================================
 # Figure 4: SHAP Importance
 # ============================================================================
+
 
 def plot_shap_importance(shap_model, save_path: Path):
     """SHAP feature importance bar chart"""
@@ -357,10 +345,7 @@ def plot_shap_importance(shap_model, save_path: Path):
     ax.set_yticklabels(names)
     ax.invert_yaxis()
     ax.set_xlabel('Mean |SHAP Value| (Feature Importance φⱼ)')
-    ax.set_title(
-        'Top 20 Features by SHAP Importance',
-        fontsize=13,
-        fontweight='bold')
+    ax.set_title('Top 20 Features by SHAP Importance', fontsize=13, fontweight='bold')
     ax.grid(axis='x', alpha=0.3)
 
     # Add values
@@ -377,16 +362,14 @@ def plot_shap_importance(shap_model, save_path: Path):
 # Figure 5: Age Distribution by Diagnosis
 # ============================================================================
 
+
 def plot_age_distribution(archetypes, epidemiology, save_path: Path):
     """Age distribution violin plots by diagnosis"""
 
     # Extract data
     data = []
     for a in archetypes:
-        data.append({
-            'diagnosis': a.diagnosis,
-            'age': a.parameters.get('age', np.nan)
-        })
+        data.append({'diagnosis': a.diagnosis, 'age': a.parameters.get('age', np.nan)})
 
     df = pd.DataFrame(data).dropna()
 
@@ -398,10 +381,13 @@ def plot_age_distribution(archetypes, epidemiology, save_path: Path):
 
     # Violin plot
     parts = ax.violinplot(
-        [df_filtered[df_filtered['diagnosis'] == d]['age'].values for d in top_diagnoses],
+        [
+            df_filtered[df_filtered['diagnosis'] == d]['age'].values
+            for d in top_diagnoses
+        ],
         positions=range(len(top_diagnoses)),
         showmeans=True,
-        showmedians=True
+        showmedians=True,
     )
 
     # Add expected distributions (from epidemiology)
@@ -409,19 +395,20 @@ def plot_age_distribution(archetypes, epidemiology, save_path: Path):
         if diagnosis in epidemiology.age_dist:
             mean, std = epidemiology.age_dist[diagnosis]
             ax.errorbar(
-                i, mean, yerr=std,
-                fmt='ro', markersize=8,
-                capsize=5, capthick=2,
-                label='Expected' if i == 0 else ''
+                i,
+                mean,
+                yerr=std,
+                fmt='ro',
+                markersize=8,
+                capsize=5,
+                capthick=2,
+                label='Expected' if i == 0 else '',
             )
 
     ax.set_xticks(range(len(top_diagnoses)))
     ax.set_xticklabels(top_diagnoses, rotation=45, ha='right')
     ax.set_ylabel('Age (years)')
-    ax.set_title(
-        'Age Distribution by Diagnosis',
-        fontsize=13,
-        fontweight='bold')
+    ax.set_title('Age Distribution by Diagnosis', fontsize=13, fontweight='bold')
     ax.legend()
     ax.grid(axis='y', alpha=0.3)
 
@@ -435,6 +422,7 @@ def plot_age_distribution(archetypes, epidemiology, save_path: Path):
 # Figure 6: Sampling Statistics
 # ============================================================================
 
+
 def plot_sampling_statistics(stats, save_path: Path):
     """Multi-phase sampling statistics"""
 
@@ -446,18 +434,19 @@ def plot_sampling_statistics(stats, save_path: Path):
         'Phase 1\n(Uniform)',
         'Phase 4\n(Importance)',
         'Phase 5\n(Critical)',
-        'Phase 6\n(Diversity)']
+        'Phase 6\n(Diversity)',
+    ]
     sampled = [
         stats['phase1_sampled'],
         stats['phase4_sampled'],
         stats['phase5_sampled'],
-        stats['phase6_sampled']
+        stats['phase6_sampled'],
     ]
     valid = [
         stats['phase1_valid'],
         stats['phase4_valid'],
         stats['phase5_valid'],
-        stats['phase6_valid']
+        stats['phase6_valid'],
     ]
 
     x = np.arange(len(phases))
@@ -469,14 +458,16 @@ def plot_sampling_statistics(stats, save_path: Path):
         width,
         label='Total Sampled',
         color='lightcoral',
-        alpha=0.8)
+        alpha=0.8,
+    )
     ax.bar(
         x + width / 2,
         valid,
         width,
         label='Valid (Passed Constraints)',
         color='lightgreen',
-        alpha=0.8)
+        alpha=0.8,
+    )
 
     ax.set_ylabel('Count')
     ax.set_title('(A) Sampling Attempts per Phase', fontweight='bold')
@@ -491,7 +482,7 @@ def plot_sampling_statistics(stats, save_path: Path):
         stats['phase1_valid'] / stats['phase1_sampled'] * 100,
         stats['phase4_valid'] / stats['phase4_sampled'] * 100,
         stats['phase5_valid'] / stats['phase5_sampled'] * 100,
-        stats['phase6_valid'] / stats['phase6_sampled'] * 100
+        stats['phase6_valid'] / stats['phase6_sampled'] * 100,
     ]
 
     colors_grad = plt.cm.RdYlGn(np.linspace(0.3, 0.9, len(phases)))
@@ -501,20 +492,21 @@ def plot_sampling_statistics(stats, save_path: Path):
     ax.set_title('(B) Acceptance Rate per Phase', fontweight='bold')
     ax.set_xticks(x)
     ax.set_xticklabels(phases)
-    ax.axhline(
-        50,
-        color='red',
-        linestyle='--',
-        alpha=0.5,
-        label='50% threshold')
+    ax.axhline(50, color='red', linestyle='--', alpha=0.5, label='50% threshold')
     ax.legend()
     ax.grid(axis='y', alpha=0.3)
 
     # Add values on bars
     for bar, rate in zip(bars, rates):
         height = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width() / 2., height,
-                f'{rate:.1f}%', ha='center', va='bottom', fontsize=9)
+        ax.text(
+            bar.get_x() + bar.get_width() / 2.0,
+            height,
+            f'{rate:.1f}%',
+            ha='center',
+            va='bottom',
+            fontsize=9,
+        )
 
     plt.tight_layout()
     plt.savefig(save_path, bbox_inches='tight')
@@ -526,6 +518,7 @@ def plot_sampling_statistics(stats, save_path: Path):
 # Figure 7: Critical Scenario Coverage
 # ============================================================================
 
+
 def plot_critical_coverage(archetypes, save_path: Path):
     """Critical scenario coverage analysis"""
 
@@ -533,8 +526,7 @@ def plot_critical_coverage(archetypes, save_path: Path):
 
     # Count critical scenarios
     critical_diagnoses = ['stroke', 'tia']
-    critical_count = sum(
-        1 for a in archetypes if a.diagnosis in critical_diagnoses)
+    critical_count = sum(1 for a in archetypes if a.diagnosis in critical_diagnoses)
     non_critical_count = len(archetypes) - critical_count
 
     # Expected
@@ -554,14 +546,16 @@ def plot_critical_coverage(archetypes, save_path: Path):
         width,
         label='Expected (Epidemiology)',
         color='lightblue',
-        alpha=0.8)
+        alpha=0.8,
+    )
     ax.bar(
         x + width / 2,
         observed,
         width,
         label='Observed (Generated)',
         color='coral',
-        alpha=0.8)
+        alpha=0.8,
+    )
 
     ax.set_ylabel('Count')
     ax.set_title('Critical Scenario Coverage', fontsize=13, fontweight='bold')
@@ -572,27 +566,38 @@ def plot_critical_coverage(archetypes, save_path: Path):
 
     # Add percentages
     for i, (exp, obs) in enumerate(zip(expected, observed)):
-        ax.text(i - width / 2,
-                exp,
-                f'{exp / len(archetypes) * 100:.1f}%',
-                ha='center',
-                va='bottom',
-                fontsize=9)
-        ax.text(i + width / 2,
-                obs,
-                f'{obs / len(archetypes) * 100:.1f}%',
-                ha='center',
-                va='bottom',
-                fontsize=9)
+        ax.text(
+            i - width / 2,
+            exp,
+            f'{exp / len(archetypes) * 100:.1f}%',
+            ha='center',
+            va='bottom',
+            fontsize=9,
+        )
+        ax.text(
+            i + width / 2,
+            obs,
+            f'{obs / len(archetypes) * 100:.1f}%',
+            ha='center',
+            va='bottom',
+            fontsize=9,
+        )
 
     # Add match info
-    match_rate = (1 - abs(critical_count - expected_critical) /
-                  expected_critical) * 100
+    match_rate = (1 - abs(critical_count - expected_critical) / expected_critical) * 100
     textstr = f"Match: {match_rate:.1f}%\n"
     textstr += f"Deviation: {abs(critical_count - expected_critical) / expected_critical * 100:.1f}%"
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
-    ax.text(0.98, 0.97, textstr, transform=ax.transAxes, fontsize=10,
-            verticalalignment='top', horizontalalignment='right', bbox=props)
+    ax.text(
+        0.98,
+        0.97,
+        textstr,
+        transform=ax.transAxes,
+        fontsize=10,
+        verticalalignment='top',
+        horizontalalignment='right',
+        bbox=props,
+    )
 
     plt.tight_layout()
     plt.savefig(save_path, bbox_inches='tight')
@@ -604,6 +609,7 @@ def plot_critical_coverage(archetypes, save_path: Path):
 # Figure 8: Acceptance Rates Comparison
 # ============================================================================
 
+
 def plot_acceptance_rates(stats, save_path: Path):
     """Acceptance rate improvement across phases"""
 
@@ -613,52 +619,35 @@ def plot_acceptance_rates(stats, save_path: Path):
         'Phase 1\n(Uniform)',
         'Phase 4\n(Importance)',
         'Phase 5\n(Critical)',
-        'Phase 6\n(Diversity)']
+        'Phase 6\n(Diversity)',
+    ]
     rates = [
         stats['phase1_valid'] / stats['phase1_sampled'],
         stats['phase4_valid'] / stats['phase4_sampled'],
         stats['phase5_valid'] / stats['phase5_sampled'],
-        stats['phase6_valid'] / stats['phase6_sampled']
+        stats['phase6_valid'] / stats['phase6_sampled'],
     ]
 
     x = np.arange(len(phases))
 
     # Line plot with markers
-    line = ax.plot(
-        x,
-        rates,
-        marker='o',
-        markersize=10,
-        linewidth=2,
-        color='steelblue')
-    ax.scatter(
-        x,
-        rates,
-        s=100,
-        c=rates,
-        cmap='RdYlGn',
-        vmin=0,
-        vmax=1,
-        zorder=3)
+    line = ax.plot(x, rates, marker='o', markersize=10, linewidth=2, color='steelblue')
+    ax.scatter(x, rates, s=100, c=rates, cmap='RdYlGn', vmin=0, vmax=1, zorder=3)
 
     ax.set_xticks(x)
     ax.set_xticklabels(phases)
     ax.set_ylabel('Acceptance Rate (ρ)')
     ax.set_title(
-        'Acceptance Rate Evolution Across Phases',
-        fontsize=13,
-        fontweight='bold')
+        'Acceptance Rate Evolution Across Phases', fontsize=13, fontweight='bold'
+    )
     ax.set_ylim([0, 1])
     ax.grid(True, alpha=0.3)
 
     # Add value labels
     for i, rate in enumerate(rates):
-        ax.text(i,
-                rate + 0.05,
-                f'{rate:.2%}',
-                ha='center',
-                fontsize=10,
-                fontweight='bold')
+        ax.text(
+            i, rate + 0.05, f'{rate:.2%}', ha='center', fontsize=10, fontweight='bold'
+        )
 
     # Add efficiency gain annotation
     efficiency_gain = (rates[-1] - rates[0]) / rates[0] * 100
@@ -672,7 +661,8 @@ def plot_acceptance_rates(stats, save_path: Path):
         fontsize=11,
         verticalalignment='bottom',
         horizontalalignment='right',
-        bbox=props)
+        bbox=props,
+    )
 
     plt.tight_layout()
     plt.savefig(save_path, bbox_inches='tight')
