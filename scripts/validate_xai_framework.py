@@ -18,7 +18,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import (
-    silhouette_score, davies_bouldin_score, calinski_harabasz_score
+    silhouette_score,
+    davies_bouldin_score,
+    calinski_harabasz_score,
 )
 from sklearn.model_selection import KFold
 from sklearn.decomposition import NMF, PCA, FastICA
@@ -33,8 +35,7 @@ import json
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
@@ -77,7 +78,7 @@ class XAIValidator:
         X_data: np.ndarray,
         model,
         feature_names: List[str],
-        n_bootstrap: int = 100
+        n_bootstrap: int = 100,
     ) -> Dict[str, Any]:
         """
         Comprehensive SHAP validation.
@@ -110,8 +111,7 @@ class XAIValidator:
             shap_values, X_data, model, n_bootstrap
         )
         results['bootstrap_consistency'] = consistency
-        logger.info(
-            f"Bootstrap consistency: {
+        logger.info(f"Bootstrap consistency: {
                 consistency['mean_rank_correlation']:.4f}")
 
         # 2. Correlation with model feature importance
@@ -120,8 +120,7 @@ class XAIValidator:
             shap_values, model, feature_names
         )
         results['model_correlation'] = model_correlation
-        logger.info(
-            f"Correlation with model importance: {
+        logger.info(f"Correlation with model importance: {
                 model_correlation['spearman_r']:.4f}")
 
         # 3. Permutation importance comparison
@@ -130,16 +129,14 @@ class XAIValidator:
             shap_values, X_data, model, feature_names
         )
         results['permutation_correlation'] = perm_correlation
-        logger.info(
-            f"Correlation with permutation: {
+        logger.info(f"Correlation with permutation: {
                 perm_correlation['spearman_r']:.4f}")
 
         # 4. Rank stability across different samples
         logger.info("Computing rank stability...")
         rank_stability = self._shap_rank_stability(shap_values)
         results['rank_stability'] = rank_stability
-        logger.info(
-            f"Rank stability (Kendall tau): {
+        logger.info(f"Rank stability (Kendall tau): {
                 rank_stability['mean_kendall_tau']:.4f}")
 
         # 5. Save results
@@ -149,11 +146,7 @@ class XAIValidator:
         return results
 
     def _shap_bootstrap_consistency(
-        self,
-        shap_values: np.ndarray,
-        X_data: np.ndarray,
-        model,
-        n_bootstrap: int
+        self, shap_values: np.ndarray, X_data: np.ndarray, model, n_bootstrap: int
     ) -> Dict[str, float]:
         """Bootstrap sampling to test SHAP stability."""
 
@@ -192,14 +185,11 @@ class XAIValidator:
             'mean_rank_correlation': np.mean(correlations),
             'std_rank_correlation': np.std(correlations),
             'min_rank_correlation': np.min(correlations),
-            'max_rank_correlation': np.max(correlations)
+            'max_rank_correlation': np.max(correlations),
         }
 
     def _shap_vs_model_importance(
-        self,
-        shap_values: np.ndarray,
-        model,
-        feature_names: List[str]
+        self, shap_values: np.ndarray, model, feature_names: List[str]
     ) -> Dict[str, float]:
         """Compare SHAP with model's built-in feature importance."""
 
@@ -216,8 +206,7 @@ class XAIValidator:
             if hasattr(model, 'feature_importances_'):
                 model_importance = model.feature_importances_
             else:
-                logger.warning(
-                    "Model doesn't have feature_importances_, using zeros")
+                logger.warning("Model doesn't have feature_importances_, using zeros")
                 model_importance = np.zeros(len(feature_names))
         except BaseException:
             logger.warning("Could not extract model importance")
@@ -234,7 +223,7 @@ class XAIValidator:
             'pearson_r': pearson_r,
             'pearson_p': pearson_p,
             'kendall_tau': kendall_tau,
-            'kendall_p': kendall_p
+            'kendall_p': kendall_p,
         }
 
     def _shap_vs_permutation_importance(
@@ -243,7 +232,7 @@ class XAIValidator:
         X_data: np.ndarray,
         model,
         feature_names: List[str],
-        n_repeats: int = 10
+        n_repeats: int = 10,
     ) -> Dict[str, float]:
         """Compare SHAP with permutation importance."""
         from sklearn.inspection import permutation_importance
@@ -277,11 +266,10 @@ class XAIValidator:
             'spearman_r': spearman_r,
             'spearman_p': spearman_p,
             'pearson_r': pearson_r,
-            'pearson_p': pearson_p
+            'pearson_p': pearson_p,
         }
 
-    def _shap_rank_stability(
-            self, shap_values: np.ndarray) -> Dict[str, float]:
+    def _shap_rank_stability(self, shap_values: np.ndarray) -> Dict[str, float]:
         """Test rank stability across different samples."""
 
         # Handle multi-class SHAP values
@@ -315,13 +303,11 @@ class XAIValidator:
             'mean_kendall_tau': np.mean(tau_values),
             'std_kendall_tau': np.std(tau_values),
             'min_kendall_tau': np.min(tau_values),
-            'max_kendall_tau': np.max(tau_values)
+            'max_kendall_tau': np.max(tau_values),
         }
 
     def _save_shap_validation_results(
-        self,
-        results: Dict[str, Any],
-        feature_names: List[str]
+        self, results: Dict[str, Any], feature_names: List[str]
     ):
         """Save SHAP validation results."""
 
@@ -353,40 +339,32 @@ class XAIValidator:
 
             f.write("1. BOOTSTRAP CONSISTENCY\n")
             bc = results['bootstrap_consistency']
-            f.write(
-                f"   Mean rank correlation: {
+            f.write(f"   Mean rank correlation: {
                     bc['mean_rank_correlation']:.4f}\n")
-            f.write(
-                f"   Std rank correlation: {
+            f.write(f"   Std rank correlation: {
                     bc['std_rank_correlation']:.4f}\n")
-            f.write(
-                f"   Range: [{
+            f.write(f"   Range: [{
                     bc['min_rank_correlation']:.4f}, {
                     bc['max_rank_correlation']:.4f}]\n\n")
 
             f.write("2. CORRELATION WITH MODEL IMPORTANCE\n")
             mc = results['model_correlation']
-            f.write(
-                f"   Spearman r: {
+            f.write(f"   Spearman r: {
                     mc['spearman_r']:.4f} (p={
                     mc['spearman_p']:.4e})\n")
-            f.write(
-                f"   Pearson r: {
+            f.write(f"   Pearson r: {
                     mc['pearson_r']:.4f} (p={
                     mc['pearson_p']:.4e})\n")
-            f.write(
-                f"   Kendall tau: {
+            f.write(f"   Kendall tau: {
                     mc['kendall_tau']:.4f} (p={
                     mc['kendall_p']:.4e})\n\n")
 
             f.write("3. CORRELATION WITH PERMUTATION IMPORTANCE\n")
             pc = results['permutation_correlation']
-            f.write(
-                f"   Spearman r: {
+            f.write(f"   Spearman r: {
                     pc['spearman_r']:.4f} (p={
                     pc['spearman_p']:.4e})\n")
-            f.write(
-                f"   Pearson r: {
+            f.write(f"   Pearson r: {
                     pc['pearson_r']:.4f} (p={
                     pc['pearson_p']:.4e})\n\n")
 
@@ -394,8 +372,7 @@ class XAIValidator:
             rs = results['rank_stability']
             f.write(f"   Mean Kendall tau: {rs['mean_kendall_tau']:.4f}\n")
             f.write(f"   Std: {rs['std_kendall_tau']:.4f}\n")
-            f.write(
-                f"   Range: [{
+            f.write(f"   Range: [{
                     rs['min_kendall_tau']:.4f}, {
                     rs['max_kendall_tau']:.4f}]\n\n")
 
@@ -415,7 +392,7 @@ class XAIValidator:
         counterfactuals: List[Dict[str, Any]],
         original_data: np.ndarray,
         feature_names: List[str],
-        clinical_plausibility_scores: List[float] = None
+        clinical_plausibility_scores: List[float] = None,
     ) -> Dict[str, Any]:
         """
         Comprehensive counterfactual validation.
@@ -464,15 +441,13 @@ class XAIValidator:
         logger.info("Computing diversity...")
         diversity = self._cf_diversity(counterfactuals)
         results['diversity'] = diversity
-        logger.info(
-            f"Diversity score: {
+        logger.info(f"Diversity score: {
                 diversity['mean_pairwise_distance']:.4f}")
 
         # 5. Clinical Plausibility
         if clinical_plausibility_scores is not None:
             logger.info("Computing clinical plausibility...")
-            plausibility = self._cf_clinical_plausibility(
-                clinical_plausibility_scores)
+            plausibility = self._cf_clinical_plausibility(clinical_plausibility_scores)
             results['clinical_plausibility'] = plausibility
             logger.info(f"Average plausibility: {plausibility['mean']:.2f}/5")
 
@@ -485,13 +460,12 @@ class XAIValidator:
     def _cf_success_rate(self, counterfactuals: List[Dict[str, Any]]) -> float:
         """Compute success rate of counterfactual generation."""
         successful = sum(
-            1 for cf in counterfactuals if cf.get(
-                'n_counterfactuals', 0) > 0)
+            1 for cf in counterfactuals if cf.get('n_counterfactuals', 0) > 0
+        )
         total = len(counterfactuals)
         return successful / total if total > 0 else 0.0
 
-    def _cf_sparsity(
-            self, counterfactuals: List[Dict[str, Any]]) -> Dict[str, float]:
+    def _cf_sparsity(self, counterfactuals: List[Dict[str, Any]]) -> Dict[str, float]:
         """Compute sparsity (number of features changed)."""
         n_changes = []
 
@@ -508,13 +482,11 @@ class XAIValidator:
             'std': np.std(n_changes),
             'min': np.min(n_changes),
             'max': np.max(n_changes),
-            'median': np.median(n_changes)
+            'median': np.median(n_changes),
         }
 
     def _cf_proximity(
-        self,
-        counterfactuals: List[Dict[str, Any]],
-        original_data: np.ndarray
+        self, counterfactuals: List[Dict[str, Any]], original_data: np.ndarray
     ) -> Dict[str, float]:
         """Compute proximity (distance from original)."""
         l2_distances = []
@@ -522,8 +494,9 @@ class XAIValidator:
 
         for i, cf_result in enumerate(counterfactuals):
             if cf_result.get('n_counterfactuals', 0) > 0:
-                original = original_data[i] if i < len(
-                    original_data) else original_data[0]
+                original = (
+                    original_data[i] if i < len(original_data) else original_data[0]
+                )
 
                 for cf in cf_result['counterfactuals']:
                     cf_data = cf.get('counterfactual', original)
@@ -540,11 +513,10 @@ class XAIValidator:
             'mean_l2': np.mean(l2_distances),
             'std_l2': np.std(l2_distances),
             'mean_l1': np.mean(l1_distances),
-            'std_l1': np.std(l1_distances)
+            'std_l1': np.std(l1_distances),
         }
 
-    def _cf_diversity(
-            self, counterfactuals: List[Dict[str, Any]]) -> Dict[str, float]:
+    def _cf_diversity(self, counterfactuals: List[Dict[str, Any]]) -> Dict[str, float]:
         """Compute diversity across counterfactuals."""
         all_cfs = []
 
@@ -567,13 +539,10 @@ class XAIValidator:
 
         return {
             'mean_pairwise_distance': np.mean(pairwise_distances),
-            'std_pairwise_distance': np.std(pairwise_distances)
+            'std_pairwise_distance': np.std(pairwise_distances),
         }
 
-    def _cf_clinical_plausibility(
-        self,
-        scores: List[float]
-    ) -> Dict[str, float]:
+    def _cf_clinical_plausibility(self, scores: List[float]) -> Dict[str, float]:
         """Analyze clinical plausibility scores (expert ratings)."""
         return {
             'mean': np.mean(scores),
@@ -582,13 +551,11 @@ class XAIValidator:
             'min': np.min(scores),
             'max': np.max(scores),
             # 3+ = plausible
-            'percent_plausible': np.mean(np.array(scores) >= 3) * 100
+            'percent_plausible': np.mean(np.array(scores) >= 3) * 100,
         }
 
     def _save_cf_validation_results(
-        self,
-        results: Dict[str, Any],
-        feature_names: List[str]
+        self, results: Dict[str, Any], feature_names: List[str]
     ):
         """Save counterfactual validation results."""
 
@@ -601,8 +568,9 @@ class XAIValidator:
         logger.info(f"Counterfactual validation results saved to {json_path}")
 
         # Create summary report
-        report_path = self.output_dir / 'reports' / \
-            'counterfactual_validation_report.txt'
+        report_path = (
+            self.output_dir / 'reports' / 'counterfactual_validation_report.txt'
+        )
         with open(report_path, 'w', encoding='utf-8') as f:
             f.write("=" * 80 + "\n")
             f.write("COUNTERFACTUAL VALIDATION REPORT\n")
@@ -611,7 +579,8 @@ class XAIValidator:
             f.write(f"1. SUCCESS RATE\n")
             f.write(
                 f"   {
-                    results['success_rate']:.2%} of attempts generated counterfactuals\n\n")
+                    results['success_rate']:.2%} of attempts generated counterfactuals\n\n"
+            )
 
             f.write("2. SPARSITY (Features Changed)\n")
             sp = results['sparsity']
@@ -626,16 +595,14 @@ class XAIValidator:
 
             f.write("4. DIVERSITY\n")
             div = results['diversity']
-            f.write(
-                f"   Mean pairwise distance: {
+            f.write(f"   Mean pairwise distance: {
                     div['mean_pairwise_distance']:.4f}\n\n")
 
             if 'clinical_plausibility' in results:
                 f.write("5. CLINICAL PLAUSIBILITY (Expert Ratings)\n")
                 cp = results['clinical_plausibility']
                 f.write(f"   Mean score: {cp['mean']:.2f}/5\n")
-                f.write(
-                    f"   Percent plausible (≥3): {
+                f.write(f"   Percent plausible (≥3): {
                         cp['percent_plausible']:.1f}%\n\n")
 
             f.write("INTERPRETATION:\n")
@@ -655,7 +622,7 @@ class XAIValidator:
         H_matrix: np.ndarray,
         X_data: np.ndarray,
         n_factors: int = 20,
-        n_bootstrap: int = 50
+        n_bootstrap: int = 50,
     ) -> Dict[str, Any]:
         """
         Comprehensive NMF validation.
@@ -686,18 +653,14 @@ class XAIValidator:
 
         # 1. Bootstrap Stability
         logger.info("Computing bootstrap stability...")
-        stability = self._nmf_bootstrap_stability(
-            X_data, n_factors, n_bootstrap
-        )
+        stability = self._nmf_bootstrap_stability(X_data, n_factors, n_bootstrap)
         results['stability'] = stability
-        logger.info(
-            f"Factor stability (mean correlation): {
+        logger.info(f"Factor stability (mean correlation): {
                 stability['mean_correlation']:.4f}")
 
         # 2. Reconstruction Error
         logger.info("Computing reconstruction error...")
-        reconstruction = self._nmf_reconstruction_error(
-            W_matrix, H_matrix, X_data)
+        reconstruction = self._nmf_reconstruction_error(W_matrix, H_matrix, X_data)
         results['reconstruction'] = reconstruction
         logger.info(f"Reconstruction RMSE: {reconstruction['rmse']:.4f}")
 
@@ -705,8 +668,7 @@ class XAIValidator:
         logger.info("Comparing with PCA...")
         pca_comparison = self._nmf_vs_pca(X_data, n_factors)
         results['pca_comparison'] = pca_comparison
-        logger.info(
-            f"Explained variance: NMF={
+        logger.info(f"Explained variance: NMF={
                 pca_comparison['nmf_variance']:.2%}, PCA={
                 pca_comparison['pca_variance']:.2%}")
 
@@ -728,20 +690,14 @@ class XAIValidator:
         return results
 
     def _nmf_bootstrap_stability(
-        self,
-        X_data: np.ndarray,
-        n_factors: int,
-        n_bootstrap: int
+        self, X_data: np.ndarray, n_factors: int, n_bootstrap: int
     ) -> Dict[str, float]:
         """Test NMF stability with bootstrap resampling."""
 
         n_samples = X_data.shape[0]
 
         # Fit original NMF
-        nmf_original = NMF(
-            n_components=n_factors,
-            init='nndsvd',
-            random_state=42)
+        nmf_original = NMF(n_components=n_factors, init='nndsvd', random_state=42)
         W_original = nmf_original.fit_transform(X_data)
         H_original = nmf_original.components_
 
@@ -754,20 +710,13 @@ class XAIValidator:
             X_bootstrap = X_data[idx]
 
             # Fit NMF
-            nmf_boot = NMF(
-                n_components=n_factors,
-                init='nndsvd',
-                random_state=i)
+            nmf_boot = NMF(n_components=n_factors, init='nndsvd', random_state=i)
             try:
                 W_boot = nmf_boot.fit_transform(X_bootstrap)
                 H_boot = nmf_boot.components_
 
                 # Compute correlation between H matrices
-                corr = np.corrcoef(
-                    H_original.flatten(),
-                    H_boot.flatten())[
-                    0,
-                    1]
+                corr = np.corrcoef(H_original.flatten(), H_boot.flatten())[0, 1]
                 correlations.append(corr)
             except BaseException:
                 logger.warning(f"Bootstrap {i} failed")
@@ -777,14 +726,11 @@ class XAIValidator:
             'mean_correlation': np.mean(correlations),
             'std_correlation': np.std(correlations),
             'min_correlation': np.min(correlations),
-            'max_correlation': np.max(correlations)
+            'max_correlation': np.max(correlations),
         }
 
     def _nmf_reconstruction_error(
-        self,
-        W_matrix: np.ndarray,
-        H_matrix: np.ndarray,
-        X_data: np.ndarray
+        self, W_matrix: np.ndarray, H_matrix: np.ndarray, X_data: np.ndarray
     ) -> Dict[str, float]:
         """Compute reconstruction error."""
 
@@ -799,17 +745,9 @@ class XAIValidator:
         # Frobenius norm
         frobenius = np.linalg.norm(X_data - X_reconstructed, 'fro')
 
-        return {
-            'rmse': rmse,
-            'mae': mae,
-            'frobenius': frobenius
-        }
+        return {'rmse': rmse, 'mae': mae, 'frobenius': frobenius}
 
-    def _nmf_vs_pca(
-        self,
-        X_data: np.ndarray,
-        n_factors: int
-    ) -> Dict[str, float]:
+    def _nmf_vs_pca(self, X_data: np.ndarray, n_factors: int) -> Dict[str, float]:
         """Compare NMF with PCA."""
 
         # Fit NMF
@@ -835,14 +773,10 @@ class XAIValidator:
             'nmf_variance': nmf_variance,
             'pca_variance': pca_variance,
             'nmf_rmse': nmf_rmse,
-            'pca_rmse': pca_rmse
+            'pca_rmse': pca_rmse,
         }
 
-    def _nmf_vs_ica(
-        self,
-        X_data: np.ndarray,
-        n_factors: int
-    ) -> Dict[str, float]:
+    def _nmf_vs_ica(self, X_data: np.ndarray, n_factors: int) -> Dict[str, float]:
         """Compare NMF with ICA."""
 
         # Fit NMF
@@ -870,15 +804,10 @@ class XAIValidator:
         except BaseException:
             ica_silhouette = 0.0
 
-        return {
-            'nmf_silhouette': nmf_silhouette,
-            'ica_silhouette': ica_silhouette
-        }
+        return {'nmf_silhouette': nmf_silhouette, 'ica_silhouette': ica_silhouette}
 
     def _nmf_clustering_metrics(
-        self,
-        W_matrix: np.ndarray,
-        X_data: np.ndarray
+        self, W_matrix: np.ndarray, X_data: np.ndarray
     ) -> Dict[str, float]:
         """Compute clustering quality metrics."""
 
@@ -888,11 +817,7 @@ class XAIValidator:
         # Ensure at least 2 unique labels
         if len(np.unique(labels)) < 2:
             logger.warning("Less than 2 clusters found")
-            return {
-                'silhouette': 0.0,
-                'davies_bouldin': 0.0,
-                'calinski_harabasz': 0.0
-            }
+            return {'silhouette': 0.0, 'davies_bouldin': 0.0, 'calinski_harabasz': 0.0}
 
         # Silhouette score
         try:
@@ -915,7 +840,7 @@ class XAIValidator:
         return {
             'silhouette': silhouette,
             'davies_bouldin': davies_bouldin,
-            'calinski_harabasz': calinski_harabasz
+            'calinski_harabasz': calinski_harabasz,
         }
 
     def _save_nmf_validation_results(self, results: Dict[str, Any]):
@@ -940,8 +865,7 @@ class XAIValidator:
             st = results['stability']
             f.write(f"   Mean correlation: {st['mean_correlation']:.4f}\n")
             f.write(f"   Std: {st['std_correlation']:.4f}\n")
-            f.write(
-                f"   Range: [{
+            f.write(f"   Range: [{
                     st['min_correlation']:.4f}, {
                     st['max_correlation']:.4f}]\n\n")
 
@@ -967,8 +891,7 @@ class XAIValidator:
             cl = results['clustering']
             f.write(f"   Silhouette score: {cl['silhouette']:.4f}\n")
             f.write(f"   Davies-Bouldin index: {cl['davies_bouldin']:.4f}\n")
-            f.write(
-                f"   Calinski-Harabasz index: {cl['calinski_harabasz']:.2f}\n\n")
+            f.write(f"   Calinski-Harabasz index: {cl['calinski_harabasz']:.2f}\n\n")
 
             f.write("INTERPRETATION:\n")
             f.write("- Stability > 0.8 → Robust factors\n")
@@ -981,6 +904,7 @@ class XAIValidator:
 # =============================================================================
 # DEMONSTRATION
 # =============================================================================
+
 
 def demonstrate_validation():
     """Demonstrate validation framework."""
@@ -1013,12 +937,13 @@ def demonstrate_validation():
         max_depth=6,
         random_state=42,
         use_label_encoder=False,
-        eval_metric='logloss'
+        eval_metric='logloss',
     )
     model.fit(X_train, y_train)
 
     # Compute SHAP values
     import shap
+
     try:
         explainer = shap.TreeExplainer(model)
         shap_values = explainer.shap_values(X_test[:100])
@@ -1039,7 +964,7 @@ def demonstrate_validation():
         X_data=X_test[:100],
         model=model,
         feature_names=feature_names,
-        n_bootstrap=50
+        n_bootstrap=50,
     )
 
     # 2. Validate Counterfactuals (simulated)
@@ -1050,22 +975,26 @@ def demonstrate_validation():
     # Simulate counterfactual results
     cf_results = []
     for i in range(20):
-        cf_results.append({
-            'n_counterfactuals': np.random.choice([0, 3, 5]),
-            'counterfactuals': [
-                {
-                    'changed_features': {f'feature_{j}': {} for j in range(np.random.randint(2, 6))},
-                    'counterfactual': np.random.randn(n_features)
-                }
-                for _ in range(3)
-            ]
-        })
+        cf_results.append(
+            {
+                'n_counterfactuals': np.random.choice([0, 3, 5]),
+                'counterfactuals': [
+                    {
+                        'changed_features': {
+                            f'feature_{j}': {} for j in range(np.random.randint(2, 6))
+                        },
+                        'counterfactual': np.random.randn(n_features),
+                    }
+                    for _ in range(3)
+                ],
+            }
+        )
 
     cf_validation = validator.validate_counterfactuals(
         counterfactuals=cf_results,
         original_data=X_test[:20],
         feature_names=feature_names,
-        clinical_plausibility_scores=np.random.uniform(2.5, 4.5, 20)
+        clinical_plausibility_scores=np.random.uniform(2.5, 4.5, 20),
     )
 
     # 3. Validate NMF
@@ -1084,7 +1013,7 @@ def demonstrate_validation():
         H_matrix=H_matrix,
         X_data=X_positive,
         n_factors=10,
-        n_bootstrap=30
+        n_bootstrap=30,
     )
 
     logger.info("\n" + "=" * 80)

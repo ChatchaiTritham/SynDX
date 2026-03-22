@@ -21,14 +21,15 @@ else:
 
 setup(
  name="syndx",
- version="0.1.0",
+ version="1.0.0",
  author="Chatchai Tritham, Chakkrit Snae Namahoot",
  author_email="chatchait66@nu.ac.th",
  description="Explainable AI-Driven Synthetic Data Generation for Vestibular Disorders",
  long_description=long_desc,
  long_description_content_type="text/markdown",
  url="https://github.com/ChatchaiTritham/SynDX",
- packages=find_packages(),
+  package_dir={"": "src"},
+  packages=find_packages(where="src"),
  classifiers=[
  "Development Status :: 3 - Alpha",
  "Intended Audience :: Science/Research",

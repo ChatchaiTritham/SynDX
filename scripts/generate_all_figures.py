@@ -39,13 +39,12 @@ import sys
 from pathlib import Path
 
 # Add parent directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
@@ -69,7 +68,7 @@ def load_data(data_dir: str = 'outputs') -> Dict[str, Any]:
     archetype_paths = [
         data_dir / 'archetypes' / 'archetypes.pkl',
         data_dir / 'archetypes' / 'archetypes_n8400.pkl',
-        data_dir / 'explorer_state.pkl'
+        data_dir / 'explorer_state.pkl',
     ]
 
     for path in archetype_paths:
@@ -100,7 +99,7 @@ def load_data(data_dir: str = 'outputs') -> Dict[str, Any]:
     # Try to load profiling data
     profiling_paths = [
         data_dir / 'profiling' / 'profiling_results.json',
-        data_dir / 'profiling' / 'exploration_profiling.json'
+        data_dir / 'profiling' / 'exploration_profiling.json',
     ]
 
     for path in profiling_paths:
@@ -115,8 +114,7 @@ def load_data(data_dir: str = 'outputs') -> Dict[str, Any]:
 
     # Generate mock data if needed
     if not data:
-        logger.warning(
-            "No data files found. Using mock data for demonstration.")
+        logger.warning("No data files found. Using mock data for demonstration.")
         data = generate_mock_data()
 
     return data
@@ -137,12 +135,14 @@ def generate_mock_data() -> Dict[str, Any]:
     n_archetypes = 8400
     archetypes = []
     for i in range(min(n_archetypes, 100)):  # Limit for speed
-        archetypes.append({
-            'diagnosis': np.random.choice(['Stroke', 'TIA', 'BPPV', 'VM', 'VN']),
-            'features': np.random.randn(150),
-            'age': np.random.randint(18, 90),
-            'duration': np.random.exponential(24)
-        })
+        archetypes.append(
+            {
+                'diagnosis': np.random.choice(['Stroke', 'TIA', 'BPPV', 'VM', 'VN']),
+                'features': np.random.randn(150),
+                'age': np.random.randint(18, 90),
+                'duration': np.random.exponential(24),
+            }
+        )
 
     # Mock NMF model
     class MockNMF:
@@ -157,14 +157,14 @@ def generate_mock_data() -> Dict[str, Any]:
             'Phase 3': {'total_time_sec': 32.8, 'peak_memory_mb': 678.4},
             'Phase 4': {'total_time_sec': 15.3, 'peak_memory_mb': 423.2},
             'Phase 5': {'total_time_sec': 20.1, 'peak_memory_mb': 534.7},
-            'Phase 6': {'total_time_sec': 8.7, 'peak_memory_mb': 312.5}
+            'Phase 6': {'total_time_sec': 8.7, 'peak_memory_mb': 312.5},
         }
     }
 
     return {
         'archetypes': archetypes,
         'nmf_model': MockNMF(),
-        'profiling_data': profiling_data
+        'profiling_data': profiling_data,
     }
 
 
@@ -183,91 +183,88 @@ def generate_latex_captions(figures: Dict[str, Path], output_path: Path):
             'SynDX Framework Architecture and XAI Integration',
             'Five-layer hybrid architecture integrating clinical guidelines (TiTrATE), '
             'NMF factor discovery (r=20), SHAP importance analysis, VAE synthesis (d=50), '
-            'and multi-level validation.'
+            'and multi-level validation.',
         ),
         'figure2': (
             'Parameter Space Characterization',
             'High-dimensional parameter space P = D × S × R × T containing 126,000 valid '
-            'combinations representing vestibular disorder presentations.'
+            'combinations representing vestibular disorder presentations.',
         ),
         'figure3': (
             'XAI-Guided Exploration Workflow',
             'Six-phase sampling strategy: (1) uniform baseline, (2) NMF discovery, '
             '(3) SHAP analysis, (4) importance-weighted, (5) critical scenarios, '
-            '(6) diversity sampling.'
+            '(6) diversity sampling.',
         ),
         'figure4': (
             'NMF Factor Analysis',
             'Twenty latent clinical patterns discovered via Non-negative Matrix Factorization. '
-            'Top features per factor with clinical interpretations.'
+            'Top features per factor with clinical interpretations.',
         ),
         'figure5': (
             'SHAP Feature Importance',
             'Global feature importance rankings via TreeSHAP on diagnostic XGBoost model. '
-            'Features ordered by mean absolute SHAP value.'
+            'Features ordered by mean absolute SHAP value.',
         ),
         'figure6': (
             'Multi-Phase Sampling Performance',
             'Execution time and memory consumption across six exploration phases. '
-            'Real profiling data showing 102-second total runtime.'
+            'Real profiling data showing 102-second total runtime.',
         ),
         'figure7': (
             'Clinical Validity Assessment',
             'TiTrATE constraint satisfaction rates (98.7% average) and distribution fidelity '
-            'metrics (KL divergence < 0.05).'
+            'metrics (KL divergence < 0.05).',
         ),
         'figure8': (
             'Comparative Performance Analysis',
             'SynDX vs. baseline methods (SMOTE, CTGAN, TVAE) across statistical realism, '
-            'clinical validity, and XAI fidelity metrics.'
+            'clinical validity, and XAI fidelity metrics.',
         ),
         'figure9': (
             'Epidemiological Fidelity',
             'Age, gender, and diagnosis distributions comparing synthetic data to clinical '
-            'archetypes. Chi-squared tests show no significant difference (p > 0.05).'
+            'archetypes. Chi-squared tests show no significant difference (p > 0.05).',
         ),
         'figure10': (
             'Critical Scenario Coverage',
             'Coverage of emergency department triage categories and rare diagnosis presentations. '
-            '310× efficiency gain over brute-force enumeration.'
+            '310× efficiency gain over brute-force enumeration.',
         ),
         'figureS1': (
             'Detailed TiTrATE Constraint Analysis',
             'Satisfaction rates for all 10 clinical constraints, violation breakdown, '
-            'and constraint interaction heatmap.'
+            'and constraint interaction heatmap.',
         ),
         'figureS2': (
             'Full NMF Factor Interpretations',
             'Complete loading matrices for all 20 NMF factors with top contributing features '
-            'and clinical annotations.'
+            'and clinical annotations.',
         ),
         'figureS3': (
             'SHAP Value Distributions per Feature',
-            'Distribution plots and dependency analyses for top 20 features by SHAP importance.'
+            'Distribution plots and dependency analyses for top 20 features by SHAP importance.',
         ),
         'figureS4': (
             'Complete Diagnosis Breakdown',
             'Confusion matrix, per-diagnosis performance metrics, and misclassification patterns '
-            'for all 15 vestibular diagnoses.'
+            'for all 15 vestibular diagnoses.',
         ),
         'figureS5': (
             'Temporal Pattern Analysis',
             'Symptom duration distributions, onset patterns, and temporal correlations across '
-            'diagnoses.'
+            'diagnoses.',
         ),
         'figureS6': (
             'Demographic Distribution Details',
             'Age and gender distributions, comorbidity prevalence, and risk factor analysis '
-            'stratified by diagnosis.'
-        )
+            'stratified by diagnosis.',
+        ),
     }
 
     latex_content = []
-    latex_content.append(
-        "% Auto-generated LaTeX figure captions for SynDX manuscript")
-    latex_content.append(
-        "% Generated: " +
-        datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    latex_content.append("% Auto-generated LaTeX figure captions for SynDX manuscript")
+    latex_content.append("% Generated: " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     latex_content.append("")
 
     for fig_name, fig_path in sorted(figures.items()):
@@ -287,7 +284,8 @@ def generate_latex_captions(figures: Dict[str, Path], output_path: Path):
             # Use relative path from manuscript directory
             rel_path = f"figures/{fig_path.name}"
             latex_content.append(
-                f"    \\includegraphics[width=\\linewidth]{{{rel_path}}}")
+                f"    \\includegraphics[width=\\linewidth]{{{rel_path}}}"
+            )
 
             latex_content.append(r"    \caption{")
             latex_content.append(f"        \\textbf{{{title}.}} ")
@@ -325,7 +323,7 @@ def validate_figures(figures: Dict[str, Path]) -> Dict[str, bool]:
             'exists': fig_path.exists(),
             'pdf_exists': fig_path.with_suffix('.pdf').exists(),
             'dpi_ok': False,
-            'size_ok': False
+            'size_ok': False,
         }
 
         if checks['exists'] and fig_path.suffix == '.png':
@@ -333,10 +331,10 @@ def validate_figures(figures: Dict[str, Path]) -> Dict[str, bool]:
                 img = Image.open(fig_path)
                 dpi = img.info.get('dpi', (0, 0))
 
-                checks['dpi_ok'] = dpi[0] >= 600 if isinstance(
-                    dpi, tuple) else dpi >= 600
-                checks['size_ok'] = fig_path.stat().st_size < 10 * \
-                    1024 * 1024  # < 10MB
+                checks['dpi_ok'] = (
+                    dpi[0] >= 600 if isinstance(dpi, tuple) else dpi >= 600
+                )
+                checks['size_ok'] = fig_path.stat().st_size < 10 * 1024 * 1024  # < 10MB
 
             except Exception as e:
                 logger.warning(f"Failed to validate {fig_name}: {e}")
@@ -356,14 +354,22 @@ def main():
     """Generate all publication figures"""
 
     parser = argparse.ArgumentParser(
-        description='Generate all SynDX publication figures')
+        description='Generate all SynDX publication figures'
+    )
     parser.add_argument('--data-dir', default='outputs', help='Data directory')
-    parser.add_argument('--output-dir', default='outputs/publication_figures',
-                        help='Output directory for main figures')
-    parser.add_argument('--supp-dir', default='outputs/supplementary_figures',
-                        help='Output directory for supplementary figures')
-    parser.add_argument('--skip-validation', action='store_true',
-                        help='Skip figure validation')
+    parser.add_argument(
+        '--output-dir',
+        default='outputs/publication_figures',
+        help='Output directory for main figures',
+    )
+    parser.add_argument(
+        '--supp-dir',
+        default='outputs/supplementary_figures',
+        help='Output directory for supplementary figures',
+    )
+    parser.add_argument(
+        '--skip-validation', action='store_true', help='Skip figure validation'
+    )
     args = parser.parse_args()
 
     logger.info("=" * 80)
@@ -390,39 +396,67 @@ def main():
         sys.path.insert(0, str(Path(__file__).parent.parent / 'examples'))
         from academic_visualizations import AcademicVisualizer
 
-        main_viz = AcademicVisualizer(
-            output_dir=args.output_dir, dpi=600, format='png')
+        main_viz = AcademicVisualizer(output_dir=args.output_dir, dpi=600, format='png')
 
         main_figures = {}
         main_figure_methods = [
             ('figure1', 'fig1_methodology_overview', []),
-            ('figure2', 'fig2_parameter_space_characterization',
-             [data.get('param_space')]),
-            ('figure3', 'fig3_exploration_workflow',
-             [data.get('explorer'), data.get('archetypes')]),
+            (
+                'figure2',
+                'fig2_parameter_space_characterization',
+                [data.get('param_space')],
+            ),
+            (
+                'figure3',
+                'fig3_exploration_workflow',
+                [data.get('explorer'), data.get('archetypes')],
+            ),
         ]
 
         # Add figures 4-10 if we have AcademicVisualizer methods
         if hasattr(main_viz, 'fig4_nmf_analysis'):
-            main_figure_methods.extend([
-                ('figure4', 'fig4_nmf_analysis', [data.get('nmf_model')]),
-                ('figure5', 'fig5_shap_importance', [data.get('shap_model')]),
-                ('figure6', 'fig6_sampling_performance',
-                 [data.get('explorer'), data.get('profiling_data')]),
-                ('figure7', 'fig7_clinical_validity',
-                 [data.get('archetypes'), data.get('param_space')]),
-                ('figure8', 'fig8_comparative_performance',
-                 [data.get('explorer'), data.get('param_space'), data.get('profiling_data')]),
-                ('figure9', 'fig9_epidemiological_fidelity',
-                 [data.get('archetypes'), data.get('epidemiology')]),
-                ('figure10', 'fig10_critical_coverage',
-                 [data.get('archetypes'), data.get('param_space')]),
-            ])
+            main_figure_methods.extend(
+                [
+                    ('figure4', 'fig4_nmf_analysis', [data.get('nmf_model')]),
+                    ('figure5', 'fig5_shap_importance', [data.get('shap_model')]),
+                    (
+                        'figure6',
+                        'fig6_sampling_performance',
+                        [data.get('explorer'), data.get('profiling_data')],
+                    ),
+                    (
+                        'figure7',
+                        'fig7_clinical_validity',
+                        [data.get('archetypes'), data.get('param_space')],
+                    ),
+                    (
+                        'figure8',
+                        'fig8_comparative_performance',
+                        [
+                            data.get('explorer'),
+                            data.get('param_space'),
+                            data.get('profiling_data'),
+                        ],
+                    ),
+                    (
+                        'figure9',
+                        'fig9_epidemiological_fidelity',
+                        [data.get('archetypes'), data.get('epidemiology')],
+                    ),
+                    (
+                        'figure10',
+                        'fig10_critical_coverage',
+                        [data.get('archetypes'), data.get('param_space')],
+                    ),
+                ]
+            )
 
         for idx, (fig_name, method_name, method_args) in enumerate(
-                main_figure_methods, 1):
+            main_figure_methods, 1
+        ):
             logger.info(
-                f"\n[{idx}/{len(main_figure_methods)}] Generating {fig_name}...")
+                f"\n[{idx}/{len(main_figure_methods)}] Generating {fig_name}..."
+            )
 
             try:
                 method = getattr(main_viz, method_name, None)
@@ -451,8 +485,7 @@ def main():
 
         from supplementary_figures import SupplementaryFigures
 
-        supp_viz = SupplementaryFigures(
-            output_dir=args.supp_dir, dpi=600, format='png')
+        supp_viz = SupplementaryFigures(output_dir=args.supp_dir, dpi=600, format='png')
 
         try:
             import numpy as np
@@ -469,8 +502,7 @@ def main():
             if 'shap_values' not in data and supp_data['archetypes']:
                 n_samples = min(len(supp_data['archetypes']), 1000)
                 n_features = 150
-                supp_data['shap_values'] = np.random.randn(
-                    n_samples, n_features)
+                supp_data['shap_values'] = np.random.randn(n_samples, n_features)
 
             # Generate mock predictions if needed
             if 'predictions' not in data and supp_data['archetypes']:
@@ -480,8 +512,7 @@ def main():
 
             supp_figures = supp_viz.generate_all_supplementary(**supp_data)
 
-            logger.info(
-                f"✓ Generated {
+            logger.info(f"✓ Generated {
                     len(supp_figures)} supplementary figures")
 
         except Exception as e:
@@ -523,7 +554,8 @@ def main():
         duration = (end_time - start_time).total_seconds()
 
         logger.info(
-            f"\nMain figures: {len([v for v in main_figures.values() if v])}/{len(main_figures)}")
+            f"\nMain figures: {len([v for v in main_figures.values() if v])}/{len(main_figures)}"
+        )
         logger.info(f"Supplementary figures: {len(supp_figures)}/6")
         logger.info(f"Total: {len(all_figures)}/16")
         logger.info(f"Duration: {duration:.2f} seconds")
@@ -537,20 +569,16 @@ def main():
             'project': 'SynDX Tier 1 Journal Publication',
             'generated_at': datetime.now().isoformat(),
             'duration_seconds': duration,
-            'main_figures': {
-                k: str(v) if v else None for k,
-                v in main_figures.items()},
-            'supplementary_figures': {
-                k: str(v) for k,
-                v in supp_figures.items()},
+            'main_figures': {k: str(v) if v else None for k, v in main_figures.items()},
+            'supplementary_figures': {k: str(v) for k, v in supp_figures.items()},
             'total_figures': len(all_figures),
             'configuration': {
                 'dpi': 600,
-                'formats': [
-                    'pdf',
-                    'png'],
+                'formats': ['pdf', 'png'],
                 'data_dir': args.data_dir,
-                'output_dir': args.output_dir}}
+                'output_dir': args.output_dir,
+            },
+        }
 
         manifest_path = Path(args.output_dir) / 'figure_manifest.json'
         with open(manifest_path, 'w') as f:
