@@ -26,6 +26,7 @@ import logging
 # SHAP library for feature importance
 try:
     import shap
+
     SHAP_AVAILABLE = True
 except ImportError:
     SHAP_AVAILABLE = False
@@ -38,8 +39,7 @@ from sklearn.preprocessing import StandardScaler
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
@@ -89,7 +89,7 @@ class XAIExplainer:
         X_data: np.ndarray,
         feature_names: List[str],
         class_names: Optional[List[str]] = None,
-        sample_size: int = 100
+        sample_size: int = 100,
     ) -> Dict[str, Any]:
         """
         Compute SHAP values for model predictions.
@@ -136,9 +136,7 @@ class XAIExplainer:
         if isinstance(shap_values, list):
             # Multi-class: list of arrays
             n_classes = len(shap_values)
-            shap_values_dict = {
-                f"class_{i}": shap_values[i] for i in range(n_classes)
-            }
+            shap_values_dict = {f"class_{i}": shap_values[i] for i in range(n_classes)}
         else:
             # Binary classification
             shap_values_dict = {"class_0": shap_values}
@@ -146,8 +144,7 @@ class XAIExplainer:
 
         # Compute statistics
         feature_importance = {}
-        for class_idx, (class_key, shap_vals) in enumerate(
-                shap_values_dict.items()):
+        for class_idx, (class_key, shap_vals) in enumerate(shap_values_dict.items()):
             # Mean absolute SHAP values per feature
             mean_abs_shap = np.abs(shap_vals).mean(axis=0)
 
@@ -157,17 +154,15 @@ class XAIExplainer:
 
             # Ensure correct length
             if len(mean_abs_shap) != len(feature_names):
-                logger.warning(
-                    f"SHAP shape mismatch: {
+                logger.warning(f"SHAP shape mismatch: {
                         len(mean_abs_shap)} vs {
                         len(feature_names)} features")
-                mean_abs_shap = mean_abs_shap[:len(feature_names)]
+                mean_abs_shap = mean_abs_shap[: len(feature_names)]
 
             # Create importance DataFrame
-            importance_df = pd.DataFrame({
-                'feature': feature_names,
-                'importance': mean_abs_shap
-            }).sort_values('importance', ascending=False)
+            importance_df = pd.DataFrame(
+                {'feature': feature_names, 'importance': mean_abs_shap}
+            ).sort_values('importance', ascending=False)
 
             feature_importance[class_key] = importance_df
 
@@ -179,16 +174,14 @@ class XAIExplainer:
             'class_names': class_names,
             'feature_importance': feature_importance,
             'n_samples': len(X_sample),
-            'n_classes': n_classes
+            'n_classes': n_classes,
         }
 
         logger.info(f"SHAP values computed for {len(X_sample)} samples")
         return results
 
     def plot_shap_summary(
-        self,
-        shap_results: Dict[str, Any],
-        save_name: str = "shap_summary"
+        self, shap_results: Dict[str, Any], save_name: str = "shap_summary"
     ):
         """
         Generate SHAP summary plots.
@@ -212,8 +205,7 @@ class XAIExplainer:
         feature_names = shap_results['feature_names']
 
         # For each class
-        for class_idx, (class_key, shap_vals) in enumerate(
-                shap_values.items()):
+        for class_idx, (class_key, shap_vals) in enumerate(shap_values.items()):
             try:
                 # 1. Summary plot (beeswarm)
                 plt.figure(figsize=(12, 8))
@@ -222,27 +214,25 @@ class XAIExplainer:
                     X_sample,
                     feature_names=feature_names,
                     show=False,
-                    plot_type="dot"
+                    plot_type="dot",
                 )
                 plt.title(
                     f'SHAP Summary Plot - {class_key}\n'
                     'Color: Feature value (red=high, blue=low)\n'
                     'X-axis: SHAP value (impact on prediction)',
                     fontsize=14,
-                    fontweight='bold'
+                    fontweight='bold',
                 )
                 plt.tight_layout()
                 plt.savefig(
-                    self.output_dir /
-                    "shap" /
-                    f"{save_name}_{class_key}_summary.png",
+                    self.output_dir / "shap" / f"{save_name}_{class_key}_summary.png",
                     dpi=600,
-                    bbox_inches='tight')
+                    bbox_inches='tight',
+                )
                 plt.savefig(
-                    self.output_dir /
-                    "shap" /
-                    f"{save_name}_{class_key}_summary.pdf",
-                    bbox_inches='tight')
+                    self.output_dir / "shap" / f"{save_name}_{class_key}_summary.pdf",
+                    bbox_inches='tight',
+                )
                 plt.close()
 
                 # 2. Bar plot (global importance)
@@ -252,43 +242,46 @@ class XAIExplainer:
                     X_sample,
                     feature_names=feature_names,
                     show=False,
-                    plot_type="bar"
+                    plot_type="bar",
                 )
                 plt.title(
                     f'Feature Importance (Mean |SHAP|) - {class_key}',
                     fontsize=14,
-                    fontweight='bold'
+                    fontweight='bold',
                 )
                 plt.tight_layout()
                 plt.savefig(
-                    self.output_dir /
-                    "shap" /
-                    f"{save_name}_{class_key}_importance.png",
+                    self.output_dir
+                    / "shap"
+                    / f"{save_name}_{class_key}_importance.png",
                     dpi=600,
-                    bbox_inches='tight')
+                    bbox_inches='tight',
+                )
                 plt.savefig(
-                    self.output_dir /
-                    "shap" /
-                    f"{save_name}_{class_key}_importance.pdf",
-                    bbox_inches='tight')
+                    self.output_dir
+                    / "shap"
+                    / f"{save_name}_{class_key}_importance.pdf",
+                    bbox_inches='tight',
+                )
                 plt.close()
             except Exception as e:
-                logger.warning(
-                    f"Error generating SHAP plot for {class_key}: {e}")
+                logger.warning(f"Error generating SHAP plot for {class_key}: {e}")
                 plt.close('all')
 
         # 3. Waterfall plot for first sample (individual explanation)
         if len(X_sample) > 0:
-            for class_idx, (class_key, shap_vals) in enumerate(
-                    shap_values.items()):
+            for class_idx, (class_key, shap_vals) in enumerate(shap_values.items()):
                 try:
                     plt.figure(figsize=(10, 6))
 
                     # Get base value
                     expected_value = shap_results['explainer'].expected_value
                     if hasattr(expected_value, '__len__'):
-                        base_val = expected_value[class_idx] if class_idx < len(
-                            expected_value) else expected_value[0]
+                        base_val = (
+                            expected_value[class_idx]
+                            if class_idx < len(expected_value)
+                            else expected_value[0]
+                        )
                     else:
                         base_val = expected_value
 
@@ -297,51 +290,56 @@ class XAIExplainer:
                     # or (n_samples, n_features, n_classes)
                     if shap_vals[0].ndim > 1:
                         # Multi-dimensional, take first feature dimension
-                        shap_val_sample = shap_vals[0][:,
-                                                       0] if shap_vals[0].shape[1] > 1 else shap_vals[0].flatten()
+                        shap_val_sample = (
+                            shap_vals[0][:, 0]
+                            if shap_vals[0].shape[1] > 1
+                            else shap_vals[0].flatten()
+                        )
                     else:
                         shap_val_sample = shap_vals[0]
 
                     # Ensure correct length
                     if len(shap_val_sample) > len(feature_names):
-                        shap_val_sample = shap_val_sample[:len(feature_names)]
+                        shap_val_sample = shap_val_sample[: len(feature_names)]
 
                     explanation = shap.Explanation(
                         values=shap_val_sample,
                         base_values=base_val,
-                        data=X_sample[0][:len(shap_val_sample)],
-                        feature_names=feature_names[:len(shap_val_sample)]
+                        data=X_sample[0][: len(shap_val_sample)],
+                        feature_names=feature_names[: len(shap_val_sample)],
                     )
 
                     shap.plots.waterfall(explanation, show=False)
                     plt.title(
                         f'SHAP Waterfall - Individual Prediction - {class_key}',
                         fontsize=14,
-                        fontweight='bold')
+                        fontweight='bold',
+                    )
                     plt.tight_layout()
                     plt.savefig(
-                        self.output_dir /
-                        "shap" /
-                        f"{save_name}_{class_key}_waterfall.png",
+                        self.output_dir
+                        / "shap"
+                        / f"{save_name}_{class_key}_waterfall.png",
                         dpi=600,
-                        bbox_inches='tight')
+                        bbox_inches='tight',
+                    )
                     plt.savefig(
-                        self.output_dir /
-                        "shap" /
-                        f"{save_name}_{class_key}_waterfall.pdf",
-                        bbox_inches='tight')
+                        self.output_dir
+                        / "shap"
+                        / f"{save_name}_{class_key}_waterfall.pdf",
+                        bbox_inches='tight',
+                    )
                     plt.close()
                 except Exception as e:
                     logger.warning(
-                        f"Error generating waterfall plot for {class_key}: {e}")
+                        f"Error generating waterfall plot for {class_key}: {e}"
+                    )
                     plt.close('all')
 
         logger.info(f"SHAP plots saved to {self.output_dir / 'shap'}")
 
     def generate_shap_report(
-        self,
-        shap_results: Dict[str, Any],
-        save_name: str = "shap_report"
+        self, shap_results: Dict[str, Any], save_name: str = "shap_report"
     ):
         """
         Generate clinical SHAP report for medical personnel.
@@ -362,9 +360,8 @@ class XAIExplainer:
 
         feature_importance = shap_results['feature_importance']
         class_names = shap_results.get(
-            'class_names', [
-                f"Class {i}" for i in range(
-                    shap_results['n_classes'])])
+            'class_names', [f"Class {i}" for i in range(shap_results['n_classes'])]
+        )
 
         # 1. Text report
         report_lines = []
@@ -372,16 +369,17 @@ class XAIExplainer:
         report_lines.append("SHAP FEATURE IMPORTANCE REPORT")
         report_lines.append("SynDX Explainable AI Framework")
         report_lines.append("=" * 80)
-        report_lines.append(
-            f"Generated: {
+        report_lines.append(f"Generated: {
                 datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         report_lines.append(f"Samples analyzed: {shap_results['n_samples']}")
         report_lines.append("")
 
         for class_idx, (class_key, importance_df) in enumerate(
-                feature_importance.items()):
-            class_name = class_names[class_idx] if class_idx < len(
-                class_names) else class_key
+            feature_importance.items()
+        ):
+            class_name = (
+                class_names[class_idx] if class_idx < len(class_names) else class_key
+            )
 
             report_lines.append("-" * 80)
             report_lines.append(f"CLASS: {class_name}")
@@ -389,8 +387,7 @@ class XAIExplainer:
             report_lines.append("")
             report_lines.append("Top 15 Most Important Features:")
             report_lines.append("")
-            report_lines.append(
-                f"{'Rank':<6} {'Feature':<40} {'SHAP Importance':<15}")
+            report_lines.append(f"{'Rank':<6} {'Feature':<40} {'SHAP Importance':<15}")
             report_lines.append("-" * 80)
 
             for idx, row in importance_df.head(15).iterrows():
@@ -399,8 +396,7 @@ class XAIExplainer:
                 )
 
             report_lines.append("")
-            report_lines.append(
-                f"Total features analyzed: {
+            report_lines.append(f"Total features analyzed: {
                     len(importance_df)}")
             report_lines.append("")
 
@@ -409,18 +405,20 @@ class XAIExplainer:
         report_lines.append("=" * 80)
         report_lines.append("")
         report_lines.append(
-            "SHAP values quantify each feature's contribution to predictions:")
+            "SHAP values quantify each feature's contribution to predictions:"
+        )
         report_lines.append(
-            "- Positive SHAP: Feature pushes prediction toward this class")
+            "- Positive SHAP: Feature pushes prediction toward this class"
+        )
         report_lines.append(
-            "- Negative SHAP: Feature pushes prediction away from this class")
+            "- Negative SHAP: Feature pushes prediction away from this class"
+        )
         report_lines.append("- Magnitude: Strength of feature's impact")
         report_lines.append("")
         report_lines.append("Clinical Use:")
         report_lines.append("1. Identify key diagnostic indicators")
         report_lines.append("2. Understand why model made specific prediction")
-        report_lines.append(
-            "3. Validate predictions against clinical knowledge")
+        report_lines.append("3. Validate predictions against clinical knowledge")
         report_lines.append("4. Support clinical decision-making")
         report_lines.append("")
 
@@ -434,17 +432,20 @@ class XAIExplainer:
             'metadata': {
                 'generated': datetime.now().isoformat(),
                 'n_samples': shap_results['n_samples'],
-                'n_classes': shap_results['n_classes']
+                'n_classes': shap_results['n_classes'],
             },
-            'feature_importance': {}
+            'feature_importance': {},
         }
 
         for class_idx, (class_key, importance_df) in enumerate(
-                feature_importance.items()):
-            class_name = class_names[class_idx] if class_idx < len(
-                class_names) else class_key
+            feature_importance.items()
+        ):
+            class_name = (
+                class_names[class_idx] if class_idx < len(class_names) else class_key
+            )
             json_data['feature_importance'][class_name] = importance_df.to_dict(
-                'records')
+                'records'
+            )
 
         json_path = self.output_dir / "reports" / f"{save_name}.json"
         with open(json_path, 'w', encoding='utf-8') as f:
@@ -452,11 +453,12 @@ class XAIExplainer:
 
         # 3. CSV files
         for class_idx, (class_key, importance_df) in enumerate(
-                feature_importance.items()):
-            class_name = class_names[class_idx] if class_idx < len(
-                class_names) else class_key
-            csv_path = self.output_dir / "reports" / \
-                f"{save_name}_{class_name}.csv"
+            feature_importance.items()
+        ):
+            class_name = (
+                class_names[class_idx] if class_idx < len(class_names) else class_key
+            )
+            csv_path = self.output_dir / "reports" / f"{save_name}_{class_name}.csv"
             importance_df.to_csv(csv_path, index=False)
 
         logger.info(f"SHAP reports saved to {self.output_dir / 'reports'}")
@@ -472,7 +474,7 @@ class XAIExplainer:
         feature_names: List[str],
         target_class: Optional[int] = None,
         n_counterfactuals: int = 5,
-        max_changes: int = 3
+        max_changes: int = 3,
     ) -> Dict[str, Any]:
         """
         Generate counterfactual explanations.
@@ -531,9 +533,7 @@ class XAIExplainer:
             # Randomly select features to change
             n_changes = np.random.randint(1, max_changes + 1)
             features_to_change = np.random.choice(
-                len(feature_names),
-                size=n_changes,
-                replace=False
+                len(feature_names), size=n_changes, replace=False
             )
 
             # Apply more aggressive perturbations
@@ -546,8 +546,7 @@ class XAIExplainer:
 
                 if strategy == 1:
                     # Flip: multiply by -1 then add random shift
-                    cf[0, feat_idx] = -cf[0, feat_idx] + np.random.randn() * \
-                        0.5
+                    cf[0, feat_idx] = -cf[0, feat_idx] + np.random.randn() * 0.5
                 elif strategy == 2:
                     # Move to extreme: multiply by large factor
                     noise_factor = np.random.choice([0.3, 0.5, 1.5, 2.0, 3.0])
@@ -566,25 +565,28 @@ class XAIExplainer:
                 for feat_idx in features_to_change:
                     original_val = patient_data[0, feat_idx]
                     new_val = cf[0, feat_idx]
-                    change_pct = ((new_val - original_val) /
-                                  (abs(original_val) + 1e-10)) * 100
+                    change_pct = (
+                        (new_val - original_val) / (abs(original_val) + 1e-10)
+                    ) * 100
 
                     changes[feature_names[feat_idx]] = {
                         'original': float(original_val),
                         'counterfactual': float(new_val),
                         'change': float(new_val - original_val),
-                        'change_percent': float(change_pct)
+                        'change_percent': float(change_pct),
                     }
 
-                counterfactuals.append({
-                    'id': len(counterfactuals) + 1,
-                    'counterfactual_data': cf[0],
-                    'prediction': int(cf_pred),
-                    'probability': cf_proba.tolist(),
-                    'confidence': float(cf_proba[cf_pred]),
-                    'n_changes': n_changes,
-                    'changes': changes
-                })
+                counterfactuals.append(
+                    {
+                        'id': len(counterfactuals) + 1,
+                        'counterfactual_data': cf[0],
+                        'prediction': int(cf_pred),
+                        'probability': cf_proba.tolist(),
+                        'confidence': float(cf_proba[cf_pred]),
+                        'n_changes': n_changes,
+                        'changes': changes,
+                    }
+                )
 
         results = {
             'original_prediction': int(current_pred),
@@ -593,11 +595,10 @@ class XAIExplainer:
             'target_class': int(target_class),
             'counterfactuals': counterfactuals,
             'n_found': len(counterfactuals),
-            'feature_names': feature_names
+            'feature_names': feature_names,
         }
 
-        logger.info(
-            f"Generated {
+        logger.info(f"Generated {
                 len(counterfactuals)} counterfactual explanations")
         return results
 
@@ -605,7 +606,7 @@ class XAIExplainer:
         self,
         cf_results: Dict[str, Any],
         class_names: Optional[List[str]] = None,
-        save_name: str = "counterfactuals"
+        save_name: str = "counterfactuals",
     ):
         """
         Visualize counterfactual explanations.
@@ -643,29 +644,16 @@ class XAIExplainer:
         features = list(all_changes.keys())
         changes = [np.mean(all_changes[f]) for f in features]
 
-        axes[0].barh(
-            features,
-            changes,
-            color='skyblue',
-            edgecolor='navy',
-            alpha=0.7)
-        axes[0].set_xlabel(
-            'Average Change (%)',
-            fontsize=12,
-            fontweight='bold')
+        axes[0].barh(features, changes, color='skyblue', edgecolor='navy', alpha=0.7)
+        axes[0].set_xlabel('Average Change (%)', fontsize=12, fontweight='bold')
         axes[0].set_ylabel('Feature', fontsize=12, fontweight='bold')
         axes[0].set_title(
             'Counterfactual Feature Changes\n'
             f'(Top {min(5, len(counterfactuals))} counterfactuals)',
             fontsize=14,
-            fontweight='bold'
+            fontweight='bold',
         )
-        axes[0].axvline(
-            x=0,
-            color='red',
-            linestyle='--',
-            linewidth=2,
-            alpha=0.7)
+        axes[0].axvline(x=0, color='red', linestyle='--', linewidth=2, alpha=0.7)
         axes[0].grid(True, alpha=0.3)
 
         # 2. Probability shift
@@ -673,8 +661,9 @@ class XAIExplainer:
         target_class = cf_results['target_class']
 
         if class_names is None:
-            class_names = [f"Class {i}" for i in range(
-                len(cf_results['original_probability']))]
+            class_names = [
+                f"Class {i}" for i in range(len(cf_results['original_probability']))
+            ]
 
         orig_probs = cf_results['original_probability']
         cf_probs = [cf['probability'] for cf in counterfactuals[:5]]
@@ -690,7 +679,7 @@ class XAIExplainer:
             label='Original',
             color='coral',
             edgecolor='darkred',
-            alpha=0.8
+            alpha=0.8,
         )
 
         # Counterfactual probabilities
@@ -700,15 +689,13 @@ class XAIExplainer:
                 cf_prob,
                 width,
                 label=f'CF {i + 1}',
-                alpha=0.7
+                alpha=0.7,
             )
 
         axes[1].set_xlabel('Class', fontsize=12, fontweight='bold')
         axes[1].set_ylabel('Probability', fontsize=12, fontweight='bold')
         axes[1].set_title(
-            'Prediction Probability Shifts',
-            fontsize=14,
-            fontweight='bold'
+            'Prediction Probability Shifts', fontsize=14, fontweight='bold'
         )
         axes[1].set_xticks(x)
         axes[1].set_xticklabels(class_names, rotation=45, ha='right')
@@ -717,20 +704,17 @@ class XAIExplainer:
 
         plt.tight_layout()
         plt.savefig(
-            self.output_dir /
-            "counterfactuals" /
-            f"{save_name}_comparison.png",
+            self.output_dir / "counterfactuals" / f"{save_name}_comparison.png",
             dpi=600,
-            bbox_inches='tight')
+            bbox_inches='tight',
+        )
         plt.savefig(
-            self.output_dir /
-            "counterfactuals" /
-            f"{save_name}_comparison.pdf",
-            bbox_inches='tight')
+            self.output_dir / "counterfactuals" / f"{save_name}_comparison.pdf",
+            bbox_inches='tight',
+        )
         plt.close()
 
-        logger.info(
-            f"Counterfactual plots saved to {
+        logger.info(f"Counterfactual plots saved to {
                 self.output_dir /
                 'counterfactuals'}")
 
@@ -738,7 +722,7 @@ class XAIExplainer:
         self,
         cf_results: Dict[str, Any],
         class_names: Optional[List[str]] = None,
-        save_name: str = "counterfactual_report"
+        save_name: str = "counterfactual_report",
     ):
         """
         Generate clinical counterfactual report.
@@ -760,8 +744,9 @@ class XAIExplainer:
         logger.info("Generating counterfactual clinical report...")
 
         if class_names is None:
-            class_names = [f"Class {i}" for i in range(
-                len(cf_results['original_probability']))]
+            class_names = [
+                f"Class {i}" for i in range(len(cf_results['original_probability']))
+            ]
 
         counterfactuals = cf_results['counterfactuals']
 
@@ -770,10 +755,10 @@ class XAIExplainer:
         report_lines.append("=" * 80)
         report_lines.append("COUNTERFACTUAL EXPLANATION REPORT")
         report_lines.append(
-            "SynDX Explainable AI Framework - Clinical Decision Support")
+            "SynDX Explainable AI Framework - Clinical Decision Support"
+        )
         report_lines.append("=" * 80)
-        report_lines.append(
-            f"Generated: {
+        report_lines.append(f"Generated: {
                 datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         report_lines.append("")
 
@@ -781,15 +766,14 @@ class XAIExplainer:
         report_lines.append("-" * 80)
         report_lines.append("ORIGINAL PREDICTION")
         report_lines.append("-" * 80)
-        report_lines.append(
-            f"Class: {class_names[cf_results['original_prediction']]}")
-        report_lines.append(
-            f"Confidence: {
+        report_lines.append(f"Class: {class_names[cf_results['original_prediction']]}")
+        report_lines.append(f"Confidence: {
                 cf_results['original_confidence']:.2%}")
         report_lines.append("")
         report_lines.append("Probabilities:")
         for i, (cls, prob) in enumerate(
-                zip(class_names, cf_results['original_probability'])):
+            zip(class_names, cf_results['original_probability'])
+        ):
             report_lines.append(f"  {cls}: {prob:.4f} ({prob:.1%})")
         report_lines.append("")
 
@@ -797,8 +781,7 @@ class XAIExplainer:
         report_lines.append("-" * 80)
         report_lines.append("COUNTERFACTUAL ANALYSIS")
         report_lines.append("-" * 80)
-        report_lines.append(
-            f"Target Class: {class_names[cf_results['target_class']]}")
+        report_lines.append(f"Target Class: {class_names[cf_results['target_class']]}")
         report_lines.append(f"Counterfactuals Found: {len(counterfactuals)}")
         report_lines.append("")
 
@@ -807,15 +790,15 @@ class XAIExplainer:
             report_lines.append("-" * 80)
             report_lines.append(f"COUNTERFACTUAL #{cf['id']}")
             report_lines.append("-" * 80)
-            report_lines.append(
-                f"Predicted Class: {class_names[cf['prediction']]}")
+            report_lines.append(f"Predicted Class: {class_names[cf['prediction']]}")
             report_lines.append(f"Confidence: {cf['confidence']:.2%}")
             report_lines.append(f"Number of Changes: {cf['n_changes']}")
             report_lines.append("")
             report_lines.append("Feature Changes Required:")
             report_lines.append("")
             report_lines.append(
-                f"{'Feature':<30} {'Original':<12} {'New':<12} {'Change %':<12}")
+                f"{'Feature':<30} {'Original':<12} {'New':<12} {'Change %':<12}"
+            )
             report_lines.append("-" * 80)
 
             for feat, change in cf['changes'].items():
@@ -834,7 +817,8 @@ class XAIExplainer:
         report_lines.append("What are Counterfactuals?")
         report_lines.append("-" * 40)
         report_lines.append(
-            "Counterfactuals answer: 'What minimal changes would alter the diagnosis?'")
+            "Counterfactuals answer: 'What minimal changes would alter the diagnosis?'"
+        )
         report_lines.append("")
         report_lines.append("For Physicians:")
         report_lines.append("- Identify modifiable risk factors")
@@ -869,9 +853,14 @@ class XAIExplainer:
                 json_safe_results[key] = value.tolist()
             elif isinstance(value, list):
                 json_safe_results[key] = [
-                    {k: (v.tolist() if isinstance(v, np.ndarray) else v)
-                     for k, v in item.items()}
-                    if isinstance(item, dict) else item
+                    (
+                        {
+                            k: (v.tolist() if isinstance(v, np.ndarray) else v)
+                            for k, v in item.items()
+                        }
+                        if isinstance(item, dict)
+                        else item
+                    )
                     for item in value
                 ]
             else:
@@ -880,8 +869,7 @@ class XAIExplainer:
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(json_safe_results, f, indent=2)
 
-        logger.info(
-            f"Counterfactual reports saved to {
+        logger.info(f"Counterfactual reports saved to {
                 self.output_dir /
                 'clinical'}")
 
@@ -889,6 +877,7 @@ class XAIExplainer:
 # =============================================================================
 # DEMONSTRATION / TESTING
 # =============================================================================
+
 
 def run_demonstration():
     """
@@ -921,15 +910,11 @@ def run_demonstration():
         'diabetes',
         'cardiac_disease',
         'neurological_signs',
-        'positional_trigger'
+        'positional_trigger',
     ]
 
     # Class names
-    class_names = [
-        'BPPV',
-        'Vestibular Neuritis',
-        'Stroke',
-        'Meniere\'s Disease']
+    class_names = ['BPPV', 'Vestibular Neuritis', 'Stroke', 'Meniere\'s Disease']
 
     # Simulate data with meaningful patterns
     X = np.random.randn(n_samples, n_features)
@@ -945,8 +930,8 @@ def run_demonstration():
     # Stroke: high neurological signs, high vascular risk
     stroke_mask = y == 2
     X[stroke_mask, 13] += 2.5  # High neurological signs
-    X[stroke_mask, 8] += 2.0   # High vascular risk
-    X[stroke_mask, 9] += 1.5   # Stroke history
+    X[stroke_mask, 8] += 2.0  # High vascular risk
+    X[stroke_mask, 9] += 1.5  # Stroke history
 
     # Convert to DataFrame
     X_df = pd.DataFrame(X, columns=feature_names)
@@ -957,11 +942,7 @@ def run_demonstration():
         X, y, test_size=0.3, random_state=42
     )
 
-    model = RandomForestClassifier(
-        n_estimators=100,
-        max_depth=10,
-        random_state=42
-    )
+    model = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)
     model.fit(X_train, y_train)
 
     accuracy = model.score(X_test, y_test)
@@ -981,7 +962,7 @@ def run_demonstration():
             X_data=X_test,
             feature_names=feature_names,
             class_names=class_names,
-            sample_size=100
+            sample_size=100,
         )
 
         explainer.plot_shap_summary(shap_results)
@@ -1000,12 +981,11 @@ def run_demonstration():
         patient_data=patient_data,
         feature_names=feature_names,
         n_counterfactuals=5,
-        max_changes=3
+        max_changes=3,
     )
 
     explainer.plot_counterfactuals(cf_results, class_names=class_names)
-    explainer.generate_counterfactual_report(
-        cf_results, class_names=class_names)
+    explainer.generate_counterfactual_report(cf_results, class_names=class_names)
 
     # Summary
     logger.info("\n" + "=" * 80)

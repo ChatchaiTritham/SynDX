@@ -6,7 +6,7 @@ Demonstrates full XAI-guided parameter space exploration
 from syndx.utils.formulas import (
     calculate_n_target,
     calculate_r_clinical,
-    calculate_complexity_factor
+    calculate_complexity_factor,
 )
 from syndx.phase1_knowledge.xai_explorer import XAIGuidedExplorer
 from syndx.phase1_knowledge.domain_config import create_vestibular_domain
@@ -15,20 +15,15 @@ import logging
 import numpy as np
 import sys
 import os
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            '..')))
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 
 # Import SynDX modules
 
 # Setup logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
@@ -72,7 +67,7 @@ def main():
         n_diagnoses=param_space.D_size,
         valid_space_size=int(param_space.space_size * param_space.acceptance_rate),
         psi=psi,
-        critical_diagnoses={'stroke': 0.10, 'tia': 0.05}
+        critical_diagnoses={'stroke': 0.10, 'tia': 0.05},
     )
 
     print(f"✓ Target calculated: n_target = {n_target}")
@@ -93,8 +88,7 @@ def main():
 
     print(f"✓ NMF factors: r = {r}")
     print(f"  - Formula: r = ⌈log₂(|D|) + √(m/10)⌉")
-    print(
-        f"  - log₂({param_space.D_size}) = {np.log2(param_space.D_size):.2f}")
+    print(f"  - log₂({param_space.D_size}) = {np.log2(param_space.D_size):.2f}")
     print(f"  - √({param_space.m}/10) = {np.sqrt(param_space.m / 10):.2f}")
     print()
 
@@ -111,7 +105,7 @@ def main():
         alpha_importance=0.60,
         alpha_critical=0.30,
         alpha_diversity=0.10,
-        random_state=42
+        random_state=42,
     )
 
     print(f"✓ Explorer initialized")
@@ -145,8 +139,7 @@ def main():
 
     print(f"Final archetypes generated: {stats['final_count']}")
     print(f"Target: {stats['configuration']['n_target']}")
-    print(
-        f"Achievement: {
+    print(f"Achievement: {
             stats['final_count'] / stats['configuration']['n_target'] * 100:.1f}%")
     print()
 
@@ -155,25 +148,29 @@ def main():
     print(f"    - Sampled: {stats['sampling_stats']['phase1_sampled']}")
     print(f"    - Valid: {stats['sampling_stats']['phase1_valid']}")
     print(
-        f"    - Rate: {stats['sampling_stats']['phase1_valid'] / stats['sampling_stats']['phase1_sampled'] * 100:.1f}%")
+        f"    - Rate: {stats['sampling_stats']['phase1_valid'] / stats['sampling_stats']['phase1_sampled'] * 100:.1f}%"
+    )
     print()
     print(f"  Phase 4 (Importance):")
     print(f"    - Sampled: {stats['sampling_stats']['phase4_sampled']}")
     print(f"    - Valid: {stats['sampling_stats']['phase4_valid']}")
     print(
-        f"    - Rate: {stats['sampling_stats']['phase4_valid'] / stats['sampling_stats']['phase4_sampled'] * 100:.1f}%")
+        f"    - Rate: {stats['sampling_stats']['phase4_valid'] / stats['sampling_stats']['phase4_sampled'] * 100:.1f}%"
+    )
     print()
     print(f"  Phase 5 (Critical):")
     print(f"    - Sampled: {stats['sampling_stats']['phase5_sampled']}")
     print(f"    - Valid: {stats['sampling_stats']['phase5_valid']}")
     print(
-        f"    - Rate: {stats['sampling_stats']['phase5_valid'] / stats['sampling_stats']['phase5_sampled'] * 100:.1f}%")
+        f"    - Rate: {stats['sampling_stats']['phase5_valid'] / stats['sampling_stats']['phase5_sampled'] * 100:.1f}%"
+    )
     print()
     print(f"  Phase 6 (Diversity):")
     print(f"    - Sampled: {stats['sampling_stats']['phase6_sampled']}")
     print(f"    - Valid: {stats['sampling_stats']['phase6_valid']}")
     print(
-        f"    - Rate: {stats['sampling_stats']['phase6_valid'] / stats['sampling_stats']['phase6_sampled'] * 100:.1f}%")
+        f"    - Rate: {stats['sampling_stats']['phase6_valid'] / stats['sampling_stats']['phase6_sampled'] * 100:.1f}%"
+    )
     print()
 
     # NMF Results
@@ -181,11 +178,11 @@ def main():
         print("NMF Factor Discovery:")
         print(f"  - Factors: {stats['nmf_summary']['n_components']}")
         print(
-            f"  - Reconstruction error: {stats['nmf_summary']['reconstruction_error']:.4f}")
+            f"  - Reconstruction error: {stats['nmf_summary']['reconstruction_error']:.4f}"
+        )
         print(f"  - Discovered patterns:")
         for interp in stats['nmf_summary']['factor_interpretations']:
-            print(
-                f"    Factor {
+            print(f"    Factor {
                     interp['factor_id']}: {
                     interp['clinical_pattern']}")
         print()
@@ -211,7 +208,8 @@ def main():
         print(f"  Timing: {archetype.parameters.get('timing', 'N/A')}")
         print(f"  Trigger: {archetype.parameters.get('trigger', 'N/A')}")
         print(
-            f"  HINTS - Nystagmus: {archetype.parameters.get('nystagmus_type', 'N/A')}")
+            f"  HINTS - Nystagmus: {archetype.parameters.get('nystagmus_type', 'N/A')}"
+        )
         print(f"  Urgency: {archetype.parameters.get('urgency', 'N/A')}")
 
     print()
@@ -236,7 +234,7 @@ def main():
             explorer=explorer,
             archetypes=archetypes,
             param_space=param_space,
-            output_dir=output_dir
+            output_dir=output_dir,
         )
 
         print(f"✓ Visualizations saved to: {output_dir}")

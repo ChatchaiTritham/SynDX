@@ -7,8 +7,9 @@ Author: Chatchai Tritham
 Date: 2026-01-25
 """
 
-import pytest
 import numpy as np
+import pytest
+
 from syndx.phase2_synthesis.shap_reweighter import SHAPReweighter
 
 
@@ -128,7 +129,7 @@ class TestSHAPReweighterTransform:
         reweighter = SHAPReweighter()
         X = np.random.randn(10, 20)
 
-        with pytest.raises(ValueError, match="Must fit"):
+        with pytest.raises(ValueError, match="Must call fit"):
             reweighter.transform(X)
 
     def test_transform_applies_sqrt_weights(self, mock_archetype_data):
@@ -186,7 +187,7 @@ class TestSHAPReweighterGetTopFeatures:
         """Test that get_top_features without fit raises error."""
         reweighter = SHAPReweighter()
 
-        with pytest.raises(ValueError, match="Must fit"):
+        with pytest.raises(ValueError, match="Must call fit"):
             reweighter.get_top_features()
 
 
@@ -210,7 +211,7 @@ class TestSHAPReweighterGetSamplingWeights:
         """Test that get_sampling_weights without fit raises error."""
         reweighter = SHAPReweighter()
 
-        with pytest.raises(ValueError, match="Must fit"):
+        with pytest.raises(ValueError, match="Must call fit"):
             reweighter.get_sampling_weights()
 
 
@@ -241,7 +242,9 @@ class TestSHAPReweighterSummary:
         assert 'background_samples' in summary
 
         assert summary['n_features'] == X.shape[1]
-        assert summary['mean_feature_weight'] == pytest.approx(1.0 / X.shape[1], rel=0.1)
+        assert summary['mean_feature_weight'] == pytest.approx(
+            1.0 / X.shape[1], rel=0.1
+        )
 
 
 @pytest.mark.unit

@@ -7,7 +7,7 @@ from complete_visualization_suite import CompleteSynDXVisualizationSuite
 from syndx.utils.formulas import (
     calculate_n_target,
     calculate_r_clinical,
-    calculate_complexity_factor
+    calculate_complexity_factor,
 )
 from syndx.phase1_knowledge.xai_explorer import XAIGuidedExplorer
 from syndx.phase1_knowledge.domain_config import create_vestibular_domain
@@ -17,12 +17,8 @@ import logging
 import numpy as np
 import sys
 import os
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            '..')))
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 
 # Import SynDX modules
@@ -31,8 +27,7 @@ sys.path.insert(
 
 # Setup logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
@@ -86,7 +81,8 @@ def main():
     print(f"  • Total combinations (|P|): {param_space.space_size:,}")
     print(f"  • Acceptance rate (ρ): {param_space.acceptance_rate:.3f}")
     print(
-        f"  • Valid space (|A|): {int(param_space.space_size * param_space.acceptance_rate):,}")
+        f"  • Valid space (|A|): {int(param_space.space_size * param_space.acceptance_rate):,}"
+    )
 
     # ========================================================================
     # PHASE 2: Target Calculation
@@ -102,21 +98,18 @@ def main():
         n_diagnoses=param_space.D_size,
         valid_space_size=int(param_space.space_size * param_space.acceptance_rate),
         psi=psi,
-        critical_diagnoses={'stroke': 0.10, 'tia': 0.05}
+        critical_diagnoses={'stroke': 0.10, 'tia': 0.05},
     )
 
     print(f"✓ Target calculated: n_target = {n_target:,}")
     print(f"\nTarget Breakdown (Eq. 8-14):")
-    print(
-        f"  • Statistical requirement (n_stat):  {
+    print(f"  • Statistical requirement (n_stat):  {
             breakdown['n_statistical']:,}")
     print(f"    κ = 0.05, confidence = 95%")
-    print(
-        f"  • Coverage requirement (n_cov):      {
+    print(f"  • Coverage requirement (n_cov):      {
             breakdown['n_coverage']:,}")
     print(f"    q = 750 per diagnosis, r = 20 NMF factors")
-    print(
-        f"  • Clinical requirement (n_clin):     {
+    print(f"  • Clinical requirement (n_clin):     {
             breakdown['n_clinical']:,}")
     print(f"    Critical scenarios: 15% (stroke/TIA)")
     print(f"  • Optimal formula (n_opt):           {breakdown['n_optimal']:,}")
@@ -135,8 +128,7 @@ def main():
     print(f"✓ NMF factors determined: r = {r}")
     print(f"\nNMF Configuration (Eq. 16):")
     print(f"  • Formula: r_clinical = ⌈log₂(|D|) + √(m/10)⌉")
-    print(
-        f"  • log₂({
+    print(f"  • log₂({
             param_space.D_size}) = {
             np.log2(
                 param_space.D_size):.2f}")
@@ -157,19 +149,22 @@ def main():
         alpha_importance=0.60,
         alpha_critical=0.30,
         alpha_diversity=0.10,
-        random_state=42
+        random_state=42,
     )
 
     print(f"✓ Explorer initialized successfully")
     print(f"\nMulti-Phase Sampling Allocation (Algorithm 7.1):")
     print(
-        f"  • Phase 4 - Importance-weighted (60%): {explorer.n_importance:,} archetypes")
+        f"  • Phase 4 - Importance-weighted (60%): {explorer.n_importance:,} archetypes"
+    )
     print(f"    SHAP-guided parameter selection")
     print(
-        f"  • Phase 5 - Critical scenarios (30%):  {explorer.n_critical:,} archetypes")
+        f"  • Phase 5 - Critical scenarios (30%):  {explorer.n_critical:,} archetypes"
+    )
     print(f"    Stroke/TIA targeted generation")
     print(
-        f"  • Phase 6 - Diversity-oriented (10%): {explorer.n_diversity:,} archetypes")
+        f"  • Phase 6 - Diversity-oriented (10%): {explorer.n_diversity:,} archetypes"
+    )
     print(f"    K-means cluster-based sampling")
     print(f"\nTotal target: {n_target:,} archetypes")
 
@@ -201,8 +196,7 @@ def main():
     print_section("6.1 Generation Statistics")
     print(f"  Final archetypes:      {stats['final_count']:,}")
     print(f"  Target:                {stats['configuration']['n_target']:,}")
-    print(
-        f"  Achievement rate:      {
+    print(f"  Achievement rate:      {
             stats['final_count'] / stats['configuration']['n_target'] * 100:.1f}%")
     print()
 
@@ -213,7 +207,7 @@ def main():
         ("Phase 1 (Uniform Sampling)", 'phase1'),
         ("Phase 4 (Importance-Weighted)", 'phase4'),
         ("Phase 5 (Critical Scenarios)", 'phase5'),
-        ("Phase 6 (Diversity-Oriented)", 'phase6')
+        ("Phase 6 (Diversity-Oriented)", 'phase6'),
     ]
 
     for phase_name, phase_key in phases_data:
@@ -234,22 +228,21 @@ def main():
         nmf = stats['nmf_summary']
         print(f"  Components:            {nmf['n_components']}")
         print(f"  Reconstruction error:  {nmf['reconstruction_error']:.4f}")
-        print(
-            f"  Explained variance:    {
+        print(f"  Explained variance:    {
                 1 - nmf['reconstruction_error']:.1%}")
         print(f"\n  Discovered Clinical Patterns:")
         for i, interp in enumerate(nmf['factor_interpretations'][:5], 1):
             print(f"    {i}. {interp['clinical_pattern']}")
         if len(nmf['factor_interpretations']) > 5:
-            print(
-                f"    ... and {len(nmf['factor_interpretations']) - 5} more patterns")
+            print(f"    ... and {len(nmf['factor_interpretations']) - 5} more patterns")
         print()
 
     # SHAP Analysis
     if stats['shap_summary']:
         print_section("6.4 SHAP Feature Importance (Top 10)")
         for i, (name, importance) in enumerate(
-                stats['shap_summary']['top_10_features'], 1):
+            stats['shap_summary']['top_10_features'], 1
+        ):
             print(f"    {i:2d}. {name:<35} φ = {importance:.4f}")
         print()
 
@@ -258,27 +251,25 @@ def main():
     for i, archetype in enumerate(archetypes[:3], 1):
         print(f"\n  Archetype #{i}:")
         print(f"    Diagnosis:        {archetype.diagnosis}")
-        print(
-            f"    Age:              {
+        print(f"    Age:              {
                 archetype.parameters.get(
                     'age',
                     'N/A')} years")
-        print(
-            f"    Timing:           {
+        print(f"    Timing:           {
                 archetype.parameters.get(
                     'timing',
                     'N/A')}")
-        print(
-            f"    Trigger:          {
+        print(f"    Trigger:          {
                 archetype.parameters.get(
                     'trigger',
                     'N/A')}")
         print(
-            f"    HINTS-Nystagmus:  {archetype.parameters.get('nystagmus_type', 'N/A')}")
+            f"    HINTS-Nystagmus:  {archetype.parameters.get('nystagmus_type', 'N/A')}"
+        )
         print(
-            f"    HINTS-Skew:       {archetype.parameters.get('skew_deviation', 'N/A')}")
-        print(
-            f"    Urgency:          {
+            f"    HINTS-Skew:       {archetype.parameters.get('skew_deviation', 'N/A')}"
+        )
+        print(f"    Urgency:          {
                 archetype.parameters.get(
                     'urgency',
                     'N/A')}")
@@ -292,8 +283,7 @@ def main():
 
     output_dir = Path("outputs/publication_figures")
     viz_suite = CompleteSynDXVisualizationSuite(
-        output_dir=str(output_dir),
-        format='png'
+        output_dir=str(output_dir), format='png'
     )
 
     print(f"✓ Visualization suite initialized")
@@ -309,9 +299,7 @@ def main():
 
     try:
         viz_suite.create_all_manuscript_figures(
-            explorer=explorer,
-            archetypes=archetypes,
-            param_space=param_space
+            explorer=explorer, archetypes=archetypes, param_space=param_space
         )
         viz_time = time.time() - viz_start
 
@@ -321,8 +309,12 @@ def main():
 
     except Exception as e:
         print(f"\n⚠ Visualization error: {e}")
-        print("  (This is expected if matplotlib/seaborn dependencies are not installed)")
-        print("  Core exploration completed successfully - figures can be generated later")
+        print(
+            "  (This is expected if matplotlib/seaborn dependencies are not installed)"
+        )
+        print(
+            "  Core exploration completed successfully - figures can be generated later"
+        )
 
     # ========================================================================
     # PHASE 8: Final Summary
@@ -339,16 +331,14 @@ def main():
     print(f"  ✓ SHAP analysis: Complete")
     print(f"  ✓ Figures: 10 publication-ready")
     print(f"\n  ⏱  Total execution time: {total_time:.2f} seconds")
-    print(
-        f"  ⏱  Exploration: {
+    print(f"  ⏱  Exploration: {
             exploration_time:.2f}s ({
             exploration_time /
             total_time *
             100:.1f}%)")
 
     if 'viz_time' in locals():
-        print(
-            f"  ⏱  Visualization: {
+        print(f"  ⏱  Visualization: {
                 viz_time:.2f}s ({
                 viz_time /
                 total_time *
@@ -388,4 +378,5 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"\n\n❌ Error during execution: {e}")
         import traceback
+
         traceback.print_exc()

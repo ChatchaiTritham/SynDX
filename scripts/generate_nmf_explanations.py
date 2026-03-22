@@ -33,6 +33,7 @@ import logging
 # Network analysis
 try:
     import networkx as nx
+
     NETWORKX_AVAILABLE = True
 except ImportError:
     NETWORKX_AVAILABLE = False
@@ -42,6 +43,7 @@ except ImportError:
 try:
     import plotly.graph_objects as go
     import plotly.express as px
+
     PLOTLY_AVAILABLE = True
 except ImportError:
     PLOTLY_AVAILABLE = False
@@ -55,8 +57,7 @@ from scipy.stats import chi2_contingency, f_oneway
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
@@ -110,7 +111,7 @@ class NMFInterpreter:
         H_matrix: np.ndarray,
         feature_names: List[str],
         n_top_features: int = 10,
-        save_name: str = "factor_interpretation"
+        save_name: str = "factor_interpretation",
     ) -> Dict[str, Any]:
         """
         Interpret each NMF factor.
@@ -146,7 +147,9 @@ class NMFInterpreter:
                 {
                     'feature': feature_names[idx],
                     'weight': float(factor_weights[idx]),
-                    'normalized_weight': float(factor_weights[idx] / factor_weights.sum())
+                    'normalized_weight': float(
+                        factor_weights[idx] / factor_weights.sum()
+                    ),
                 }
                 for idx in top_indices
             ]
@@ -158,16 +161,14 @@ class NMFInterpreter:
                 'sparsity': float(np.mean(factor_weights == 0)),
                 'max_weight': float(factor_weights.max()),
                 'mean_weight': float(factor_weights.mean()),
-                'std_weight': float(factor_weights.std())
+                'std_weight': float(factor_weights.std()),
             }
 
         logger.info(f"Interpreted {self.n_factors} factors")
         return interpretations
 
     def plot_factor_compositions(
-        self,
-        interpretations: Dict[str, Any],
-        save_name: str = "factor_compositions"
+        self, interpretations: Dict[str, Any], save_name: str = "factor_compositions"
     ):
         """
         Visualize factor compositions.
@@ -215,15 +216,14 @@ class NMFInterpreter:
             yticklabels=factor_names,
             cmap='YlOrRd',
             cbar_kws={'label': 'Feature Weight'},
-            ax=ax
+            ax=ax,
         )
         ax.set_xlabel('Features', fontsize=12, fontweight='bold')
         ax.set_ylabel('Latent Factors', fontsize=12, fontweight='bold')
         ax.set_title(
-            'NMF Factor Compositions\n'
-            f'Top {n_top} Contributing Features per Factor',
+            'NMF Factor Compositions\n' f'Top {n_top} Contributing Features per Factor',
             fontsize=14,
-            fontweight='bold'
+            fontweight='bold',
         )
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
@@ -231,11 +231,11 @@ class NMFInterpreter:
         plt.savefig(
             self.output_dir / "factors" / f"{save_name}_heatmap.png",
             dpi=600,
-            bbox_inches='tight'
+            bbox_inches='tight',
         )
         plt.savefig(
             self.output_dir / "factors" / f"{save_name}_heatmap.pdf",
-            bbox_inches='tight'
+            bbox_inches='tight',
         )
         plt.close()
 
@@ -246,26 +246,18 @@ class NMFInterpreter:
         axes = axes.flatten() if n_factors > 1 else [axes]
 
         for idx, (factor_key, factor_data) in enumerate(
-                list(interpretations.items())[:min(5, n_factors)]):
+            list(interpretations.items())[: min(5, n_factors)]
+        ):
             ax = axes[idx]
 
             top_feats = factor_data['top_features']
-            features = [f['feature'][:30]
-                        for f in top_feats]  # Truncate long names
+            features = [f['feature'][:30] for f in top_feats]  # Truncate long names
             weights = [f['weight'] for f in top_feats]
 
-            ax.barh(
-                features,
-                weights,
-                color='steelblue',
-                edgecolor='navy',
-                alpha=0.7)
+            ax.barh(features, weights, color='steelblue', edgecolor='navy', alpha=0.7)
             ax.set_xlabel('Weight', fontsize=10, fontweight='bold')
-            ax.set_title(
-                f'{factor_key}\n(Top {
-                    len(top_feats)} Features)',
-                fontsize=11,
-                fontweight='bold')
+            ax.set_title(f'{factor_key}\n(Top {
+                    len(top_feats)} Features)', fontsize=11, fontweight='bold')
             ax.invert_yaxis()
             ax.grid(True, alpha=0.3, axis='x')
 
@@ -277,23 +269,21 @@ class NMFInterpreter:
         plt.savefig(
             self.output_dir / "factors" / f"{save_name}_bars.png",
             dpi=600,
-            bbox_inches='tight'
+            bbox_inches='tight',
         )
         plt.savefig(
-            self.output_dir / "factors" / f"{save_name}_bars.pdf",
-            bbox_inches='tight'
+            self.output_dir / "factors" / f"{save_name}_bars.pdf", bbox_inches='tight'
         )
         plt.close()
 
-        logger.info(
-            f"Factor composition plots saved to {
+        logger.info(f"Factor composition plots saved to {
                 self.output_dir /
                 'factors'}")
 
     def generate_factor_report(
         self,
         interpretations: Dict[str, Any],
-        save_name: str = "factor_interpretation_report"
+        save_name: str = "factor_interpretation_report",
     ):
         """
         Generate clinical factor interpretation report.
@@ -309,8 +299,7 @@ class NMFInterpreter:
         report_lines.append("NMF FACTOR INTERPRETATION REPORT")
         report_lines.append("SynDX Framework - Latent Factor Analysis")
         report_lines.append("=" * 80)
-        report_lines.append(
-            f"Generated: {
+        report_lines.append(f"Generated: {
                 datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         report_lines.append(f"Number of Factors: {len(interpretations)}")
         report_lines.append("")
@@ -323,7 +312,8 @@ class NMFInterpreter:
             report_lines.append("Top Contributing Features:")
             report_lines.append("")
             report_lines.append(
-                f"{'Rank':<6} {'Feature':<40} {'Weight':<12} {'% of Total':<12}")
+                f"{'Rank':<6} {'Feature':<40} {'Weight':<12} {'% of Total':<12}"
+            )
             report_lines.append("-" * 80)
 
             for rank, feat in enumerate(factor_data['top_features'], 1):
@@ -335,11 +325,9 @@ class NMFInterpreter:
             report_lines.append("")
             report_lines.append(f"Statistics:")
             report_lines.append(f"  Sparsity: {factor_data['sparsity']:.2%}")
-            report_lines.append(
-                f"  Max Weight: {
+            report_lines.append(f"  Max Weight: {
                     factor_data['max_weight']:.6f}")
-            report_lines.append(
-                f"  Mean Weight: {
+            report_lines.append(f"  Mean Weight: {
                     factor_data['mean_weight']:.6f}")
             report_lines.append("")
 
@@ -350,21 +338,16 @@ class NMFInterpreter:
         report_lines.append("")
         report_lines.append("What are NMF Latent Factors?")
         report_lines.append("-" * 40)
-        report_lines.append(
-            "Latent factors represent hidden clinical phenotypes:")
+        report_lines.append("Latent factors represent hidden clinical phenotypes:")
         report_lines.append("- Each factor = combination of features")
-        report_lines.append(
-            "- Factors capture common patterns across patients")
+        report_lines.append("- Factors capture common patterns across patients")
         report_lines.append("- Reduce 150 features → 20 interpretable factors")
         report_lines.append("")
         report_lines.append("Clinical Use:")
-        report_lines.append(
-            "1. Phenotype Discovery: Identify patient subtypes")
+        report_lines.append("1. Phenotype Discovery: Identify patient subtypes")
         report_lines.append("2. Feature Reduction: Simplify complex data")
-        report_lines.append(
-            "3. Pattern Recognition: Find common presentations")
-        report_lines.append(
-            "4. Personalized Medicine: Patient-specific profiles")
+        report_lines.append("3. Pattern Recognition: Find common presentations")
+        report_lines.append("4. Personalized Medicine: Patient-specific profiles")
         report_lines.append("")
 
         # Save report
@@ -387,7 +370,7 @@ class NMFInterpreter:
         self,
         W_matrix: np.ndarray,
         patient_idx: int = 0,
-        factor_names: Optional[List[str]] = None
+        factor_names: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
         """
         Profile individual patient's factor composition.
@@ -420,12 +403,12 @@ class NMFInterpreter:
             'factor_weights': {
                 factor_names[i]: {
                     'raw_weight': float(patient_factors[i]),
-                    'percentage': float(patient_factors_norm[i] * 100)
+                    'percentage': float(patient_factors_norm[i] * 100),
                 }
                 for i in range(n_factors)
             },
             'dominant_factors': [],
-            'n_factors': n_factors
+            'n_factors': n_factors,
         }
 
         # Identify dominant factors (top 5)
@@ -434,7 +417,7 @@ class NMFInterpreter:
             {
                 'factor': factor_names[i],
                 'weight': float(patient_factors[i]),
-                'percentage': float(patient_factors_norm[i] * 100)
+                'percentage': float(patient_factors_norm[i] * 100),
             }
             for i in top_indices
         ]
@@ -443,9 +426,7 @@ class NMFInterpreter:
         return profile
 
     def plot_patient_profile(
-        self,
-        profile: Dict[str, Any],
-        save_name: str = "patient_profile"
+        self, profile: Dict[str, Any], save_name: str = "patient_profile"
     ):
         """
         Visualize patient factor profile.
@@ -482,12 +463,12 @@ class NMFInterpreter:
             labels=top_10_factors,
             autopct='%1.1f%%',
             colors=colors,
-            startangle=90
+            startangle=90,
         )
         ax1.set_title(
             f'Patient {patient_id} - Factor Composition\n(Top 10 Factors)',
             fontsize=12,
-            fontweight='bold'
+            fontweight='bold',
         )
 
         # 2. Radar chart (top 8 factors)
@@ -496,11 +477,7 @@ class NMFInterpreter:
         top_8_factors = [factors[i] for i in top_8_indices]
         top_8_weights = [weights[i] for i in top_8_indices]
 
-        angles = np.linspace(
-            0,
-            2 * np.pi,
-            len(top_8_factors),
-            endpoint=False).tolist()
+        angles = np.linspace(0, 2 * np.pi, len(top_8_factors), endpoint=False).tolist()
         top_8_weights += top_8_weights[:1]  # Close the plot
         angles += angles[:1]
 
@@ -512,7 +489,7 @@ class NMFInterpreter:
             f'Patient {patient_id} - Factor Radar\n(Top 8 Factors)',
             fontsize=12,
             fontweight='bold',
-            pad=20
+            pad=20,
         )
         ax2.grid(True)
 
@@ -527,31 +504,29 @@ class NMFInterpreter:
             sorted_weights,
             color='coral',
             edgecolor='darkred',
-            alpha=0.7)
+            alpha=0.7,
+        )
         ax3.set_xlabel('Factor Weight', fontsize=10, fontweight='bold')
         ax3.set_title(
             f'Patient {patient_id} - Factor Weights\n(Top 15 Factors)',
             fontsize=12,
-            fontweight='bold'
+            fontweight='bold',
         )
         ax3.grid(True, alpha=0.3, axis='x')
 
         plt.tight_layout()
         plt.savefig(
-            self.output_dir /
-            "patients" /
-            f"{save_name}_patient_{patient_id}.png",
+            self.output_dir / "patients" / f"{save_name}_patient_{patient_id}.png",
             dpi=600,
-            bbox_inches='tight')
+            bbox_inches='tight',
+        )
         plt.savefig(
-            self.output_dir /
-            "patients" /
-            f"{save_name}_patient_{patient_id}.pdf",
-            bbox_inches='tight')
+            self.output_dir / "patients" / f"{save_name}_patient_{patient_id}.pdf",
+            bbox_inches='tight',
+        )
         plt.close()
 
-        logger.info(
-            f"Patient profile plots saved to {
+        logger.info(f"Patient profile plots saved to {
                 self.output_dir /
                 'patients'}")
 
@@ -564,7 +539,7 @@ class NMFInterpreter:
         W_matrix: np.ndarray,
         diagnoses: np.ndarray,
         diagnosis_names: List[str],
-        factor_names: Optional[List[str]] = None
+        factor_names: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
         """
         Analyze association between factors and diseases.
@@ -603,8 +578,9 @@ class NMFInterpreter:
         p_values = []
         for factor_idx in range(n_factors):
             # ANOVA: test if factor differs across diagnoses
-            groups = [W_matrix[diagnoses == diag, factor_idx]
-                      for diag in unique_diagnoses]
+            groups = [
+                W_matrix[diagnoses == diag, factor_idx] for diag in unique_diagnoses
+            ]
             _, p_val = f_oneway(*groups)
             p_values.append(p_val)
 
@@ -615,17 +591,18 @@ class NMFInterpreter:
             'p_values': p_values,
             'significant_factors': [
                 factor_names[i] for i, p in enumerate(p_values) if p < 0.05
-            ]
+            ],
         }
 
         logger.info(
-            f"Found {len(results['significant_factors'])} significant factor-disease associations")
+            f"Found {len(results['significant_factors'])} significant factor-disease associations"
+        )
         return results
 
     def plot_factor_disease_heatmap(
         self,
         association_results: Dict[str, Any],
-        save_name: str = "factor_disease_association"
+        save_name: str = "factor_disease_association",
     ):
         """
         Visualize factor-disease associations.
@@ -642,7 +619,8 @@ class NMFInterpreter:
         p_values = association_results['p_values']
 
         fig, ax = plt.subplots(
-            figsize=(max(12, len(factors) * 0.5), len(diagnoses) * 0.8))
+            figsize=(max(12, len(factors) * 0.5), len(diagnoses) * 0.8)
+        )
 
         # Plot heatmap
         sns.heatmap(
@@ -653,7 +631,7 @@ class NMFInterpreter:
             cbar_kws={'label': 'Mean Factor Weight'},
             annot=True,
             fmt='.3f',
-            ax=ax
+            ax=ax,
         )
 
         # Mark significant factors
@@ -667,19 +645,17 @@ class NMFInterpreter:
                     va='center',
                     fontsize=16,
                     color='red',
-                    fontweight='bold'
+                    fontweight='bold',
                 )
 
         ax.set_xlabel(
-            'Latent Factors\n(* = p < 0.05, ANOVA)',
-            fontsize=12,
-            fontweight='bold')
+            'Latent Factors\n(* = p < 0.05, ANOVA)', fontsize=12, fontweight='bold'
+        )
         ax.set_ylabel('Diagnoses', fontsize=12, fontweight='bold')
         ax.set_title(
-            'Factor-Disease Association Heatmap\n'
-            'Mean Factor Weights per Diagnosis',
+            'Factor-Disease Association Heatmap\n' 'Mean Factor Weights per Diagnosis',
             fontsize=14,
-            fontweight='bold'
+            fontweight='bold',
         )
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
@@ -687,16 +663,17 @@ class NMFInterpreter:
         plt.savefig(
             self.output_dir / "associations" / f"{save_name}_heatmap.png",
             dpi=600,
-            bbox_inches='tight'
+            bbox_inches='tight',
         )
         plt.savefig(
             self.output_dir / "associations" / f"{save_name}_heatmap.pdf",
-            bbox_inches='tight'
+            bbox_inches='tight',
         )
         plt.close()
 
         logger.info(
-            f"Factor-disease heatmap saved to {self.output_dir / 'associations'}")
+            f"Factor-disease heatmap saved to {self.output_dir / 'associations'}"
+        )
 
     # =========================================================================
     # 4. FEATURE-FACTOR NETWORK
@@ -707,7 +684,7 @@ class NMFInterpreter:
         H_matrix: np.ndarray,
         feature_names: List[str],
         threshold: float = 0.1,
-        save_name: str = "feature_factor_network"
+        save_name: str = "feature_factor_network",
     ):
         """
         Create network graph of feature-factor relationships.
@@ -719,8 +696,7 @@ class NMFInterpreter:
             save_name: Base name for saved files
         """
         if not NETWORKX_AVAILABLE:
-            logger.warning(
-                "NetworkX not available. Skipping network visualization.")
+            logger.warning("NetworkX not available. Skipping network visualization.")
             return
 
         logger.info("Creating feature-factor network...")
@@ -756,28 +732,30 @@ class NMFInterpreter:
 
         # Draw nodes
         factor_nodes_list = [
-            n for n, d in G.nodes(
-                data=True) if d.get('node_type') == 'factor']
+            n for n, d in G.nodes(data=True) if d.get('node_type') == 'factor'
+        ]
         feature_nodes_list = [
-            n for n, d in G.nodes(
-                data=True) if d.get('node_type') == 'feature']
+            n for n, d in G.nodes(data=True) if d.get('node_type') == 'feature'
+        ]
 
         nx.draw_networkx_nodes(
-            G, pos,
+            G,
+            pos,
             nodelist=factor_nodes_list,
             node_color='coral',
             node_size=800,
             label='Latent Factors',
-            ax=ax
+            ax=ax,
         )
 
         nx.draw_networkx_nodes(
-            G, pos,
+            G,
+            pos,
             nodelist=feature_nodes_list,
             node_color='skyblue',
             node_size=400,
             label='Features',
-            ax=ax
+            ax=ax,
         )
 
         # Draw edges with varying thickness
@@ -786,25 +764,17 @@ class NMFInterpreter:
         max_weight = max(weights) if weights else 1
 
         nx.draw_networkx_edges(
-            G, pos,
-            width=[w / max_weight * 3 for w in weights],
-            alpha=0.3,
-            ax=ax
+            G, pos, width=[w / max_weight * 3 for w in weights], alpha=0.3, ax=ax
         )
 
         # Draw labels
-        nx.draw_networkx_labels(
-            G, pos,
-            font_size=8,
-            font_weight='bold',
-            ax=ax
-        )
+        nx.draw_networkx_labels(G, pos, font_size=8, font_weight='bold', ax=ax)
 
         ax.set_title(
             f'Feature-Factor Network\n'
             f'({len(G.nodes())} nodes, {len(G.edges())} edges, threshold={threshold})',
             fontsize=14,
-            fontweight='bold'
+            fontweight='bold',
         )
         ax.legend(loc='upper right', fontsize=10)
         ax.axis('off')
@@ -813,11 +783,10 @@ class NMFInterpreter:
         plt.savefig(
             self.output_dir / "networks" / f"{save_name}.png",
             dpi=600,
-            bbox_inches='tight'
+            bbox_inches='tight',
         )
         plt.savefig(
-            self.output_dir / "networks" / f"{save_name}.pdf",
-            bbox_inches='tight'
+            self.output_dir / "networks" / f"{save_name}.pdf", bbox_inches='tight'
         )
         plt.close()
 
@@ -829,7 +798,7 @@ class NMFInterpreter:
             'edges': len(G.edges()),
             'factors': len(factor_nodes_list),
             'features': len(feature_nodes_list),
-            'threshold': threshold
+            'threshold': threshold,
         }
 
         json_path = self.output_dir / "networks" / f"{save_name}_stats.json"
@@ -840,6 +809,7 @@ class NMFInterpreter:
 # =============================================================================
 # DEMONSTRATION / TESTING
 # =============================================================================
+
 
 def run_demonstration():
     """
@@ -858,14 +828,36 @@ def run_demonstration():
 
     # Feature names (clinical features)
     feature_names = [
-        'age', 'symptom_duration', 'vertigo_intensity', 'nystagmus_type',
-        'hearing_loss', 'tinnitus', 'headache', 'imbalance', 'vascular_risk',
-        'stroke_history', 'hypertension', 'diabetes', 'cardiac_disease',
-        'neurological_signs', 'positional_trigger', 'fall_risk', 'anxiety',
-        'depression', 'medication_count', 'comorbidity_count', 'bmi',
-        'blood_pressure_systolic', 'blood_pressure_diastolic', 'heart_rate',
-        'visual_impairment', 'cognitive_score', 'gait_speed', 'balance_score',
-        'previous_episodes', 'family_history'
+        'age',
+        'symptom_duration',
+        'vertigo_intensity',
+        'nystagmus_type',
+        'hearing_loss',
+        'tinnitus',
+        'headache',
+        'imbalance',
+        'vascular_risk',
+        'stroke_history',
+        'hypertension',
+        'diabetes',
+        'cardiac_disease',
+        'neurological_signs',
+        'positional_trigger',
+        'fall_risk',
+        'anxiety',
+        'depression',
+        'medication_count',
+        'comorbidity_count',
+        'bmi',
+        'blood_pressure_systolic',
+        'blood_pressure_diastolic',
+        'heart_rate',
+        'visual_impairment',
+        'cognitive_score',
+        'gait_speed',
+        'balance_score',
+        'previous_episodes',
+        'family_history',
     ]
 
     # Simulate archetype data
@@ -881,11 +873,7 @@ def run_demonstration():
 
     # Simulate diagnoses
     diagnoses = np.random.randint(0, 4, n_patients)
-    diagnosis_names = [
-        'BPPV',
-        'Vestibular Neuritis',
-        'Stroke',
-        "Meniere's Disease"]
+    diagnosis_names = ['BPPV', 'Vestibular Neuritis', 'Stroke', "Meniere's Disease"]
 
     # 2. Initialize interpreter
     interpreter = NMFInterpreter()
@@ -895,8 +883,7 @@ def run_demonstration():
     logger.info("FACTOR INTERPRETATION")
     logger.info("=" * 80)
 
-    interpretations = interpreter.interpret_factors(
-        H, feature_names, n_top_features=10)
+    interpretations = interpreter.interpret_factors(H, feature_names, n_top_features=10)
     interpreter.plot_factor_compositions(interpretations)
     interpreter.generate_factor_report(interpretations)
 

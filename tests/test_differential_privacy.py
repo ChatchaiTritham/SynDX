@@ -7,8 +7,9 @@ Author: Chatchai Tritham
 Date: 2026-01-25
 """
 
-import pytest
 import numpy as np
+import pytest
+
 from syndx.phase2_synthesis.differential_privacy import DifferentialPrivacy
 
 
@@ -112,13 +113,13 @@ class TestGradientClipping:
         gradients = [
             np.array([3.0, 4.0]),  # Norm = 5.0, will be clipped
             np.array([0.6, 0.8]),  # Norm = 1.0, at boundary
-            np.array([0.3, 0.4])   # Norm = 0.5, won't be clipped
+            np.array([0.3, 0.4]),  # Norm = 0.5, won't be clipped
         ]
 
         clipped, stats = dp.clip_gradients(gradients)
 
         assert stats['max_norm'] == pytest.approx(5.0)
-        assert stats['clip_fraction'] == pytest.approx(1/3)  # Only first one clipped
+        assert stats['clip_fraction'] == pytest.approx(1 / 3)  # Only first one clipped
 
 
 @pytest.mark.unit

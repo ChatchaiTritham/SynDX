@@ -7,8 +7,9 @@ Author: Chatchai Tritham
 Date: 2026-01-25
 """
 
-import pytest
 import numpy as np
+import pytest
+
 from syndx.phase3_validation.diagnostic_evaluator import DiagnosticEvaluator
 
 
@@ -31,9 +32,7 @@ class TestDiagnosticEvaluatorInit:
     def test_custom_initialization(self):
         """Test initialization with custom parameters."""
         evaluator = DiagnosticEvaluator(
-            model_type='random_forest',
-            cv_folds=10,
-            random_state=123
+            model_type='random_forest', cv_folds=10, random_state=123
         )
 
         assert evaluator.model_type == 'random_forest'
@@ -173,7 +172,9 @@ class TestEvaluate:
         with pytest.raises(ValueError, match="Must fit both models"):
             evaluator.evaluate(X_test, y_test)
 
-    def test_evaluate_computes_all_metrics(self, mock_archetype_data, mock_synthetic_data):
+    def test_evaluate_computes_all_metrics(
+        self, mock_archetype_data, mock_synthetic_data
+    ):
         """Test that evaluation computes all expected metrics."""
         X_arch_train, y_arch_train = mock_archetype_data
         X_synth_train, y_synth_train = mock_synthetic_data
@@ -235,10 +236,19 @@ class TestComputeMetrics:
         metrics = evaluator._compute_metrics(y, y_pred, y_proba, "Test")
 
         expected_metrics = [
-            'accuracy', 'precision_macro', 'recall_macro', 'f1_macro',
-            'precision_weighted', 'recall_weighted', 'f1_weighted',
-            'auc_macro', 'auc_weighted', 'precision_per_class',
-            'recall_per_class', 'f1_per_class', 'confusion_matrix'
+            'accuracy',
+            'precision_macro',
+            'recall_macro',
+            'f1_macro',
+            'precision_weighted',
+            'recall_weighted',
+            'f1_weighted',
+            'auc_macro',
+            'auc_weighted',
+            'precision_per_class',
+            'recall_per_class',
+            'f1_per_class',
+            'confusion_matrix',
         ]
 
         for metric in expected_metrics:
@@ -392,7 +402,7 @@ class TestSummary:
             'archetype': {'accuracy': 0.90},
             'synthetic': {'accuracy': 0.89},
             'utility_gap': 0.01,
-            'mcnemar': {'is_significant': False}
+            'mcnemar': {'is_significant': False},
         }
 
         summary = evaluator.summary()
@@ -407,7 +417,7 @@ class TestSummary:
             'archetype': {'accuracy': 0.90},
             'synthetic': {'accuracy': 0.87},
             'utility_gap': 0.03,
-            'mcnemar': {'is_significant': False}
+            'mcnemar': {'is_significant': False},
         }
 
         summary = evaluator.summary()
@@ -421,7 +431,7 @@ class TestSummary:
             'archetype': {'accuracy': 0.90},
             'synthetic': {'accuracy': 0.75},
             'utility_gap': 0.15,
-            'mcnemar': {'is_significant': True}
+            'mcnemar': {'is_significant': True},
         }
 
         summary = evaluator.summary()
@@ -474,7 +484,9 @@ class TestDiagnosticEvaluatorIntegration:
         y_test = y_arch_train[:split_idx]
 
         evaluator = DiagnosticEvaluator()
-        evaluator.fit_archetype_model(X_arch_train[split_idx:], y_arch_train[split_idx:])
+        evaluator.fit_archetype_model(
+            X_arch_train[split_idx:], y_arch_train[split_idx:]
+        )
         evaluator.fit_synthetic_model(X_synth_train, y_synth_train)
 
         results = evaluator.evaluate(X_test, y_test)
@@ -486,7 +498,9 @@ class TestDiagnosticEvaluatorIntegration:
         # (This depends on mock data quality)
         pass
 
-    def test_reproducibility_with_random_state(self, mock_archetype_data, mock_synthetic_data):
+    def test_reproducibility_with_random_state(
+        self, mock_archetype_data, mock_synthetic_data
+    ):
         """Test reproducibility with fixed random state."""
         X_arch_train, y_arch_train = mock_archetype_data
         X_synth_train, y_synth_train = mock_synthetic_data
@@ -497,19 +511,25 @@ class TestDiagnosticEvaluatorIntegration:
 
         # Run 1
         evaluator1 = DiagnosticEvaluator(random_state=42)
-        evaluator1.fit_archetype_model(X_arch_train[split_idx:], y_arch_train[split_idx:])
+        evaluator1.fit_archetype_model(
+            X_arch_train[split_idx:], y_arch_train[split_idx:]
+        )
         evaluator1.fit_synthetic_model(X_synth_train, y_synth_train)
         results1 = evaluator1.evaluate(X_test, y_test)
 
         # Run 2
         evaluator2 = DiagnosticEvaluator(random_state=42)
-        evaluator2.fit_archetype_model(X_arch_train[split_idx:], y_arch_train[split_idx:])
+        evaluator2.fit_archetype_model(
+            X_arch_train[split_idx:], y_arch_train[split_idx:]
+        )
         evaluator2.fit_synthetic_model(X_synth_train, y_synth_train)
         results2 = evaluator2.evaluate(X_test, y_test)
 
         # Should be identical
         assert results1['utility_gap'] == pytest.approx(results2['utility_gap'])
-        assert results1['archetype']['accuracy'] == pytest.approx(results2['archetype']['accuracy'])
+        assert results1['archetype']['accuracy'] == pytest.approx(
+            results2['archetype']['accuracy']
+        )
 
     def test_both_model_types(self, mock_archetype_data, mock_synthetic_data):
         """Test that both XGBoost and RandomForest work."""
