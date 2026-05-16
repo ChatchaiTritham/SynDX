@@ -52,10 +52,10 @@ def main():
         from syn_dx_hybrid.dataset_generator import SynDXDatasetGenerator
         from syn_dx_hybrid.visualization_system import SynDXVisualizer
         
-        print("✅ SynDX-Hybrid framework imported successfully!")
+        print("โ… SynDX-Hybrid framework imported successfully!")
         
     except ImportError as e:
-        print(f"❌ Import error: {e}")
+        print(f"โ Import error: {e}")
         print("Creating mock implementations for demonstration...")
         
         # Create mock classes for demonstration
@@ -217,7 +217,7 @@ def main():
                 rules_with_provenance = self.layer4_xai.add_provenance(
                     rule_based_samples,
                     source_layer="rules",
-                    source_citation="Clinical Guidelines (AHA/ASA, Bárány ICVD)"
+                    source_citation="Clinical Guidelines (AHA/ASA, Bรกrรกny ICVD)"
                 )
                 self.layer_outputs['rules_provenance'] = rules_with_provenance
                 print("Applied provenance tracking to rule-based samples")
@@ -301,7 +301,7 @@ def main():
 
         # Use mock implementations
         SynDXHybridPipeline = MockSynDXHybridPipeline
-        print("✅ Mock implementations created for demonstration")
+        print("โ… Mock implementations created for demonstration")
     
     # Initialize pipeline with demonstration parameters
     pipeline = SynDXHybridPipeline(
@@ -344,7 +344,7 @@ def main():
     try:
         from syn_dx_hybrid.dataset_generator import SynDXDatasetGenerator
         generator = SynDXDatasetGenerator(random_state=42)
-        print(f"\\n✅ Dataset generator imported successfully!")
+        print(f"\\nโ… Dataset generator imported successfully!")
     except ImportError:
         # Create mock dataset generator
         class MockSynDXDatasetGenerator:
@@ -414,7 +414,7 @@ def main():
                 return stats
         
         generator = MockSynDXDatasetGenerator(random_state=42)
-        print(f"\\n⚠️ Using mock dataset generator for demonstration")
+        print(f"\\nโ ๏ธ Using mock dataset generator for demonstration")
     
     # Generate demonstration datasets
     print(f"\\nGenerating demonstration datasets for SynDX-Hybrid framework...")
@@ -441,7 +441,7 @@ def main():
     try:
         from syn_dx_hybrid.visualization_system import SynDXVisualizer
         visualizer = SynDXVisualizer(generator, output_dir='demo_figures')
-        print(f"\\n✅ Visualization system imported successfully!")
+        print(f"\\nโ… Visualization system imported successfully!")
     except ImportError:
         # Create mock visualizer
         class MockSynDXVisualizer:
@@ -469,7 +469,7 @@ def main():
                         fig_path = self.figure_dir / f'{layer_name}_visualization.png'
                         plt.savefig(fig_path, dpi=600, bbox_inches='tight')
                         plt.show()
-                        print(f"  ✓ Created {layer_name} visualization")
+                        print(f"  โ“ Created {layer_name} visualization")
                 
                 # Create comprehensive comparison visualization
                 fig, ax = plt.subplots(figsize=(14, 10))
@@ -506,7 +506,7 @@ def main():
                 fig_path = self.figure_dir / 'syn_dx_hybrid_architecture.png'
                 plt.savefig(fig_path, dpi=600, bbox_inches='tight')
                 plt.show()
-                print(f"  ✓ Created comprehensive architecture visualization")
+                print(f"  โ“ Created comprehensive architecture visualization")
                 
                 # Create performance metrics visualization
                 fig, ax = plt.subplots(figsize=(12, 8))
@@ -545,14 +545,14 @@ def main():
                 fig_path = self.figure_dir / 'syn_dx_hybrid_performance_metrics.png'
                 plt.savefig(fig_path, dpi=600, bbox_inches='tight')
                 plt.show()
-                print(f"  ✓ Created performance metrics visualization")
+                print(f"  โ“ Created performance metrics visualization")
                 
                 print(f"\\nVisualization generation completed!")
                 print(f"Total figures created: {len(list(self.figure_dir.glob('*.png')))}")
                 print(f"Figures saved to: {self.figure_dir}")
         
         visualizer = MockSynDXVisualizer(generator, output_dir='demo_figures')
-        print(f"\\n⚠️ Using mock visualizer for demonstration")
+        print(f"\\nโ ๏ธ Using mock visualizer for demonstration")
     
     # Generate all visualizations
     print(f"\\nCreating high-resolution visualizations (600 DPI)...")
@@ -662,99 +662,74 @@ def main():
     print(f"  Figure directory: {visualizer.figure_dir}")
     
     # Performance metrics (simulated based on manuscript targets)
-    print(f"\\nPERFORMANCE METRICS (Target vs Achieved):")
+    print("\nPERFORMANCE METRICS (Target vs Achieved):")
     metrics = {
-        \"KL Divergence\": (\"≤ 0.05\", f\"{0.031:.3f}\"),\n",
-        \"ROC-AUC\": (\">= 0.90\", f\"{0.92:.3f}\"),\n",
-        \"TiTrATE Coverage\": (\">= 95%\", f\"{0.981:.1%}\"),\n",
-        \"Expert Plausibility\": (\">= 90%\", f\"{0.935:.1%}\"),\n",
-        \"Provenance Traceability\": (\">= 95%\", f\"{0.958:.1%}\"),\n",
-        \"Counterfactual Consistency\": (\">= 95%\", f\"{0.969:.1%}\")\n",
-    "}\n",
-    "\n",
-    "for metric, (target, achieved) in metrics.items():\n",
-    "    # Determine status based on target achievement\n",
-    "    if '<=' in target:\n",
-    "        target_val = float(target.replace('≤ ', ''))\n",
-    "        status = \"✅\" if float(achieved) <= target_val else \"❌\"\n",
-    "    elif '>=' in target:\n",
-    "        target_val = float(target.replace('≥ ', ''))\n",
-    "        status = \"✅\" if float(achieved) >= target_val else \"❌\"\n",
-    "    else:\n",
-    "        status = \"❓\"  # Unknown target type\n",
-    "    \n",
-    "    print(f\"  {status} {metric}: Target {target}, Achieved {achieved}\")\n",
-    "\n",
-    "# Export datasets\n",
-    "print(f\"\\nEXPORTING DATASETS...\")\n",
-    "export_dir = Path(\"exported_data\")\n",
-    "export_dir.mkdir(exist_ok=True)\n",
-    "\n",
-    "generator.datasets['ensemble'].to_csv(export_dir / \"synthetic_medical_data.csv\", index=False)\n",
-    "print(f\"  ✅ Synthetic data exported to: {export_dir}/synthetic_medical_data.csv\")\n",
-    "\n",
-    "# Save layer datasets\n",
-    "for layer_name, layer_data in generator.datasets.items():\n",
-    "    layer_data.to_csv(export_dir / f\"{layer_name}_data.csv\", index=False)\n",
-    "    print(f\"  ✅ {layer_name} data exported\")\n",
-    "\n",
-    "# Save visualization parameters\n",
-    "viz_params = {\n",
-    "    \"figure_resolution\": 600,\n",
-    "    \"figure_format\": \"png\",\n",
-    "    \"academic_standards\": \"top-tier\",\n",
-    "    \"generated_figures\": total_figures,\n",
-    "    \"figure_directory\": str(visualizer.figure_dir),\n",
-    "    \"generation_timestamp\": datetime.now().isoformat()\n",
-    "}\n",
-    "\n",
-    "with open(export_dir / \"visualization_metadata.json\", 'w') as f:\n",
-    "    json.dump(viz_params, f, indent=2)\n",
-    "print(f\"  ✅ Visualization metadata exported\")\n",
-    "\n",
-    "print(f\"\\n🎉 SYNDX-HYBRID FRAMEWORK EXECUTION COMPLETED SUCCESSFULLY!\")\n",
-    "print(f\"All datasets and visualizations saved to their respective directories.\")\n",
-    "print(f\"Ready for clinical validation and research applications.\")\n",
-    "print(f\"\\nFramework successfully demonstrates the five-layer architecture:\")\n",
-    "print(f\"  1. Combinatorial Enumeration: Systematic archetype generation\")\n",
-    "print(f\"  2. Bayesian Networks: Probabilistic dependencies from epidemiological data\")\n",
-    "print(f\"  3. Rule-Based Expert Systems: Clinical guidelines as formal IF-THEN rules\")\n",
-    "print(f\"  4. XAI-by-Design: Complete provenance tracking for explainability\")\n",
-    "print(f\"  5. Counterfactual Reasoning: Validation through systematic perturbations\")\n",
-    "print(f\"  6. Ensemble Integration: Weighted merging with diversity-aware sampling\")\n",
-    "\n",
-    "print(f\"\\nTotal synthetic patients: {len(generator.datasets['ensemble']):,}\")\n",
-    "print(f\"Total features: {generator.datasets['ensemble'].shape[1]}\")\n",
-    "print(f\"Total visualizations: {total_figures}\")\n",
-    "print(f\"All outputs saved to: {output_dir}\")\n",
-    "\n",
-    "return 0\n",
-    "\n",
-    "if __name__ == \"__main__\":\n",
-    "    sys.exit(main())\n",
-    "\"\"\""
-   ]
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "Python 3",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.9.0"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 4
-}
+        "KL Divergence": ("<= 0.05", f"{0.031:.3f}"),
+        "ROC-AUC": (">= 0.90", f"{0.92:.3f}"),
+        "TiTrATE Coverage": (">= 95%", f"{0.981:.1%}"),
+        "Expert Plausibility": (">= 90%", f"{0.935:.1%}"),
+        "Provenance Traceability": (">= 95%", f"{0.958:.1%}"),
+        "Counterfactual Consistency": (">= 95%", f"{0.969:.1%}"),
+    }
+
+    for metric, (target, achieved) in metrics.items():
+        if target.startswith("<="):
+            target_value = float(target.replace("<=", "").strip())
+            status = "PASS" if float(achieved) <= target_value else "FAIL"
+        elif target.startswith(">="):
+            target_value = float(target.replace(">=", "").replace("%", "").strip())
+            achieved_value = float(achieved.replace("%", "")) if "%" in achieved else float(achieved)
+            if "%" in target:
+                achieved_value /= 100
+                target_value /= 100
+            status = "PASS" if achieved_value >= target_value else "FAIL"
+        else:
+            status = "CHECK"
+        print(f"  {status} {metric}: Target {target}, Achieved {achieved}")
+
+    # Export datasets
+    print("\nEXPORTING DATASETS...")
+    export_dir = Path("exported_data")
+    export_dir.mkdir(exist_ok=True)
+
+    generator.datasets["ensemble"].to_csv(export_dir / "synthetic_medical_data.csv", index=False)
+    print(f"  Synthetic data exported to: {export_dir}/synthetic_medical_data.csv")
+
+    for layer_name, layer_data in generator.datasets.items():
+        layer_data.to_csv(export_dir / f"{layer_name}_data.csv", index=False)
+        print(f"  {layer_name} data exported")
+
+    viz_params = {
+        "figure_resolution": 600,
+        "figure_format": "png",
+        "academic_standards": "top-tier",
+        "generated_figures": total_figures,
+        "figure_directory": str(visualizer.figure_dir),
+        "generation_timestamp": datetime.now().isoformat(),
+    }
+
+    with open(export_dir / "visualization_metadata.json", "w", encoding="utf-8") as handle:
+        json.dump(viz_params, handle, indent=2)
+    print("  Visualization metadata exported")
+
+    print("\nSYNDX-HYBRID FRAMEWORK EXECUTION COMPLETED SUCCESSFULLY")
+    print("All datasets and visualizations saved to their respective directories.")
+    print("Ready for clinical validation and research applications.")
+    print("\nFramework successfully demonstrates the five-layer architecture:")
+    print("  1. Combinatorial Enumeration: Systematic archetype generation")
+    print("  2. Bayesian Networks: Probabilistic dependencies from epidemiological data")
+    print("  3. Rule-Based Expert Systems: Clinical guidelines as formal IF-THEN rules")
+    print("  4. XAI-by-Design: Complete provenance tracking for explainability")
+    print("  5. Counterfactual Reasoning: Validation through systematic perturbations")
+    print("  6. Ensemble Integration: Weighted merging with diversity-aware sampling")
+
+    print(f"\nTotal synthetic patients: {len(generator.datasets['ensemble']):,}")
+    print(f"Total features: {generator.datasets['ensemble'].shape[1]}")
+    print(f"Total visualizations: {total_figures}")
+    print(f"All outputs saved to: {output_dir}")
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
