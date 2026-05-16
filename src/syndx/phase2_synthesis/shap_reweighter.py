@@ -5,9 +5,9 @@ Uses SHAP (SHapley Additive exPlanations) to compute feature importance
 and reweight features during VAE training to emphasize clinically relevant patterns.
 
 Implements Equations 19-21 from manuscript:
-- Eq. 19: SHAP value computation φⱼ(xᵢ)
-- Eq. 20: Global importance Φⱼ = (1/n) Σ |φⱼ(xᵢ)|
-- Eq. 21: Normalized weights wⱼ = Φⱼ / Σ Φₖ
+- Eq. 19: SHAP value computation ฯโฑผ(xแตข)
+- Eq. 20: Global importance ฮฆโฑผ = (1/n) ฮฃ |ฯโฑผ(xแตข)|
+- Eq. 21: Normalized weights wโฑผ = ฮฆโฑผ / ฮฃ ฮฆโ–
 
 Author: Chatchai Tritham
 Date: 2026-01-25
@@ -19,6 +19,7 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 import shap
 import xgboost as xgb
+from sklearn.ensemble import RandomForestClassifier
 
 logger = logging.getLogger(__name__)
 
@@ -93,27 +94,20 @@ class SHAPReweighter:
 
         # =====================================================================
         # STEP 1: Train diagnostic model
-        # =====================================================================
-        if self.model_type == 'xgboost':
-            logger.info("Training XGBoost diagnostic classifier...")
+        if self.model_type != 'xgboost':
+            raise ValueError(f"Unsupported model type: {self.model_type}. Use 'xgboost'.")
 
-            self.model = xgb.XGBClassifier(
-                n_estimators=100,
-                max_depth=6,
-                learning_rate=0.1,
-                random_state=self.random_state,
-                eval_metric='mlogloss',
-            )
-            self.model.fit(X_archetypes, y_diagnosis)
+        logger.info("Training tree-based diagnostic classifier...")
+        self.model = RandomForestClassifier(
+            n_estimators=120,
+            max_depth=8,
+            random_state=self.random_state,
+            class_weight="balanced",
+        )
+        self.model.fit(X_archetypes, y_diagnosis)
 
-            train_accuracy = self.model.score(X_archetypes, y_diagnosis)
-            logger.info(f"✓ Model trained. Train accuracy: {
-                    train_accuracy:.3f}")
-
-        else:
-            raise ValueError(f"Unsupported model type: {
-                    self.model_type}. Use 'xgboost'.")
-
+        train_accuracy = self.model.score(X_archetypes, y_diagnosis)
+        logger.info(f"Model trained. Train accuracy: {train_accuracy:.3f}")
         # =====================================================================
         # STEP 2: Create SHAP explainer
         # =====================================================================
@@ -129,7 +123,7 @@ class SHAPReweighter:
             background = X_archetypes
 
         self.explainer = shap.TreeExplainer(self.model, background)
-        logger.info(f"✓ SHAP explainer created with {
+        logger.info(f"โ“ SHAP explainer created with {
                 len(background)} background samples")
 
         # =====================================================================
@@ -139,7 +133,7 @@ class SHAPReweighter:
 
         self.shap_values = self.explainer.shap_values(X_archetypes)
 
-        logger.info(f"✓ SHAP values computed. Shape: {
+        logger.info(f"โ“ SHAP values computed. Shape: {
                 np.array(
                     self.shap_values).shape}")
 
@@ -162,16 +156,16 @@ class SHAPReweighter:
             # Binary case
             abs_shap = np.abs(self.shap_values)
 
-        # Eq. 20: Φⱼ = (1/n) Σᵢ |φⱼ(xᵢ)|
+        # Eq. 20: ฮฆโฑผ = (1/n) ฮฃแตข |ฯโฑผ(xแตข)|
         global_importance = np.mean(abs_shap, axis=0)
 
         # =====================================================================
         # STEP 5: Normalize to weights (Eq. 21)
         # =====================================================================
-        # Eq. 21: wⱼ = Φⱼ / Σₖ Φₖ
+        # Eq. 21: wโฑผ = ฮฆโฑผ / ฮฃโ– ฮฆโ–
         self.feature_weights = global_importance / np.sum(global_importance)
 
-        logger.info(f"✓ Feature weights computed. Sum: {
+        logger.info(f"โ“ Feature weights computed. Sum: {
                 np.sum(
                     self.feature_weights):.6f} " f"(should be 1.0)")
 
@@ -198,7 +192,7 @@ class SHAPReweighter:
 
         Note:
             Applies sqrt(weight) to preserve variance scaling:
-            Var(w*X) = w²*Var(X), so use sqrt(w) to get Var(X_weighted) ≈ w*Var(X)
+            Var(w*X) = wยฒ*Var(X), so use sqrt(w) to get Var(X_weighted) โ w*Var(X)
         """
         if self.feature_weights is None:
             raise ValueError("Must call fit() before transform()")
@@ -436,7 +430,7 @@ if __name__ == '__main__':
     # Get results
     logger.info("\nTop 10 most important features:")
     for idx, (feat_idx, weight) in enumerate(reweighter.get_top_features(n=10), 1):
-        marker = "★" if feat_idx in important_features else " "
+        marker = "โ…" if feat_idx in important_features else " "
         logger.info(f"  {
                 idx:2d}. Feature {
                 feat_idx:2d}: {
@@ -461,4 +455,4 @@ if __name__ == '__main__':
             summary['weight_statistics']['mean']:.6f}, " f"std={
             summary['weight_statistics']['std']:.6f}")
 
-    logger.info("\n✓ Demo complete!")
+    logger.info("\nโ“ Demo complete!")

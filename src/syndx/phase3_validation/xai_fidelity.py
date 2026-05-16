@@ -8,8 +8,8 @@ Validates that models trained on synthetic data produce similar explanations
 to models trained on archetype data, ensuring XAI techniques remain effective.
 
 Key Metrics:
-- SHAP Value Correlation (Spearman ρ)
-- Feature Ranking Agreement (Kendall's τ)
+- SHAP Value Correlation (Spearman ฯ)
+- Feature Ranking Agreement (Kendall's ฯ)
 - Interaction Pattern Fidelity (Frobenius norm)
 - Local Explanation Consistency (LIME agreement)
 
@@ -24,6 +24,7 @@ import numpy as np
 import shap
 import xgboost as xgb
 from scipy.stats import kendalltau, spearmanr
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import mean_squared_error
 
 logger = logging.getLogger(__name__)
@@ -97,20 +98,17 @@ class XAIFidelity:
         logger.info(
             f"Training archetype model on {n_samples} samples with {n_features} features..."
         )
-
-        # Train XGBoost classifier
-        self.archetype_model = xgb.XGBClassifier(
-            n_estimators=100,
-            max_depth=6,
-            learning_rate=0.1,
+        # Train a SHAP-compatible tree classifier.
+        self.archetype_model = RandomForestClassifier(
+            n_estimators=120,
+            max_depth=8,
             random_state=self.random_state,
-            eval_metric='mlogloss',
+            class_weight="balanced",
         )
         self.archetype_model.fit(X_arch, y_arch)
 
         train_accuracy = self.archetype_model.score(X_arch, y_arch)
-        logger.info(f"✓ Archetype model trained. Accuracy: {
-                train_accuracy:.3f}")
+        logger.info(f"Archetype model trained. Accuracy: {train_accuracy:.3f}")
 
         # Compute SHAP values
         logger.info("Computing SHAP values for archetype model...")
@@ -130,7 +128,7 @@ class XAIFidelity:
         self.archetype_explainer = shap.TreeExplainer(self.archetype_model, background)
         self.archetype_shap = self.archetype_explainer.shap_values(X_arch)
 
-        logger.info(f"✓ SHAP values computed for archetype model. Shape: {
+        logger.info(f"โ“ SHAP values computed for archetype model. Shape: {
                 np.array(
                     self.archetype_shap).shape}")
 
@@ -147,19 +145,17 @@ class XAIFidelity:
             f"Training synthetic model on {n_samples} samples with {n_features} features..."
         )
 
-        # Train identical architecture
-        self.synthetic_model = xgb.XGBClassifier(
-            n_estimators=100,
-            max_depth=6,
-            learning_rate=0.1,
+        # Train identical architecture.
+        self.synthetic_model = RandomForestClassifier(
+            n_estimators=120,
+            max_depth=8,
             random_state=self.random_state,
-            eval_metric='mlogloss',
+            class_weight="balanced",
         )
         self.synthetic_model.fit(X_synth, y_synth)
 
         train_accuracy = self.synthetic_model.score(X_synth, y_synth)
-        logger.info(f"✓ Synthetic model trained. Accuracy: {
-                train_accuracy:.3f}")
+        logger.info(f"Synthetic model trained. Accuracy: {train_accuracy:.3f}")
 
         # Compute SHAP values
         logger.info("Computing SHAP values for synthetic model...")
@@ -179,7 +175,7 @@ class XAIFidelity:
         self.synthetic_explainer = shap.TreeExplainer(self.synthetic_model, background)
         self.synthetic_shap = self.synthetic_explainer.shap_values(X_synth)
 
-        logger.info(f"✓ SHAP values computed for synthetic model. Shape: {
+        logger.info(f"โ“ SHAP values computed for synthetic model. Shape: {
                 np.array(
                     self.synthetic_shap).shape}")
 
@@ -237,7 +233,7 @@ class XAIFidelity:
                 rho, pvalue = spearmanr(arch_flat, synth_flat)
                 correlations.append(rho)
 
-                logger.info(f"  Class {class_idx}: ρ = {
+                logger.info(f"  Class {class_idx}: ฯ = {
                         rho:.3f} (p={
                         pvalue:.4f})")
 
@@ -259,21 +255,21 @@ class XAIFidelity:
             synth_flat = synth_flat[:min_size]
 
             avg_correlation, pvalue = spearmanr(arch_flat, synth_flat)
-            logger.info(f"  Binary: ρ = {
+            logger.info(f"  Binary: ฯ = {
                     avg_correlation:.3f} (p={
                     pvalue:.4f})")
 
         self.fidelity_scores['shap_correlation'] = avg_correlation
-        logger.info(f"✓ Overall SHAP Correlation: ρ = {avg_correlation:.3f}")
+        logger.info(f"โ“ Overall SHAP Correlation: ฯ = {avg_correlation:.3f}")
 
         return avg_correlation
 
     def compute_rank_agreement(self) -> float:
         """
-        Compute Kendall's τ for feature importance ranking.
+        Compute Kendall's ฯ for feature importance ranking.
 
         Measures agreement in feature rankings between archetype and synthetic models.
-        High τ indicates similar feature importance orderings.
+        High ฯ indicates similar feature importance orderings.
 
         Returns:
             Kendall's tau coefficient (0-1, higher is better)
@@ -294,7 +290,7 @@ class XAIFidelity:
         tau, pvalue = kendalltau(arch_importance, synth_importance)
 
         self.fidelity_scores['rank_agreement'] = tau
-        logger.info(f"✓ Rank Agreement: τ = {tau:.3f} (p={pvalue:.4f})")
+        logger.info(f"โ“ Rank Agreement: ฯ = {tau:.3f} (p={pvalue:.4f})")
 
         return tau
 
@@ -320,7 +316,7 @@ class XAIFidelity:
             # Binary case
             abs_shap = np.abs(shap_values)
 
-        # Mean absolute SHAP per feature (Φⱼ = (1/n) Σᵢ |φⱼ(xᵢ)|)
+        # Mean absolute SHAP per feature (ฮฆโฑผ = (1/n) ฮฃแตข |ฯโฑผ(xแตข)|)
         global_importance = np.mean(abs_shap, axis=0)
 
         return global_importance
@@ -352,7 +348,7 @@ class XAIFidelity:
         mse = mean_squared_error(arch_importance_norm, synth_importance_norm)
 
         self.fidelity_scores['importance_mse'] = mse
-        logger.info(f"✓ Feature Importance MSE: {mse:.6f}")
+        logger.info(f"โ“ Feature Importance MSE: {mse:.6f}")
 
         return mse
 
@@ -386,7 +382,7 @@ class XAIFidelity:
         overlap = len(arch_top_k & synth_top_k) / k
 
         self.fidelity_scores[f'top_{k}_overlap'] = overlap
-        logger.info(f"✓ Top-{k} Feature Overlap: {overlap:.1%}")
+        logger.info(f"โ“ Top-{k} Feature Overlap: {overlap:.1%}")
 
         return overlap
 
@@ -441,7 +437,7 @@ class XAIFidelity:
         interaction_fidelity = max(0.0, 1.0 - normalized_distance)
 
         self.fidelity_scores['interaction_fidelity'] = interaction_fidelity
-        logger.info(f"✓ Interaction Fidelity: {interaction_fidelity:.3f}")
+        logger.info(f"โ“ Interaction Fidelity: {interaction_fidelity:.3f}")
 
         return interaction_fidelity
 
@@ -621,4 +617,4 @@ if __name__ == '__main__':
     logger.info(f"\nInterpretation: {summary['interpretation']}")
     logger.info(f"Recommendation: {summary['recommendation']}")
 
-    logger.info("\n✓ Demo complete!")
+    logger.info("\nโ“ Demo complete!")
