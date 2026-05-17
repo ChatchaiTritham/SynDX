@@ -1,4 +1,4 @@
-"""
+﻿"""
 NMF Interpretability for SynDX Framework
 =========================================
 
@@ -12,7 +12,7 @@ Features:
 
 Clinical Value:
 - Understand clinical phenotypes (latent factors)
-- Simplify 150 features → 20 interpretable factors
+- Simplify 150 features โ’ 20 interpretable factors
 - Patient profiling for personalized medicine
 - Pattern discovery for research
 
@@ -117,11 +117,11 @@ class NMFInterpreter:
         Interpret each NMF factor.
 
         Each factor = linear combination of features
-        → Identify top contributing features
-        → Assign clinical meaning
+        โ’ Identify top contributing features
+        โ’ Assign clinical meaning
 
         Args:
-            H_matrix: Factor-feature matrix (n_factors × n_features)
+            H_matrix: Factor-feature matrix (n_factors ร— n_features)
             feature_names: List of feature names
             n_top_features: Number of top features to show per factor
             save_name: Base name for saved files
@@ -187,7 +187,7 @@ class NMFInterpreter:
         n_factors = len(interpretations)
         n_top = 10
 
-        # 1. Heatmap: Factors × Top Features
+        # 1. Heatmap: Factors ร— Top Features
         fig, ax = plt.subplots(figsize=(14, max(8, n_factors * 0.6)))
 
         # Collect data for heatmap
@@ -341,7 +341,7 @@ class NMFInterpreter:
         report_lines.append("Latent factors represent hidden clinical phenotypes:")
         report_lines.append("- Each factor = combination of features")
         report_lines.append("- Factors capture common patterns across patients")
-        report_lines.append("- Reduce 150 features → 20 interpretable factors")
+        report_lines.append("- Reduce 150 features โ’ 20 interpretable factors")
         report_lines.append("")
         report_lines.append("Clinical Use:")
         report_lines.append("1. Phenotype Discovery: Identify patient subtypes")
@@ -376,7 +376,7 @@ class NMFInterpreter:
         Profile individual patient's factor composition.
 
         Args:
-            W_matrix: Patient-factor matrix (n_patients × n_factors)
+            W_matrix: Patient-factor matrix (n_patients ร— n_factors)
             patient_idx: Index of patient to profile
             factor_names: Optional custom factor names
 
@@ -549,7 +549,7 @@ class NMFInterpreter:
         - Chi-square: Test independence
 
         Args:
-            W_matrix: Patient-factor matrix (n_patients × n_factors)
+            W_matrix: Patient-factor matrix (n_patients ร— n_factors)
             diagnoses: Diagnosis labels (n_patients,)
             diagnosis_names: Names of diagnoses
             factor_names: Optional custom factor names
@@ -690,7 +690,7 @@ class NMFInterpreter:
         Create network graph of feature-factor relationships.
 
         Args:
-            H_matrix: Factor-feature matrix (n_factors × n_features)
+            H_matrix: Factor-feature matrix (n_factors ร— n_features)
             feature_names: List of feature names
             threshold: Minimum weight to include edge
             save_name: Base name for saved files
@@ -869,7 +869,7 @@ def run_demonstration():
     W = nmf_model.fit_transform(X)
     H = nmf_model.components_
 
-    logger.info(f"NMF decomposition: {X.shape} → W{W.shape} × H{H.shape}")
+    logger.info(f"NMF decomposition: {X.shape} โ’ W{W.shape} ร— H{H.shape}")
 
     # Simulate diagnoses
     diagnoses = np.random.randint(0, 4, n_patients)
@@ -928,7 +928,7 @@ def run_demonstration():
     logger.info("    - Statistical heatmap with significance tests")
     logger.info("  Feature-Factor Network:")
     logger.info("    - Network graph visualization")
-    logger.info("\nAll outputs are publication-ready (600 DPI)")
+    logger.info("\nAll outputs are manuscript-preparation (600 DPI)")
     logger.info("=" * 80)
 
 

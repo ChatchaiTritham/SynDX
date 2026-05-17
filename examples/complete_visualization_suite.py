@@ -1,7 +1,7 @@
-"""
+﻿"""
 Complete Visualization Suite for SynDX
 Integrates all commercial-grade academic visualizations
-Publication-ready figures for top-tier medical informatics journals
+Manuscript-preparation figures for manuscript preparation and review
 """
 
 from comparative_academic_charts import ComparativeAcademicCharts
@@ -23,7 +23,7 @@ warnings.filterwarnings('ignore')
 class CompleteSynDXVisualizationSuite:
     """
     Master visualization suite for SynDX academic publication
-    Generates all 10 figures for manuscript submission
+    Generates all 10 figures for manuscript preparation
     """
 
     def __init__(
@@ -47,7 +47,7 @@ class CompleteSynDXVisualizationSuite:
 
         print("\n" + "=" * 80)
         print(" " * 15 + "SYNDX COMPLETE VISUALIZATION SUITE")
-        print(" " * 20 + "Publication-Ready Figures")
+        print(" " * 20 + "Manuscript-Preparation Figures")
         print("=" * 80)
         print(f"\nOutput Directory: {self.output_dir}")
         print(f"Format: {format.upper()}, Resolution: 600 DPI")
@@ -109,14 +109,14 @@ class CompleteSynDXVisualizationSuite:
             print("Creating Figure 4: NMF Factor Analysis...")
             self.advanced_charts.fig4_nmf_analysis(explorer.nmf_model, explorer)
         else:
-            print("⚠ Skipping Figure 4: NMF model not available")
+            print("โ  Skipping Figure 4: NMF model not available")
 
         # Figure 5: SHAP Feature Importance
         if explorer.shap_model:
             print("Creating Figure 5: SHAP Feature Importance...")
             self.advanced_charts.fig5_shap_importance(explorer.shap_model, explorer)
         else:
-            print("⚠ Skipping Figure 5: SHAP model not available")
+            print("โ  Skipping Figure 5: SHAP model not available")
 
         print()
 
@@ -181,16 +181,16 @@ class CompleteSynDXVisualizationSuite:
         print("-" * 80)
 
         figures = [
-            "Figure 1:  Methodology Overview ✓",
-            "Figure 2:  Parameter Space Characterization ✓",
-            "Figure 3:  XAI-Guided Exploration Workflow ✓",
-            "Figure 4:  NMF Factor Analysis ✓",
-            "Figure 5:  SHAP Feature Importance ✓",
-            "Figure 6:  Multi-Phase Sampling Performance ✓",
-            "Figure 7:  Clinical Validity Assessment ✓",
-            "Figure 8:  Comparative Performance Analysis ✓",
-            "Figure 9:  Epidemiological Fidelity ✓",
-            "Figure 10: Critical Scenario Coverage ✓",
+            "Figure 1:  Methodology Overview โ“",
+            "Figure 2:  Parameter Space Characterization โ“",
+            "Figure 3:  XAI-Guided Exploration Workflow โ“",
+            "Figure 4:  NMF Factor Analysis โ“",
+            "Figure 5:  SHAP Feature Importance โ“",
+            "Figure 6:  Multi-Phase Sampling Performance โ“",
+            "Figure 7:  Clinical Validity Assessment โ“",
+            "Figure 8:  Comparative Performance Analysis โ“",
+            "Figure 9:  Epidemiological Fidelity โ“",
+            "Figure 10: Critical Scenario Coverage โ“",
         ]
 
         for fig in figures:
@@ -214,19 +214,19 @@ class CompleteSynDXVisualizationSuite:
                     stats['nmf_summary']['reconstruction_error']:.4f}")
 
         print("\n" + "-" * 80)
-        print("Journal Submission Requirements:")
+        print("Manuscript Review Requirements:")
         print("-" * 80)
-        print("  ✓ High resolution (600 DPI)")
-        print("  ✓ Vector format available (PDF)")
-        print("  ✓ Professional styling (serif fonts)")
-        print("  ✓ Color-blind friendly palettes")
-        print("  ✓ Statistical annotations included")
-        print("  ✓ Clear labels and legends")
-        print("  ✓ Consistent formatting across all figures")
-        print("  ✓ Ready for Nature/JAMA/IEEE/BMJ submission")
+        print("  โ“ High resolution (600 DPI)")
+        print("  โ“ Vector format available (PDF)")
+        print("  โ“ Professional styling (serif fonts)")
+        print("  โ“ Color-blind friendly palettes")
+        print("  โ“ Statistical annotations included")
+        print("  โ“ Clear labels and legends")
+        print("  โ“ Consistent formatting across all figures")
+        print("  โ“ Ready for Nature/JAMA/IEEE/BMJ submission")
 
         print("\n" + "=" * 80)
-        print(f"\n✓ All figures saved successfully to: {self.output_dir}\n")
+        print(f"\nโ“ All figures saved successfully to: {self.output_dir}\n")
 
     def create_supplementary_figures(self, explorer, archetypes, param_space):
         """
@@ -258,7 +258,7 @@ class CompleteSynDXVisualizationSuite:
         # Note: Implementation of supplementary figures
         # would follow similar pattern to main figures
 
-        print(f"\n✓ Supplementary figures saved to: {supp_dir}\n")
+        print(f"\nโ“ Supplementary figures saved to: {supp_dir}\n")
 
     def export_for_journal_submission(self, journal: str = 'nature'):
         """
@@ -305,7 +305,7 @@ class CompleteSynDXVisualizationSuite:
         journal_dir = self.output_dir / f"{journal}_submission"
         journal_dir.mkdir(exist_ok=True)
 
-        print(f"\n✓ Journal-specific figures prepared in: {journal_dir}\n")
+        print(f"\nโ“ Journal-specific figures prepared in: {journal_dir}\n")
 
 
 # ============================================================================
@@ -361,7 +361,7 @@ def prepare_journal_submission(
     output_dir="outputs/publication_figures",
 ):
     """
-    Prepare figures for specific journal submission
+    Prepare figures for specific manuscript review
 
     Args:
         explorer: XAIGuidedExplorer instance

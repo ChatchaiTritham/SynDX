@@ -1,7 +1,7 @@
-"""
+﻿"""
 Commercial-Grade Academic Visualizations for SynDX
-Publication-ready charts and graphs for all exploration phases
-Compliant with top-tier medical informatics journals (Nature, JAMA, BMJ)
+Manuscript-preparation charts and graphs for all exploration phases
+Compliant with manuscript preparation and review (Nature, JAMA, BMJ)
 """
 
 import numpy as np
@@ -127,7 +127,7 @@ class AcademicVisualizer:
         self.fig10_critical_coverage(archetypes, param_space)
 
         print("\n" + "=" * 80)
-        print(f"✓ All figures saved to: {self.output_dir}")
+        print(f"โ“ All figures saved to: {self.output_dir}")
         print(f"  Format: {self.format.upper()}, DPI: 600")
         print("=" * 80 + "\n")
 
@@ -599,7 +599,7 @@ class AcademicVisualizer:
         ax.text(
             0.5,
             -0.3,
-            '(log₁₀ scale)',
+            '(logโโ€ scale)',
             transform=ax.transData,
             ha='center',
             fontsize=7,
@@ -620,7 +620,7 @@ class AcademicVisualizer:
         }
 
         labels = [
-            'Statistical\nRequirement\n(κ=0.05)',
+            'Statistical\nRequirement\n(ฮบ=0.05)',
             'Coverage\nRequirement\n(q=750)',
             'Clinical\nRequirement\n(15% critical)',
             'Optimal\nFormula\n(Final)',
@@ -697,7 +697,7 @@ class AcademicVisualizer:
             linewidth=1.5,
         )
 
-        ax.set_ylabel('Acceptance Rate (ρ)', fontweight='bold')
+        ax.set_ylabel('Acceptance Rate (ฯ)', fontweight='bold')
         ax.set_ylim(0, 1.1)
         ax.axhline(
             0.5,
@@ -800,7 +800,7 @@ class AcademicVisualizer:
         ax.text(
             0.5,
             0.97,
-            f'{speedup:.0f}× faster',
+            f'{speedup:.0f}ร— faster',
             transform=ax.transAxes,
             ha='center',
             va='top',
@@ -969,7 +969,7 @@ class AcademicVisualizer:
         )
 
         ax.set_xlabel('Phase', fontweight='bold')
-        ax.set_ylabel('Acceptance Rate (ρ)', fontweight='bold')
+        ax.set_ylabel('Acceptance Rate (ฯ)', fontweight='bold')
         ax.set_xticks(phases)
         ax.set_xticklabels(phase_names, rotation=15)
         ax.set_ylim(0, max(rates) * 1.2)
@@ -1140,7 +1140,7 @@ class AcademicVisualizer:
     # ========================================================================
 
     def _save_figure(self, fig, filename):
-        """Save figure in multiple formats for journal submission"""
+        """Save figure in multiple formats for manuscript review"""
         formats = [self.format]
         if self.format == 'png':
             formats.append('pdf')  # Always save PDF for journals
@@ -1157,7 +1157,7 @@ class AcademicVisualizer:
             )
 
         plt.close(fig)
-        print(f"✓ Saved: {filename}.{self.format}")
+        print(f"โ“ Saved: {filename}.{self.format}")
 
 
 # ============================================================================
