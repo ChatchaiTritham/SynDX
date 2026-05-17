@@ -1,4 +1,4 @@
-"""
+﻿"""
 SynDX-Hybrid: Complete Implementation with Advanced Visualization and Dataset Generation
 
 This script demonstrates the complete implementation of the SynDX-Hybrid five-layer framework with:
@@ -7,7 +7,7 @@ This script demonstrates the complete implementation of the SynDX-Hybrid five-la
 3. High-resolution visualization capabilities (600 DPI)
 4. Comprehensive validation framework
 
-Following top-tier academic standards with publication-ready figures.
+Following manuscript-quality visualization standards with manuscript-preparation figures.
 """
 
 import sys
@@ -52,10 +52,10 @@ def main():
         from syn_dx_hybrid.dataset_generator import SynDXDatasetGenerator
         from syn_dx_hybrid.visualization_system import SynDXVisualizer
         
-        print("โ… SynDX-Hybrid framework imported successfully!")
+        print("เนยโ€ฆ SynDX-Hybrid framework imported successfully!")
         
     except ImportError as e:
-        print(f"โ Import error: {e}")
+        print(f"เนยย Import error: {e}")
         print("Creating mock implementations for demonstration...")
         
         # Create mock classes for demonstration
@@ -217,7 +217,7 @@ def main():
                 rules_with_provenance = self.layer4_xai.add_provenance(
                     rule_based_samples,
                     source_layer="rules",
-                    source_citation="Clinical Guidelines (AHA/ASA, Bรกrรกny ICVD)"
+                    source_citation="Clinical Guidelines (AHA/ASA, Bเธฃเธrเธฃเธny ICVD)"
                 )
                 self.layer_outputs['rules_provenance'] = rules_with_provenance
                 print("Applied provenance tracking to rule-based samples")
@@ -301,7 +301,7 @@ def main():
 
         # Use mock implementations
         SynDXHybridPipeline = MockSynDXHybridPipeline
-        print("โ… Mock implementations created for demonstration")
+        print("เนยโ€ฆ Mock implementations created for demonstration")
     
     # Initialize pipeline with demonstration parameters
     pipeline = SynDXHybridPipeline(
@@ -344,7 +344,7 @@ def main():
     try:
         from syn_dx_hybrid.dataset_generator import SynDXDatasetGenerator
         generator = SynDXDatasetGenerator(random_state=42)
-        print(f"\\nโ… Dataset generator imported successfully!")
+        print(f"\\nเนยโ€ฆ Dataset generator imported successfully!")
     except ImportError:
         # Create mock dataset generator
         class MockSynDXDatasetGenerator:
@@ -414,7 +414,7 @@ def main():
                 return stats
         
         generator = MockSynDXDatasetGenerator(random_state=42)
-        print(f"\\nโ ๏ธ Using mock dataset generator for demonstration")
+        print(f"\\nเนยย เนเธย Using mock dataset generator for demonstration")
     
     # Generate demonstration datasets
     print(f"\\nGenerating demonstration datasets for SynDX-Hybrid framework...")
@@ -441,7 +441,7 @@ def main():
     try:
         from syn_dx_hybrid.visualization_system import SynDXVisualizer
         visualizer = SynDXVisualizer(generator, output_dir='demo_figures')
-        print(f"\\nโ… Visualization system imported successfully!")
+        print(f"\\nเนยโ€ฆ Visualization system imported successfully!")
     except ImportError:
         # Create mock visualizer
         class MockSynDXVisualizer:
@@ -469,7 +469,7 @@ def main():
                         fig_path = self.figure_dir / f'{layer_name}_visualization.png'
                         plt.savefig(fig_path, dpi=600, bbox_inches='tight')
                         plt.show()
-                        print(f"  โ“ Created {layer_name} visualization")
+                        print(f"  เนยโ€ Created {layer_name} visualization")
                 
                 # Create comprehensive comparison visualization
                 fig, ax = plt.subplots(figsize=(14, 10))
@@ -506,7 +506,7 @@ def main():
                 fig_path = self.figure_dir / 'syn_dx_hybrid_architecture.png'
                 plt.savefig(fig_path, dpi=600, bbox_inches='tight')
                 plt.show()
-                print(f"  โ“ Created comprehensive architecture visualization")
+                print(f"  เนยโ€ Created comprehensive architecture visualization")
                 
                 # Create performance metrics visualization
                 fig, ax = plt.subplots(figsize=(12, 8))
@@ -545,14 +545,14 @@ def main():
                 fig_path = self.figure_dir / 'syn_dx_hybrid_performance_metrics.png'
                 plt.savefig(fig_path, dpi=600, bbox_inches='tight')
                 plt.show()
-                print(f"  โ“ Created performance metrics visualization")
+                print(f"  เนยโ€ Created performance metrics visualization")
                 
                 print(f"\\nVisualization generation completed!")
                 print(f"Total figures created: {len(list(self.figure_dir.glob('*.png')))}")
                 print(f"Figures saved to: {self.figure_dir}")
         
         visualizer = MockSynDXVisualizer(generator, output_dir='demo_figures')
-        print(f"\\nโ ๏ธ Using mock visualizer for demonstration")
+        print(f"\\nเนยย เนเธย Using mock visualizer for demonstration")
     
     # Generate all visualizations
     print(f"\\nCreating high-resolution visualizations (600 DPI)...")

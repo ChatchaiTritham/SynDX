@@ -1,6 +1,6 @@
-"""
+﻿"""
 Complete Vestibular Domain Demo with Commercial-Grade Visualizations
-Demonstrates full XAI-guided exploration + publication-ready figures
+Demonstrates full XAI-guided exploration + manuscript-preparation figures
 """
 
 from complete_visualization_suite import CompleteSynDXVisualizationSuite
@@ -61,7 +61,7 @@ def main():
     print_header("SYNDX: VESTIBULAR DOMAIN - COMPLETE DEMO")
     print("XAI-Guided Parameter Space Exploration")
     print("with Commercial-Grade Academic Visualizations")
-    print("\nPublication-Ready Output for Medical Informatics Journals")
+    print("\nManuscript-Preparation Output for Medical Informatics Journals")
     print("(Nature, JAMA, IEEE, BMJ)")
 
     # ========================================================================
@@ -73,15 +73,15 @@ def main():
 
     param_space = create_vestibular_domain()
 
-    print(f"✓ Parameter space created successfully")
+    print(f"โ“ Parameter space created successfully")
     print(f"\nParameter Space Characteristics:")
-    print(f"  • Parameters (m): {param_space.m}")
-    print(f"  • Diagnoses (|D|): {param_space.D_size}")
-    print(f"  • Constraints (|C|): {len(param_space.constraints)}")
-    print(f"  • Total combinations (|P|): {param_space.space_size:,}")
-    print(f"  • Acceptance rate (ρ): {param_space.acceptance_rate:.3f}")
+    print(f"  โ€ข Parameters (m): {param_space.m}")
+    print(f"  โ€ข Diagnoses (|D|): {param_space.D_size}")
+    print(f"  โ€ข Constraints (|C|): {len(param_space.constraints)}")
+    print(f"  โ€ข Total combinations (|P|): {param_space.space_size:,}")
+    print(f"  โ€ข Acceptance rate (ฯ): {param_space.acceptance_rate:.3f}")
     print(
-        f"  • Valid space (|A|): {int(param_space.space_size * param_space.acceptance_rate):,}"
+        f"  โ€ข Valid space (|A|): {int(param_space.space_size * param_space.acceptance_rate):,}"
     )
 
     # ========================================================================
@@ -101,20 +101,20 @@ def main():
         critical_diagnoses={'stroke': 0.10, 'tia': 0.05},
     )
 
-    print(f"✓ Target calculated: n_target = {n_target:,}")
+    print(f"โ“ Target calculated: n_target = {n_target:,}")
     print(f"\nTarget Breakdown (Eq. 8-14):")
-    print(f"  • Statistical requirement (n_stat):  {
+    print(f"  โ€ข Statistical requirement (n_stat):  {
             breakdown['n_statistical']:,}")
-    print(f"    κ = 0.05, confidence = 95%")
-    print(f"  • Coverage requirement (n_cov):      {
+    print(f"    ฮบ = 0.05, confidence = 95%")
+    print(f"  โ€ข Coverage requirement (n_cov):      {
             breakdown['n_coverage']:,}")
     print(f"    q = 750 per diagnosis, r = 20 NMF factors")
-    print(f"  • Clinical requirement (n_clin):     {
+    print(f"  โ€ข Clinical requirement (n_clin):     {
             breakdown['n_clinical']:,}")
     print(f"    Critical scenarios: 15% (stroke/TIA)")
-    print(f"  • Optimal formula (n_opt):           {breakdown['n_optimal']:,}")
-    print(f"  • Complexity factor (ψ):             {psi}")
-    print(f"  • Final target: min(n_opt, |A|) =    {n_target:,}")
+    print(f"  โ€ข Optimal formula (n_opt):           {breakdown['n_optimal']:,}")
+    print(f"  โ€ข Complexity factor (ฯ):             {psi}")
+    print(f"  โ€ข Final target: min(n_opt, |A|) =    {n_target:,}")
 
     # ========================================================================
     # PHASE 3: NMF Configuration
@@ -125,15 +125,15 @@ def main():
 
     r = calculate_r_clinical(param_space.D_size, param_space.m)
 
-    print(f"✓ NMF factors determined: r = {r}")
+    print(f"โ“ NMF factors determined: r = {r}")
     print(f"\nNMF Configuration (Eq. 16):")
-    print(f"  • Formula: r_clinical = ⌈log₂(|D|) + √(m/10)⌉")
-    print(f"  • log₂({
+    print(f"  โ€ข Formula: r_clinical = โlogโ(|D|) + โ(m/10)โ")
+    print(f"  โ€ข logโ({
             param_space.D_size}) = {
             np.log2(
                 param_space.D_size):.2f}")
-    print(f"  • √({param_space.m}/10) = {np.sqrt(param_space.m / 10):.2f}")
-    print(f"  • Result: r = {r} latent clinical patterns")
+    print(f"  โ€ข โ({param_space.m}/10) = {np.sqrt(param_space.m / 10):.2f}")
+    print(f"  โ€ข Result: r = {r} latent clinical patterns")
 
     # ========================================================================
     # PHASE 4: XAI Explorer Initialization
@@ -152,18 +152,18 @@ def main():
         random_state=42,
     )
 
-    print(f"✓ Explorer initialized successfully")
+    print(f"โ“ Explorer initialized successfully")
     print(f"\nMulti-Phase Sampling Allocation (Algorithm 7.1):")
     print(
-        f"  • Phase 4 - Importance-weighted (60%): {explorer.n_importance:,} archetypes"
+        f"  โ€ข Phase 4 - Importance-weighted (60%): {explorer.n_importance:,} archetypes"
     )
     print(f"    SHAP-guided parameter selection")
     print(
-        f"  • Phase 5 - Critical scenarios (30%):  {explorer.n_critical:,} archetypes"
+        f"  โ€ข Phase 5 - Critical scenarios (30%):  {explorer.n_critical:,} archetypes"
     )
     print(f"    Stroke/TIA targeted generation")
     print(
-        f"  • Phase 6 - Diversity-oriented (10%): {explorer.n_diversity:,} archetypes"
+        f"  โ€ข Phase 6 - Diversity-oriented (10%): {explorer.n_diversity:,} archetypes"
     )
     print(f"    K-means cluster-based sampling")
     print(f"\nTotal target: {n_target:,} archetypes")
@@ -183,8 +183,8 @@ def main():
     print()
     print_header("EXPLORATION COMPLETED!", 80)
 
-    print(f"⏱  Execution Time: {exploration_time:.2f} seconds")
-    print(f"✓ Generated: {len(archetypes):,} valid archetypes")
+    print(f"โฑ  Execution Time: {exploration_time:.2f} seconds")
+    print(f"โ“ Generated: {len(archetypes):,} valid archetypes")
 
     # ========================================================================
     # PHASE 6: Results Analysis
@@ -243,7 +243,7 @@ def main():
         for i, (name, importance) in enumerate(
             stats['shap_summary']['top_10_features'], 1
         ):
-            print(f"    {i:2d}. {name:<35} φ = {importance:.4f}")
+            print(f"    {i:2d}. {name:<35} ฯ = {importance:.4f}")
         print()
 
     # Sample Archetypes
@@ -286,7 +286,7 @@ def main():
         output_dir=str(output_dir), format='png'
     )
 
-    print(f"✓ Visualization suite initialized")
+    print(f"โ“ Visualization suite initialized")
     print(f"  Output: {output_dir}")
     print(f"  Format: PNG + PDF")
     print(f"  Resolution: 600 DPI")
@@ -304,11 +304,11 @@ def main():
         viz_time = time.time() - viz_start
 
         print()
-        print(f"✓ All figures generated successfully!")
-        print(f"⏱  Visualization time: {viz_time:.2f} seconds")
+        print(f"โ“ All figures generated successfully!")
+        print(f"โฑ  Visualization time: {viz_time:.2f} seconds")
 
     except Exception as e:
-        print(f"\n⚠ Visualization error: {e}")
+        print(f"\nโ  Visualization error: {e}")
         print(
             "  (This is expected if matplotlib/seaborn dependencies are not installed)"
         )
@@ -324,28 +324,28 @@ def main():
     total_time = time.time() - start_time
 
     print("Summary:")
-    print(f"  ✓ Parameter space: {param_space.space_size:,} combinations")
-    print(f"  ✓ Valid archetypes: {len(archetypes):,} / {n_target:,} target")
-    print(f"  ✓ Achievement: {len(archetypes) / n_target * 100:.1f}%")
-    print(f"  ✓ NMF factors: {r} clinical patterns")
-    print(f"  ✓ SHAP analysis: Complete")
-    print(f"  ✓ Figures: 10 publication-ready")
-    print(f"\n  ⏱  Total execution time: {total_time:.2f} seconds")
-    print(f"  ⏱  Exploration: {
+    print(f"  โ“ Parameter space: {param_space.space_size:,} combinations")
+    print(f"  โ“ Valid archetypes: {len(archetypes):,} / {n_target:,} target")
+    print(f"  โ“ Achievement: {len(archetypes) / n_target * 100:.1f}%")
+    print(f"  โ“ NMF factors: {r} clinical patterns")
+    print(f"  โ“ SHAP analysis: Complete")
+    print(f"  โ“ Figures: 10 manuscript-preparation")
+    print(f"\n  โฑ  Total execution time: {total_time:.2f} seconds")
+    print(f"  โฑ  Exploration: {
             exploration_time:.2f}s ({
             exploration_time /
             total_time *
             100:.1f}%)")
 
     if 'viz_time' in locals():
-        print(f"  ⏱  Visualization: {
+        print(f"  โฑ  Visualization: {
                 viz_time:.2f}s ({
                 viz_time /
                 total_time *
                 100:.1f}%)")
 
     print(f"\nOutput Files:")
-    print(f"  📁 Figures: {output_dir}")
+    print(f"  ๐“ Figures: {output_dir}")
     print(f"     - fig1_methodology_overview.png/pdf")
     print(f"     - fig2_parameter_space.png/pdf")
     print(f"     - fig3_exploration_workflow.png/pdf")
@@ -357,11 +357,11 @@ def main():
     print(f"     - fig9_epidemiological_fidelity.png/pdf")
     print(f"     - fig10_critical_coverage.png/pdf")
 
-    print("\nReady for Journal Submission:")
-    print("  ✓ Nature Medical Informatics")
-    print("  ✓ JAMA Network Open")
-    print("  ✓ IEEE Journal of Biomedical and Health Informatics")
-    print("  ✓ BMJ Health & Care Informatics")
+    print("\nPrepared for Manuscript Review:")
+    print("  โ“ Nature Medical Informatics")
+    print("  โ“ JAMA Network Open")
+    print("  โ“ IEEE Journal of Biomedical and Health Informatics")
+    print("  โ“ BMJ Health & Care Informatics")
 
     print_header("ALL TASKS COMPLETED", 80)
 
@@ -371,12 +371,12 @@ def main():
 if __name__ == "__main__":
     try:
         explorer, archetypes, viz_suite = main()
-        print("\n✓ Demo executed successfully!")
+        print("\nโ“ Demo executed successfully!")
         print("  Results available in variables: explorer, archetypes, viz_suite")
     except KeyboardInterrupt:
-        print("\n\n⚠ Demo interrupted by user")
+        print("\n\nโ  Demo interrupted by user")
     except Exception as e:
-        print(f"\n\n❌ Error during execution: {e}")
+        print(f"\n\nโ Error during execution: {e}")
         import traceback
 
         traceback.print_exc()

@@ -1,4 +1,4 @@
-"""
+﻿"""
 SynDX-Hybrid: Complete Implementation with Advanced Visualization and Dataset Generation
 
 This script demonstrates the complete implementation of the SynDX-Hybrid five-layer framework with:
@@ -7,7 +7,7 @@ This script demonstrates the complete implementation of the SynDX-Hybrid five-la
 3. High-resolution visualization capabilities (600 DPI)
 4. Comprehensive validation framework
 
-Following top-tier academic standards with publication-ready figures.
+Following manuscript-quality visualization standards with manuscript-preparation figures.
 """
 
 import json
@@ -55,10 +55,10 @@ def main():
         from syn_dx_hybrid.pipeline import SynDXHybridPipeline
         from syn_dx_hybrid.visualization_system import SynDXVisualizer
 
-        print("✅ SynDX-Hybrid framework imported successfully!")
+        print("โ… SynDX-Hybrid framework imported successfully!")
 
     except ImportError as e:
-        print(f"❌ Import error: {e}")
+        print(f"โ Import error: {e}")
         print("Creating mock implementations for demonstration...")
 
         # Create mock classes for demonstration
@@ -253,7 +253,7 @@ def main():
                 rules_with_provenance = self.layer4_xai.add_provenance(
                     rule_based_samples,
                     source_layer="rules",
-                    source_citation="Clinical Guidelines (AHA/ASA, Bárány ICVD)",
+                    source_citation="Clinical Guidelines (AHA/ASA, Bรกrรกny ICVD)",
                 )
                 self.layer_outputs['rules_provenance'] = rules_with_provenance
                 print("Applied provenance tracking to rule-based samples")
@@ -360,7 +360,7 @@ def main():
 
         # Use mock implementations
         SynDXHybridPipeline = MockSynDXHybridPipeline
-        print("✅ Mock implementations created for demonstration")
+        print("โ… Mock implementations created for demonstration")
 
     # Initialize pipeline with demonstration parameters
     pipeline = SynDXHybridPipeline(
@@ -411,7 +411,7 @@ def main():
         from syn_dx_hybrid.dataset_generator import SynDXDatasetGenerator
 
         generator = SynDXDatasetGenerator(random_state=42)
-        print(f"\\n✅ Dataset generator imported successfully!")
+        print(f"\\nโ… Dataset generator imported successfully!")
     except ImportError:
         # Create mock dataset generator
         class MockSynDXDatasetGenerator:
@@ -495,7 +495,7 @@ def main():
                 return stats
 
         generator = MockSynDXDatasetGenerator(random_state=42)
-        print(f"\\n⚠️ Using mock dataset generator for demonstration")
+        print(f"\\nโ ๏ธ Using mock dataset generator for demonstration")
 
     # Generate demonstration datasets
     print(f"\\nGenerating demonstration datasets for SynDX-Hybrid framework...")
@@ -526,7 +526,7 @@ def main():
         from syn_dx_hybrid.visualization_system import SynDXVisualizer
 
         visualizer = SynDXVisualizer(generator, output_dir='demo_figures')
-        print(f"\\n✅ Visualization system imported successfully!")
+        print(f"\\nโ… Visualization system imported successfully!")
     except ImportError:
         # Create mock visualizer
         class MockSynDXVisualizer:
@@ -573,7 +573,7 @@ def main():
                         fig_path = self.figure_dir / f'{layer_name}_visualization.png'
                         plt.savefig(fig_path, dpi=600, bbox_inches='tight')
                         plt.show()
-                        print(f"  ✓ Created {layer_name} visualization")
+                        print(f"  โ“ Created {layer_name} visualization")
 
                 # Create comprehensive comparison visualization
                 fig, ax = plt.subplots(figsize=(14, 10))
@@ -637,7 +637,7 @@ def main():
                 fig_path = self.figure_dir / 'syn_dx_hybrid_architecture.png'
                 plt.savefig(fig_path, dpi=600, bbox_inches='tight')
                 plt.show()
-                print(f"  ✓ Created comprehensive architecture visualization")
+                print(f"  โ“ Created comprehensive architecture visualization")
 
                 # Create performance metrics visualization
                 fig, ax = plt.subplots(figsize=(12, 8))
@@ -711,7 +711,7 @@ def main():
                 fig_path = self.figure_dir / 'syn_dx_hybrid_performance_metrics.png'
                 plt.savefig(fig_path, dpi=600, bbox_inches='tight')
                 plt.show()
-                print(f"  ✓ Created performance metrics visualization")
+                print(f"  โ“ Created performance metrics visualization")
 
                 print(f"\\nVisualization generation completed!")
                 print(
@@ -720,7 +720,7 @@ def main():
                 print(f"Figures saved to: {self.figure_dir}")
 
         visualizer = MockSynDXVisualizer(generator, output_dir='demo_figures')
-        print(f"\\n⚠️ Using mock visualizer for demonstration")
+        print(f"\\nโ ๏ธ Using mock visualizer for demonstration")
 
     # Generate all visualizations
     print(f"\\nCreating high-resolution visualizations (600 DPI)...")
@@ -893,7 +893,7 @@ def main():
     # Performance metrics (simulated based on manuscript targets)
     print(f"\\nPERFORMANCE METRICS (Target vs Achieved):")
     metrics = {
-        "KL Divergence": ("≤ 0.05", f"{0.031:.3f}"),
+        "KL Divergence": ("โค 0.05", f"{0.031:.3f}"),
         "ROC-AUC": (">= 0.90", f"{0.92:.3f}"),
         "TiTrATE Coverage": (">= 95%", f"{0.981:.1%}"),
         "Expert Plausibility": (">= 90%", f"{0.935:.1%}"),
@@ -904,13 +904,13 @@ def main():
     for metric, (target, achieved) in metrics.items():
         # Determine status based on target achievement
         if '<=' in target:
-            target_val = float(target.replace('≤ ', ''))
-            status = "✅" if float(achieved) <= target_val else "❌"
+            target_val = float(target.replace('โค ', ''))
+            status = "โ…" if float(achieved) <= target_val else "โ"
         elif '>=' in target:
-            target_val = float(target.replace('≥ ', ''))
-            status = "✅" if float(achieved) >= target_val else "❌"
+            target_val = float(target.replace('โฅ ', ''))
+            status = "โ…" if float(achieved) >= target_val else "โ"
         else:
-            status = "❓"  # Unknown target type
+            status = "โ“"  # Unknown target type
 
         print(f"  {status} {metric}: Target {target}, Achieved {achieved}")
 
@@ -922,12 +922,12 @@ def main():
     generator.datasets['ensemble'].to_csv(
         export_dir / "synthetic_medical_data.csv", index=False
     )
-    print(f"  ✅ Synthetic data exported to: {export_dir}/synthetic_medical_data.csv")
+    print(f"  โ… Synthetic data exported to: {export_dir}/synthetic_medical_data.csv")
 
     # Save layer datasets
     for layer_name, layer_data in generator.datasets.items():
         layer_data.to_csv(export_dir / f"{layer_name}_data.csv", index=False)
-        print(f"  ✅ {layer_name} data exported")
+        print(f"  โ… {layer_name} data exported")
 
     # Save visualization parameters
     viz_params = {
@@ -941,9 +941,9 @@ def main():
 
     with open(export_dir / "visualization_metadata.json", 'w') as f:
         json.dump(viz_params, f, indent=2)
-    print(f"  ✅ Visualization metadata exported")
+    print(f"  โ… Visualization metadata exported")
 
-    print(f"\\n🎉 SYNDX-HYBRID FRAMEWORK EXECUTION COMPLETED SUCCESSFULLY!")
+    print(f"\\n๐ SYNDX-HYBRID FRAMEWORK EXECUTION COMPLETED SUCCESSFULLY!")
     print(f"  All datasets and visualizations saved to their respective directories.")
     print(f"  Ready for clinical validation and research applications.")
     print(f"\\nFramework successfully demonstrates the five-layer architecture:")

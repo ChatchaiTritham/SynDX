@@ -1,4 +1,4 @@
-"""
+﻿"""
 Enhanced Interpretability for SynDX Framework
 ==============================================
 
@@ -6,7 +6,7 @@ Implements Explainable AI (XAI) features:
 1. SHAP Values - Feature importance explanation (medical AI standard)
 2. Counterfactual Explanations - Actionable clinical insights
 
-Output: Publication-ready visualizations and clinical reports
+Output: Manuscript-preparation visualizations and clinical reports
 Target audience: Physicians, medical personnel, patients, general public
 
 Author: SynDX Framework
@@ -101,7 +101,7 @@ class XAIExplainer:
 
         Args:
             model: Trained classifier (RandomForest, GradientBoosting, etc.)
-            X_data: Feature matrix (n_samples × n_features)
+            X_data: Feature matrix (n_samples ร— n_features)
             feature_names: List of feature names
             class_names: List of class labels
             sample_size: Number of samples for SHAP computation
@@ -1000,7 +1000,7 @@ def run_demonstration():
     logger.info("    - Feature change visualizations")
     logger.info("    - Probability shift plots")
     logger.info("    - Clinical decision support reports")
-    logger.info("\nAll outputs are publication-ready (600 DPI)")
+    logger.info("\nAll outputs are manuscript-preparation (600 DPI)")
     logger.info("=" * 80)
 
 

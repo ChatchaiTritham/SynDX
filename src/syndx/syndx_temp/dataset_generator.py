@@ -1,8 +1,8 @@
-"""
+﻿"""
 SynDX-Hybrid: Complete Dataset Generation System
 
 Generates comprehensive datasets for each stage of the SynDX-Hybrid framework
-with proper metadata and validation capabilities following top-tier academic standards.
+with proper metadata and validation capabilities following manuscript-quality visualization standards.
 """
 
 import json
@@ -544,7 +544,7 @@ class SynDXDatasetGenerator:
             'n_samples': n_samples,
             'generation_method': 'rule_based_clinical_guidelines',
             'rule_count': 247,
-            'clinical_guidelines': ['AHA/ASA', 'Bárány_ICVD', 'ACEP'],
+            'clinical_guidelines': ['AHA/ASA', 'Bรกrรกny_ICVD', 'ACEP'],
             'citation_tracking': 'complete',
             'diagnostic_rationale': 'available',
             'generated_features': list(df.columns),

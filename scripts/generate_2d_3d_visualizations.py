@@ -1,7 +1,7 @@
-"""
+﻿"""
 Comprehensive 2D/3D Visualization Generator for SynDX Framework
 
-Generates publication-ready charts and graphs for all pipeline phases:
+Generates manuscript-preparation charts and graphs for all pipeline phases:
 - Phase 1: Knowledge Extraction (Parameter space, NMF factors, SHAP importance)
 - Phase 2: Synthesis (VAE latent space, DP privacy budget, Counterfactuals)
 - Phase 3: Validation (Performance metrics, Fidelity scores, Statistical tests)
@@ -86,7 +86,7 @@ class SynDXVisualizer:
             ax=axes[0, 0],
         )
         axes[0, 0].set_title(
-            'Parameter Space: Age × Diagnosis', fontsize=16, fontweight='bold'
+            'Parameter Space: Age ร— Diagnosis', fontsize=16, fontweight='bold'
         )
         axes[0, 0].set_xlabel('Age (years)', fontsize=14)
         axes[0, 0].set_ylabel('Diagnosis Category', fontsize=14)
@@ -107,7 +107,7 @@ class SynDXVisualizer:
             cbar_kws={'label': 'Percentage (%)'},
         )
         axes[0, 1].set_title(
-            'Timing × Trigger Distribution', fontsize=16, fontweight='bold'
+            'Timing ร— Trigger Distribution', fontsize=16, fontweight='bold'
         )
         axes[0, 1].set_xlabel('Trigger Type', fontsize=14)
         axes[0, 1].set_ylabel('Timing Pattern', fontsize=14)
@@ -129,7 +129,7 @@ class SynDXVisualizer:
             ax=axes[1, 1],
             color=['#1f77b4', '#ff7f0e', '#2ca02c'],
         )
-        axes[1, 1].set_title('Urgency × Timing Pattern', fontsize=16, fontweight='bold')
+        axes[1, 1].set_title('Urgency ร— Timing Pattern', fontsize=16, fontweight='bold')
         axes[1, 1].set_xlabel('Urgency Level', fontsize=14)
         axes[1, 1].set_ylabel('Count', fontsize=14)
         axes[1, 1].legend(title='Timing', fontsize=12)
@@ -181,7 +181,7 @@ class SynDXVisualizer:
         )
 
         fig.update_layout(
-            title='3D Parameter Space: Age × Severity × Urgency',
+            title='3D Parameter Space: Age ร— Severity ร— Urgency',
             scene=dict(
                 xaxis_title='Age (years)',
                 yaxis_title='Symptom Severity (1-10)',
@@ -206,15 +206,15 @@ class SynDXVisualizer:
         Visualize NMF latent factors (W and H matrices).
 
         Args:
-            W: Archetype-to-latent weights (n_samples × r)
-            H: Latent-to-feature basis (r × n_features)
+            W: Archetype-to-latent weights (n_samples ร— r)
+            H: Latent-to-feature basis (r ร— n_features)
             feature_names: List of feature names
         """
         r = W.shape[1]
 
         fig, axes = plt.subplots(2, 1, figsize=(18, 12))
 
-        # H matrix heatmap (latent factors × features)
+        # H matrix heatmap (latent factors ร— features)
         top_features = 30  # Show top 30 most important features
         H_subset = H[:, :top_features]
         sns.heatmap(
@@ -272,7 +272,7 @@ class SynDXVisualizer:
         Visualize SHAP feature importance.
 
         Args:
-            shap_values: SHAP values (n_samples × n_features)
+            shap_values: SHAP values (n_samples ร— n_features)
             feature_names: List of feature names
         """
         # Calculate mean absolute SHAP values
@@ -330,7 +330,7 @@ class SynDXVisualizer:
         2D visualization of VAE latent space (first 2 dimensions).
 
         Args:
-            z_mean: Latent representations (n_samples × latent_dim)
+            z_mean: Latent representations (n_samples ร— latent_dim)
             labels: Diagnosis labels for coloring
         """
         fig, axes = plt.subplots(1, 2, figsize=(18, 8))
@@ -385,7 +385,7 @@ class SynDXVisualizer:
         3D interactive visualization of VAE latent space.
 
         Args:
-            z_mean: Latent representations (n_samples × latent_dim)
+            z_mean: Latent representations (n_samples ร— latent_dim)
             labels: Diagnosis labels
             label_names: Names of diagnosis categories
         """
@@ -450,28 +450,28 @@ class SynDXVisualizer:
         fig, axes = plt.subplots(2, 1, figsize=(14, 10))
 
         # Epsilon over epochs
-        axes[0].plot(epochs, epsilons, 'b-', linewidth=2, label='ε (epsilon)')
+        axes[0].plot(epochs, epsilons, 'b-', linewidth=2, label='ฮต (epsilon)')
         axes[0].axhline(
-            y=1.0, color='r', linestyle='--', linewidth=2, label='Target ε=1.0'
+            y=1.0, color='r', linestyle='--', linewidth=2, label='Target ฮต=1.0'
         )
         axes[0].set_title(
-            'Privacy Budget: Epsilon (ε) Consumption', fontsize=16, fontweight='bold'
+            'Privacy Budget: Epsilon (ฮต) Consumption', fontsize=16, fontweight='bold'
         )
         axes[0].set_xlabel('Epoch', fontsize=14)
-        axes[0].set_ylabel('ε', fontsize=14)
+        axes[0].set_ylabel('ฮต', fontsize=14)
         axes[0].legend(fontsize=12)
         axes[0].grid(True, alpha=0.3)
 
         # Delta over epochs
-        axes[1].plot(epochs, deltas, 'g-', linewidth=2, label='δ (delta)')
+        axes[1].plot(epochs, deltas, 'g-', linewidth=2, label='ฮด (delta)')
         axes[1].axhline(
-            y=1e-5, color='r', linestyle='--', linewidth=2, label='Target δ=10⁻⁵'
+            y=1e-5, color='r', linestyle='--', linewidth=2, label='Target ฮด=10โปโต'
         )
         axes[1].set_title(
-            'Privacy Budget: Delta (δ) Consumption', fontsize=16, fontweight='bold'
+            'Privacy Budget: Delta (ฮด) Consumption', fontsize=16, fontweight='bold'
         )
         axes[1].set_xlabel('Epoch', fontsize=14)
-        axes[1].set_ylabel('δ', fontsize=14)
+        axes[1].set_ylabel('ฮด', fontsize=14)
         axes[1].set_yscale('log')
         axes[1].legend(fontsize=12)
         axes[1].grid(True, alpha=0.3)
@@ -669,7 +669,7 @@ class SynDXVisualizer:
             linestyle='--',
             linewidth=2,
             alpha=0.5,
-            label='Excellent (≥0.8)',
+            label='Excellent (โฅ0.8)',
         )
         axes[0].axvline(
             x=0.6,
@@ -677,7 +677,7 @@ class SynDXVisualizer:
             linestyle='--',
             linewidth=2,
             alpha=0.5,
-            label='Good (≥0.6)',
+            label='Good (โฅ0.6)',
         )
         axes[0].legend(fontsize=11)
         axes[0].grid(True, alpha=0.3, axis='x')
@@ -733,14 +733,14 @@ class SynDXVisualizer:
         axes[0].set_title(
             'Chi-Squared Statistics by Feature', fontsize=16, fontweight='bold'
         )
-        axes[0].set_xlabel('χ² Statistic', fontsize=14)
+        axes[0].set_xlabel('ฯยฒ Statistic', fontsize=14)
         axes[0].grid(True, alpha=0.3, axis='x')
 
         # P-values
         colors = ['green' if p > 0.05 else 'red' for p in p_values]
         axes[1].barh(features, p_values, color=colors)
         axes[1].axvline(
-            x=0.05, color='red', linestyle='--', linewidth=2, label='α=0.05'
+            x=0.05, color='red', linestyle='--', linewidth=2, label='ฮฑ=0.05'
         )
         axes[1].set_title(
             'P-Values (Distribution Match Test)', fontsize=16, fontweight='bold'

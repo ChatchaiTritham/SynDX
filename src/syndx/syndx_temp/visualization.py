@@ -1,8 +1,8 @@
-"""
+﻿"""
 SynDX-Hybrid Visualization System
 
 Generates high-resolution (600 DPI) charts and graphs for each stage of the SynDX-Hybrid framework.
-Follows top-tier academic standards with publication-ready figures.
+Follows manuscript-quality visualization standards with manuscript-preparation figures.
 """
 
 import logging
@@ -35,7 +35,7 @@ class SynDXVisualizer:
     """
     Advanced visualization system for SynDX-Hybrid framework.
 
-    Creates publication-ready figures with 600 DPI resolution following
+    Creates manuscript-preparation figures with 600 DPI resolution following
     top-tier academic journal standards.
     """
 

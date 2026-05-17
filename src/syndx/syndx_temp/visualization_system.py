@@ -1,8 +1,8 @@
-"""
+﻿"""
 SynDX-Hybrid Advanced Visualization System
 
 Creates high-resolution (600 DPI) charts and graphs for each stage of the SynDX-Hybrid framework.
-Follows top-tier academic standards with publication-ready figures.
+Follows manuscript-quality visualization standards with manuscript-preparation figures.
 """
 
 import logging
@@ -35,7 +35,7 @@ class SynDXVisualizer:
     """
     Advanced visualization system for SynDX-Hybrid framework.
 
-    Creates publication-ready figures with 600 DPI resolution following
+    Creates manuscript-preparation figures with 600 DPI resolution following
     top-tier academic journal standards.
     """
 
@@ -804,31 +804,31 @@ class SynDXVisualizer:
 
         if 'layer1' in datasets:
             self.create_layer1_visualizations(datasets['layer1'])
-            print("✓ Created Layer 1 visualizations")
+            print("โ“ Created Layer 1 visualizations")
 
         if 'layer2' in datasets:
             self.create_layer2_visualizations(datasets['layer2'])
-            print("✓ Created Layer 2 visualizations")
+            print("โ“ Created Layer 2 visualizations")
 
         if 'layer3' in datasets:
             self.create_layer3_visualizations(datasets['layer3'])
-            print("✓ Created Layer 3 visualizations")
+            print("โ“ Created Layer 3 visualizations")
 
         if 'layer4' in datasets:
             self.create_layer4_visualizations(datasets['layer4'])
-            print("✓ Created Layer 4 visualizations")
+            print("โ“ Created Layer 4 visualizations")
 
         if 'layer5' in datasets:
             self.create_layer5_visualizations(datasets['layer5'])
-            print("✓ Created Layer 5 visualizations")
+            print("โ“ Created Layer 5 visualizations")
 
         if 'ensemble' in datasets:
             self.create_ensemble_visualizations(datasets['ensemble'])
-            print("✓ Created Ensemble visualizations")
+            print("โ“ Created Ensemble visualizations")
 
         # Create comprehensive comparison
         self.create_comprehensive_visualizations(datasets)
-        print("✓ Created comprehensive comparison visualizations")
+        print("โ“ Created comprehensive comparison visualizations")
 
         logger.info(f"All visualizations saved to: {self.figure_dir}")
         logger.info(
