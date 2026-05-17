@@ -497,8 +497,8 @@ Thank you for your valuable time and expert feedback. Your insights are critical
 For questions or concerns, please contact:
 
 - **PI Name:** Chatchai Tritham
-- **Email:** [your email]
-- **Institution:** [your institution]
+- **Email:** chatchait66@nu.ac.th
+- **Institution:** Department of Computer Science and Information Technology, Faculty of Science, Naresuan University, Phitsanulok 65000, Thailand
 
 ---
 
