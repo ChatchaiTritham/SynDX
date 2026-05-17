@@ -1,4 +1,4 @@
-# SynDX
+﻿# SynDX
 
 ## Overview
 
@@ -114,22 +114,6 @@ the manuscript's technical claims through:
 The current manuscript package may still use manuscript-local or TikZ/text
 figures. `FIGURE_MANIFEST.csv` is the repository-side source of truth for
 promoted SynDX figure artifacts.
-
-## Methodological References
-
-The manuscript positions SynDX against:
-
-- TiTrATE clinical reasoning for vestibular-disorder feature constraints
-- Bayesian-network uncertainty modeling
-- rule-based guideline traceability
-- SHAP-style feature-attribution review
-- counterfactual consistency checks
-- FHIR, SNOMED CT, LOINC, and OMOP-oriented interoperability mapping
-
-## Citation
-
-- cite this software repository while the associated manuscript remains in
-  preparation
 
 ## License
 
