@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 """
 SynDX-Hybrid Implementation Verification Script
 
@@ -115,7 +115,7 @@ def verify_implementation():
         provenance_samples = layer4.add_provenance(
             rule_samples.head(20), 
             source_layer="rules",
-            source_citation="Test citation"
+            source_citation="Test reference"
         )
         print(f"  OK Layer 4 (XAI): Added provenance to {len(provenance_samples)} samples")
     except Exception as e:
@@ -164,7 +164,7 @@ def verify_implementation():
         "Five-layer architecture",
         "TiTrATE framework integration",
         "Bayesian networks with epidemiological data",
-        "Rule-based expert systems with citations",
+        "Rule-based expert systems with references",
         "XAI-by-design provenance tracking",
         "Counterfactual validation",
         "Ensemble integration with optimized weights",
