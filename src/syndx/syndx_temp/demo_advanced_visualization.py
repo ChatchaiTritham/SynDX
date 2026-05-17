@@ -287,7 +287,7 @@ def main():
                     [
                         combinatorial_processed,
                         bayesian_processed,
-                        validated_rules,  # Rules layer (primary contributor)
+                        validated_rules,  # Rules layer (primary signal)
                         xai_placeholder,  # XAI layer placeholder
                         cf_placeholder,  # Counterfactual layer placeholder
                     ]
