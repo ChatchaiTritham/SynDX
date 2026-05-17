@@ -9,7 +9,7 @@ Generates publication-ready charts and graphs for all pipeline phases:
 All visualizations meet Tier 1 journal standards (600 DPI, vector formats).
 
 Author: PhD Candidate, Computer Science
-Institution: [Your Institution]
+Institution: Naresuan University
 """
 
 import numpy as np

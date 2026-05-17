@@ -5,8 +5,8 @@ Package configuration for the SynDX framework, which implements privacy-preservi
 synthetic medical data generation for vestibular disorder research.
 
 Author: Chatchai Tritham
-Advisor: Assoc. Prof. Dr. Chakkrit Snae Namahoot
-Institution: Naresuan University, Thailand
+Supervisor: Chakkrit Snae Namahoot
+Institution: Department of Computer Science and Information Technology, Faculty of Science, Naresuan University, Phitsanulok 65000, Thailand
 """
 
 from setuptools import setup, find_packages
@@ -23,7 +23,7 @@ setup(
  name="syndx",
  version="1.0.0",
  author="Chatchai Tritham, Chakkrit Snae Namahoot",
- author_email="chatchait66@nu.ac.th",
+ author_email="chatchait66@nu.ac.th, chakkrits@nu.ac.th",
  description="Explainable AI-Driven Synthetic Data Generation for Vestibular Disorders",
  long_description=long_desc,
  long_description_content_type="text/markdown",

@@ -220,7 +220,7 @@ Using these notebooks in your research? Cite the paper:
 ## Need Help?
 
 - **Bug reports**: Open an issue on GitHub
-- **Questions**: Email chatchai.tritham@nu.ac.th
+- **Questions**: Email chatchait66@nu.ac.th
 - **Docs**: Check the main README.md
 
 ---
