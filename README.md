@@ -96,10 +96,6 @@ pytest tests -v
 
 ## Manuscript Alignment
 
-Canonical manuscript package:
-
-- `D:\PhD-NU\Manuscript\Manuscript\KAIS_SynDX-Hybrid\AI_AppliedIntelligence`
-
 The SynDX manuscript is still in preparation and owns the synthetic validation
 and XAI evidence contribution in the research program. This repository supports
 the manuscript's technical claims through:

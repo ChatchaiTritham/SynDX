@@ -233,7 +233,7 @@ class SHAPImportanceAnalyzer:
         else:
             shap_values = shap_values[0]
 
-        # Get top positive and negative contributors
+        # Get top positive and negative feature effects
         pos_indices = np.argsort(shap_values)[-5:][::-1]
         neg_indices = np.argsort(shap_values)[:5]
 
