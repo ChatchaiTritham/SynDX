@@ -32,6 +32,7 @@ print(pipeline.n_archetypes)
 
 - Scripts:
   - `scripts/generate_all_figures.py`: consolidated figure generation
+  - `scripts/generate_manuscript_figures.py`: curated manuscript figure generation
   - `scripts/generate_2d_3d_visualizations.py`: visualization workflow
   - `scripts/validate_xai_framework.py`: XAI validation workflow
   - `scripts/compute_performance_metrics.py`: performance metric generation
@@ -47,6 +48,29 @@ print(pipeline.n_archetypes)
   - `notebooks/03_Phase2_VAE_and_XAI_Synthesis.ipynb`
   - `notebooks/04_Phase3_Validation_and_Metrics.ipynb`
   - `notebooks/05_Complete_Pipeline_End_to_End.ipynb`
+
+## Curated Manuscript Figures
+
+Curated manuscript figures are maintained for a manuscript that is still in
+preparation. This status does not imply publication, acceptance, or final
+journal readiness for every raw demo, legacy, or exploratory image in
+`outputs/`.
+
+Regenerate the curated manuscript figure set:
+
+```bash
+python scripts/generate_manuscript_figures.py
+```
+
+Outputs:
+
+- `figures/manuscript/`: PDF and PNG manuscript figures
+- `FIGURE_MANIFEST.csv`: figure role, source script, source data, caption, and
+  intended article section
+
+The broader `outputs/` tree remains a reproducibility archive and should not be
+treated as the final manuscript figure set unless a figure is promoted into the
+manifest.
 
 ## Cross-Repository Tutorial Charts
 
@@ -70,9 +94,46 @@ Importable code lives in `src/syndx/`.
 pytest tests -v
 ```
 
+## Manuscript Alignment
+
+Canonical manuscript package:
+
+- `D:\PhD-NU\Manuscript\Manuscript\KAIS_SynDX-Hybrid\AI_AppliedIntelligence`
+
+The SynDX manuscript is still in preparation and owns the synthetic validation
+and XAI evidence contribution in the research program. This repository supports
+the manuscript's technical claims through:
+
+- formulas: TiTrATE constraint filtering, ensemble weighting, counterfactual
+  consistency rate, and computational-complexity expressions
+- pseudocode/logic: five-layer pipeline covering combinatorial enumeration,
+  Bayesian dependency modeling, rule-based guideline encoding, provenance
+  tracking, and counterfactual validation
+- data/results: synthetic archetype coverage, synthetic patient generation,
+  statistical realism, diagnostic coherence, pathway coverage, and provenance
+  traceability
+- figure artifacts: clinical SHAP importance, focused validation metrics, and
+  counterfactual quality profile under `figures/manuscript/`
+
+The current manuscript package may still use manuscript-local or TikZ/text
+figures. `FIGURE_MANIFEST.csv` is the repository-side source of truth for
+promoted SynDX figure artifacts.
+
+## Methodological References
+
+The manuscript positions SynDX against:
+
+- TiTrATE clinical reasoning for vestibular-disorder feature constraints
+- Bayesian-network uncertainty modeling
+- rule-based guideline traceability
+- SHAP-style feature-attribution review
+- counterfactual consistency checks
+- FHIR, SNOMED CT, LOINC, and OMOP-oriented interoperability mapping
+
 ## Citation
 
-- cite the thesis/manuscript sections covering SynDX synthetic data generation and validation
+- cite this software repository while the associated manuscript remains in
+  preparation
 
 ## License
 
