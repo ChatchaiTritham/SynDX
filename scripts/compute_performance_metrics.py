@@ -14,7 +14,7 @@ Designed for multi-class diagnostic classification tasks.
 All metrics follow scikit-learn conventions and Tier 1 journal standards.
 
 Author: PhD Candidate, Computer Science
-Institution: [Your Institution]
+Institution: Naresuan University
 """
 
 import numpy as np
