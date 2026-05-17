@@ -1,5 +1,5 @@
-"""
-Generate All Publication Figures for Tier 1 Journal Submission
+﻿"""
+Generate All Publication Figures for Tier 1 Manuscript Review
 
 Generates all 16 figures (10 main + 6 supplementary) for SynDX publication.
 All figures conform to journal standards:
@@ -13,16 +13,16 @@ Usage:
 
 Output:
     outputs/publication_figures/
-    ├── figure1_methodology_overview.{pdf,png}
-    ├── figure2_parameter_space.{pdf,png}
-    ├── ...
-    ├── figure10_critical_coverage.{pdf,png}
-    └── figure_captions.tex
+    โ”โ”€โ”€ figure1_methodology_overview.{pdf,png}
+    โ”โ”€โ”€ figure2_parameter_space.{pdf,png}
+    โ”โ”€โ”€ ...
+    โ”โ”€โ”€ figure10_critical_coverage.{pdf,png}
+    โ””โ”€โ”€ figure_captions.tex
 
     outputs/supplementary_figures/
-    ├── figureS1_constraint_analysis.{pdf,png}
-    ├── ...
-    └── figureS6_demographic_details.{pdf,png}
+    โ”โ”€โ”€ figureS1_constraint_analysis.{pdf,png}
+    โ”โ”€โ”€ ...
+    โ””โ”€โ”€ figureS6_demographic_details.{pdf,png}
 
 Author: Chatchai Tritham
 Date: 2026-01-25
@@ -81,7 +81,7 @@ def load_data(data_dir: str = 'outputs') -> Dict[str, Any]:
                     elif hasattr(loaded, 'final_archetypes'):
                         data['archetypes'] = loaded.final_archetypes
                         data['explorer'] = loaded
-                logger.info(f"✓ Loaded archetypes from {path}")
+                logger.info(f"โ“ Loaded archetypes from {path}")
                 break
             except Exception as e:
                 logger.warning(f"Failed to load {path}: {e}")
@@ -92,7 +92,7 @@ def load_data(data_dir: str = 'outputs') -> Dict[str, Any]:
         try:
             with open(param_space_path, 'rb') as f:
                 data['param_space'] = pickle.load(f)
-            logger.info(f"✓ Loaded parameter space from {param_space_path}")
+            logger.info(f"โ“ Loaded parameter space from {param_space_path}")
         except Exception as e:
             logger.warning(f"Failed to load parameter space: {e}")
 
@@ -107,7 +107,7 @@ def load_data(data_dir: str = 'outputs') -> Dict[str, Any]:
             try:
                 with open(path, 'r') as f:
                     data['profiling_data'] = json.load(f)
-                logger.info(f"✓ Loaded profiling data from {path}")
+                logger.info(f"โ“ Loaded profiling data from {path}")
                 break
             except Exception as e:
                 logger.warning(f"Failed to load profiling data: {e}")
@@ -187,7 +187,7 @@ def generate_latex_captions(figures: Dict[str, Path], output_path: Path):
         ),
         'figure2': (
             'Parameter Space Characterization',
-            'High-dimensional parameter space P = D × S × R × T containing 126,000 valid '
+            'High-dimensional parameter space P = D ร— S ร— R ร— T containing 126,000 valid '
             'combinations representing vestibular disorder presentations.',
         ),
         'figure3': (
@@ -229,7 +229,7 @@ def generate_latex_captions(figures: Dict[str, Path], output_path: Path):
         'figure10': (
             'Critical Scenario Coverage',
             'Coverage of emergency department triage categories and rare diagnosis presentations. '
-            '310× efficiency gain over brute-force enumeration.',
+            '310ร— efficiency gain over brute-force enumeration.',
         ),
         'figureS1': (
             'Detailed TiTrATE Constraint Analysis',
@@ -299,7 +299,7 @@ def generate_latex_captions(figures: Dict[str, Path], output_path: Path):
     with open(output_path, 'w') as f:
         f.write('\n'.join(latex_content))
 
-    logger.info(f"✓ LaTeX captions saved: {output_path}")
+    logger.info(f"โ“ LaTeX captions saved: {output_path}")
 
 
 def validate_figures(figures: Dict[str, Path]) -> Dict[str, bool]:
@@ -343,9 +343,9 @@ def validate_figures(figures: Dict[str, Path]) -> Dict[str, bool]:
 
         if not validation_results[fig_name]:
             failed_checks = [k for k, v in checks.items() if not v]
-            logger.warning(f"✗ {fig_name} failed checks: {failed_checks}")
+            logger.warning(f"โ— {fig_name} failed checks: {failed_checks}")
         else:
-            logger.info(f"✓ {fig_name} validated")
+            logger.info(f"โ“ {fig_name} validated")
 
     return validation_results
 
@@ -374,7 +374,7 @@ def main():
 
     logger.info("=" * 80)
     logger.info("SYNDX - COMPREHENSIVE FIGURE GENERATOR")
-    logger.info("Generating 16 Figures for Tier 1 Journal Submission")
+    logger.info("Generating 16 Figures for Tier 1 Manuscript Review")
     logger.info("=" * 80)
     logger.info("")
 
@@ -469,10 +469,10 @@ def main():
                 fig_path = method(*clean_args) if clean_args else method()
 
                 main_figures[fig_name] = fig_path
-                logger.info(f"✓ {fig_name} generated: {fig_path}")
+                logger.info(f"โ“ {fig_name} generated: {fig_path}")
 
             except Exception as e:
-                logger.error(f"✗ {fig_name} failed: {e}")
+                logger.error(f"โ— {fig_name} failed: {e}")
                 logger.debug(traceback.format_exc())
                 main_figures[fig_name] = None
 
@@ -512,11 +512,11 @@ def main():
 
             supp_figures = supp_viz.generate_all_supplementary(**supp_data)
 
-            logger.info(f"✓ Generated {
+            logger.info(f"โ“ Generated {
                     len(supp_figures)} supplementary figures")
 
         except Exception as e:
-            logger.error(f"✗ Supplementary figures failed: {e}")
+            logger.error(f"โ— Supplementary figures failed: {e}")
             logger.debug(traceback.format_exc())
             supp_figures = {}
 
@@ -584,10 +584,10 @@ def main():
         with open(manifest_path, 'w') as f:
             json.dump(manifest, f, indent=2)
 
-        logger.info(f"\n✓ Manifest saved: {manifest_path}")
+        logger.info(f"\nโ“ Manifest saved: {manifest_path}")
 
         logger.info("\n" + "=" * 80)
-        logger.info("✓ FIGURE GENERATION COMPLETE")
+        logger.info("โ“ FIGURE GENERATION COMPLETE")
         logger.info("=" * 80)
         logger.info("\nNext steps:")
         logger.info("  1. Review all figures in output directories")
@@ -599,7 +599,7 @@ def main():
         return 0
 
     except Exception as e:
-        logger.error(f"\n✗ Fatal error: {e}")
+        logger.error(f"\nโ— Fatal error: {e}")
         logger.error(traceback.format_exc())
         return 1
 

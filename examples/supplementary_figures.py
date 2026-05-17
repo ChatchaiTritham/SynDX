@@ -1,7 +1,7 @@
-"""
+﻿"""
 Supplementary Figures Generator for SynDX Framework
 
-Generates Figures S1-S6 for journal submission (supplementary materials).
+Generates Figures S1-S6 for manuscript review (supplementary materials).
 All figures follow same professional standards as main figures:
 - 600 DPI resolution
 - Serif fonts (Times New Roman/DejaVu Serif)
@@ -251,7 +251,7 @@ class SupplementaryFigures:
         filepath = self._save_figure(fig, filename)
         plt.close(fig)
 
-        logger.info(f"✓ Figure S1 saved: {filepath}")
+        logger.info(f"โ“ Figure S1 saved: {filepath}")
         return filepath
 
     def figS2_nmf_factor_interpretations(
@@ -319,7 +319,7 @@ class SupplementaryFigures:
         filepath = self._save_figure(fig, filename)
         plt.close(fig)
 
-        logger.info(f"✓ Figure S2 saved: {filepath}")
+        logger.info(f"โ“ Figure S2 saved: {filepath}")
         return filepath
 
     def figS3_shap_distributions(
@@ -406,7 +406,7 @@ class SupplementaryFigures:
         filepath = self._save_figure(fig, filename)
         plt.close(fig)
 
-        logger.info(f"✓ Figure S3 saved: {filepath}")
+        logger.info(f"โ“ Figure S3 saved: {filepath}")
         return filepath
 
     def figS4_diagnosis_breakdown(
@@ -569,7 +569,7 @@ class SupplementaryFigures:
         filepath = self._save_figure(fig, filename)
         plt.close(fig)
 
-        logger.info(f"✓ Figure S4 saved: {filepath}")
+        logger.info(f"โ“ Figure S4 saved: {filepath}")
         return filepath
 
     def figS5_temporal_patterns(self, archetypes: List[Dict]) -> Path:
@@ -743,7 +743,7 @@ class SupplementaryFigures:
         filepath = self._save_figure(fig, filename)
         plt.close(fig)
 
-        logger.info(f"✓ Figure S5 saved: {filepath}")
+        logger.info(f"โ“ Figure S5 saved: {filepath}")
         return filepath
 
     def figS6_demographic_details(self, archetypes: List[Dict]) -> Path:
@@ -915,7 +915,7 @@ class SupplementaryFigures:
         filepath = self._save_figure(fig, filename)
         plt.close(fig)
 
-        logger.info(f"✓ Figure S6 saved: {filepath}")
+        logger.info(f"โ“ Figure S6 saved: {filepath}")
         return filepath
 
     def generate_all_supplementary(self, **data) -> Dict[str, Path]:
@@ -977,14 +977,14 @@ class SupplementaryFigures:
             figures['S6'] = self.figS6_demographic_details(data['archetypes'])
 
         logger.info("=" * 80)
-        logger.info(f"✓ ALL SUPPLEMENTARY FIGURES GENERATED: {len(figures)}/6")
+        logger.info(f"โ“ ALL SUPPLEMENTARY FIGURES GENERATED: {len(figures)}/6")
         logger.info("=" * 80)
 
         return figures
 
     def _save_figure(self, fig, filename: str) -> Path:
         """
-        Save figure in multiple formats for journal submission.
+        Save figure in multiple formats for manuscript review.
 
         Args:
             fig: Matplotlib figure object
