@@ -1,8 +1,8 @@
-"""
+﻿"""
 Rule-Based Expert System - Layer 3: Rule-Based Expert Systems
 
 Directly encodes clinical guidelines as formal IF-THEN rules with full source traceability.
-Every decision includes complete citation and diagnostic rationale.
+Every decision includes complete reference and diagnostic rationale.
 """
 
 import logging
@@ -18,7 +18,7 @@ class RuleBasedExpertSystem:
     """
     Rule-based expert system that translates clinical guidelines into formal IF-THEN rules.
 
-    Each rule includes full source attribution with peer-reviewed citations and
+    Each rule includes full source attribution with peer-reviewed references and
     diagnostic rationale, ensuring complete traceability.
     """
 
@@ -60,7 +60,7 @@ class RuleBasedExpertSystem:
                     'confidence': 0.95,
                     'urgency': 'emergency',
                     'source': 'AHA/ASA Acute Ischemic Stroke Guidelines 2018',
-                    'citation': 'Powers et al., Stroke 2018;49:e46-e110',
+                    'reference': 'Powers et al., Stroke 2018;49:e46-e110',
                     'rationale': 'HINTS examination showing central pattern (abnormal HIT or '
                     'direction-changing nystagmus or skew deviation) in appropriate '
                     'clinical context (acute spontaneous AVS with vascular risk factors) '
@@ -75,14 +75,14 @@ class RuleBasedExpertSystem:
                     'confidence': 0.92,
                     'urgency': 'emergency',
                     'source': 'Newman-Toker et al., Neurologic Clinics 2015',
-                    'citation': 'Newman-Toker & Edlow, Neurol Clin. 2015;33:577-599',
+                    'reference': 'Newman-Toker & Edlow, Neurol Clin. 2015;33:577-599',
                     'rationale': 'Acute onset with focal neurological signs in patient >50 years '
                     'highly suggestive of stroke',
                 },
             },
         ]
 
-        # Rule category 2: BPPV detection (Bárány Society ICVD criteria)
+        # Rule category 2: BPPV detection (Bรกrรกny Society ICVD criteria)
         bppv_rules = [
             {
                 'id': 'bppv_rule_001',
@@ -93,7 +93,7 @@ class RuleBasedExpertSystem:
                     'confidence': 0.92,
                     'urgency': 'routine',
                     'source': 'Bhattacharyya et al., Otolaryngology 2017',
-                    'citation': 'Bhattacharyya et al., Otolaryngol Head Neck Surg. 2017;156(3_suppl):S1-S47',
+                    'reference': 'Bhattacharyya et al., Otolaryngol Head Neck Surg. 2017;156(3_suppl):S1-S47',
                     'rationale': 'Episodic positional vertigo <1min with positive Dix-Hallpike showing '
                     'characteristic upbeating-torsional nystagmus is diagnostic for '
                     'posterior canal BPPV per AAO-HNSF criteria',
@@ -112,7 +112,7 @@ class RuleBasedExpertSystem:
                     'confidence': 0.88,
                     'urgency': 'urgent',
                     'source': 'Strupp et al., J Neurol 2017',
-                    'citation': 'Strupp et al., J Neurol. 2017;264(4):611-616',
+                    'reference': 'Strupp et al., J Neurol. 2017;264(4):611-616',
                     'rationale': 'Acute spontaneous vertigo with abnormal head impulse test and '
                     'peripheral-type nystagmus characteristic of vestibular neuritis',
                 },
@@ -130,7 +130,7 @@ class RuleBasedExpertSystem:
                     'confidence': 0.85,
                     'urgency': 'routine',
                     'source': 'Lempert et al., J Vestib Res 2012',
-                    'citation': 'Lempert et al., J Vestib Res. 2012;22(4):167-174',
+                    'reference': 'Lempert et al., J Vestib Res. 2012;22(4):167-174',
                     'rationale': 'Episodic vertigo in patient with migraine history and concurrent '
                     'headache meets criteria for vestibular migraine',
                 },
@@ -147,7 +147,7 @@ class RuleBasedExpertSystem:
                     'confidence': 0.75,
                     'urgency': 'screening',
                     'source': 'Framingham Stroke Study',
-                    'citation': 'Wolf et al., Stroke 1991;22(3):312-318',
+                    'reference': 'Wolf et al., Stroke 1991;22(3):312-318',
                     'rationale': 'Patient with multiple vascular risk factors warrants closer '
                     'monitoring for cerebrovascular events',
                 },
@@ -173,7 +173,7 @@ class RuleBasedExpertSystem:
                     'confidence': round(0.7 + (i % 30) * 0.01, 2),
                     'urgency': np.random.choice(['routine', 'urgent', 'emergency']),
                     'source': 'Generic Clinical Guideline',
-                    'citation': f'Generic Reference {i}',
+                    'reference': f'Generic Reference {i}',
                     'rationale': f'Generic clinical rule for pattern recognition rule #{i}',
                 },
             }

@@ -1,8 +1,8 @@
-"""
+﻿"""
 XAI-by-Design Provenance Tracker - Layer 4: XAI-by-Design Provenance
 
 Embeds complete provenance tracking, associating every feature with its clinical source,
-peer-reviewed citation, and diagnostic rationale. Every feature carries complete metadata.
+peer-reviewed reference, and diagnostic rationale. Every feature carries complete metadata.
 """
 
 import logging
@@ -20,7 +20,7 @@ class ProvenanceTracker:
     Track provenance information for generated synthetic data.
 
     Every feature includes complete metadata: numerical value, source distribution,
-    clinical guideline reference, peer-reviewed citation, and diagnostic rationale.
+    clinical guideline reference, peer-reviewed reference, and diagnostic rationale.
     """
 
     def __init__(self):
@@ -40,7 +40,7 @@ class ProvenanceTracker:
         Args:
             data: Input synthetic data DataFrame
             source_layer: Source layer identifier (e.g., "combinatorial", "bayesian", "rules")
-            source_citation: Citation for the source methodology
+            source_citation: Reference for the source methodology
 
         Returns:
             DataFrame with added provenance columns
@@ -170,7 +170,7 @@ class ProvenanceTracker:
         results['target_pti'] = 0.95  # Target: 95% features with provenance
         results['pti_met'] = pti >= 0.95
 
-        # Check for missing citations
+        # Check for missing references
         prov_cols = [col for col in df.columns if '_provenance_citation' in col]
         missing_citations = 0
         for col in prov_cols:
@@ -224,7 +224,7 @@ class ProvenanceTracker:
                 df['provenance_source_layer'].value_counts().to_dict()
             )
 
-        # Citation sources
+        # Reference sources
         citation_cols = [col for col in df.columns if '_provenance_citation' in col]
         if citation_cols:
             all_citations = []
@@ -402,7 +402,7 @@ class FeatureAttributionAnalyzer:
             for col in categorical_cols[:20]:
                 try:
                     crosstab = pd.crosstab(df[col], df[target_column])
-                    # Calculate a simple association measure (Cramér's V
+                    # Calculate a simple association measure (Cramรฉr's V
                     # approximation)
                     n = crosstab.sum().sum()
                     chi2 = self._chi_square_test(crosstab)
@@ -516,7 +516,7 @@ if __name__ == '__main__':
     print(f"  PTI: {validation_results['provenance_traceability_index']:.3f}")
     print(f"  Target PTI: {validation_results['target_pti']}")
     print(f"  PTI met: {validation_results['pti_met']}")
-    print(f"  Missing citations: {validation_results['missing_citations']}")
+    print(f"  Missing references: {validation_results['missing_citations']}")
     print(f"  Missing rationales: {validation_results['missing_rationales']}")
 
     print(f"\\nXAI-by-Design provenance tracking test completed successfully!")
