@@ -115,7 +115,7 @@ def verify_implementation():
         provenance_samples = layer4.add_provenance(
             rule_samples.head(20), 
             source_layer="rules",
-            source_citation="Test reference"
+            source_reference="Test reference"
         )
         print(f"  OK Layer 4 (XAI): Added provenance to {len(provenance_samples)} samples")
     except Exception as e:
