@@ -1,4 +1,4 @@
-"""
+﻿"""
 SynDX-Hybrid: Complete Five-Layer Pipeline Implementation with Advanced Visualization
 
 Integrates all five layers with advanced visualization and dataset generation capabilities.
@@ -134,7 +134,7 @@ class SynDXHybridPipeline:
         rules_with_provenance = self.layer4_xai.add_provenance(
             rule_based_samples,
             source_layer="rules",
-            source_citation="Clinical Guidelines (AHA/ASA, Bárány ICVD)",
+            source_reference="Clinical Guidelines (AHA/ASA, Bรกrรกny ICVD)",
         )
         self.layer_outputs['rules_provenance'] = rules_with_provenance
         logger.info("Applied provenance tracking to rule-based samples")
