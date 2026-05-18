@@ -32,7 +32,7 @@ class ProvenanceTracker:
         self,
         data: pd.DataFrame,
         source_layer: str = "unknown",
-        source_citation: str = "unknown",
+        source_reference: str = "unknown",
     ) -> pd.DataFrame:
         """
         Add provenance tracking to synthetic data.
@@ -40,7 +40,7 @@ class ProvenanceTracker:
         Args:
             data: Input synthetic data DataFrame
             source_layer: Source layer identifier (e.g., "combinatorial", "bayesian", "rules")
-            source_citation: Reference for the source methodology
+            source_reference: Reference for the source methodology
 
         Returns:
             DataFrame with added provenance columns
@@ -54,7 +54,7 @@ class ProvenanceTracker:
 
         # Provenance metadata
         df['provenance_source_layer'] = source_layer
-        df['provenance_source_citation'] = source_citation
+        df['provenance_source_reference'] = source_reference
         df['provenance_timestamp'] = pd.Timestamp.now().isoformat()
         df['provenance_traceability_id'] = [f"trace_{i:06d}" for i in range(n_rows)]
 
@@ -65,7 +65,7 @@ class ProvenanceTracker:
         for col in feature_cols:
             # Create provenance info for this column
             df[f'{col}_provenance_source'] = f"{source_layer}:{col}"
-            df[f'{col}_provenance_citation'] = source_citation
+            df[f'{col}_provenance_reference'] = source_reference
             df[f'{col}_provenance_rationale'] = self._generate_rationale(
                 col, source_layer
             )
@@ -171,12 +171,12 @@ class ProvenanceTracker:
         results['pti_met'] = pti >= 0.95
 
         # Check for missing references
-        prov_cols = [col for col in df.columns if '_provenance_citation' in col]
-        missing_citations = 0
+        prov_cols = [col for col in df.columns if '_provenance_reference' in col]
+        missing_references = 0
         for col in prov_cols:
-            missing_citations += df[col].isna().sum() + (df[col] == 'unknown').sum()
+            missing_references += df[col].isna().sum() + (df[col] == 'unknown').sum()
 
-        results['missing_citations'] = missing_citations
+        results['missing_references'] = missing_references
 
         # Check for missing rationales
         rationale_cols = [col for col in df.columns if '_provenance_rationale' in col]
@@ -188,7 +188,7 @@ class ProvenanceTracker:
 
         # Summary
         results['validation_passed'] = (
-            results['pti_met'] and missing_citations == 0 and missing_rationales == 0
+            results['pti_met'] and missing_references == 0 and missing_rationales == 0
         )
         results['total_features'] = len(
             [col for col in df.columns if not col.startswith('provenance_')]
@@ -225,13 +225,13 @@ class ProvenanceTracker:
             )
 
         # Reference sources
-        citation_cols = [col for col in df.columns if '_provenance_citation' in col]
-        if citation_cols:
-            all_citations = []
-            for col in citation_cols:
-                all_citations.extend(df[col].dropna().tolist())
-            report['unique_citations'] = list(set(all_citations))
-            report['citation_count'] = len(set(all_citations))
+        reference_cols = [col for col in df.columns if '_provenance_reference' in col]
+        if reference_cols:
+            all_references = []
+            for col in reference_cols:
+                all_references.extend(df[col].dropna().tolist())
+            report['unique_references'] = list(set(all_references))
+            report['reference_count'] = len(set(all_references))
 
         return report
 
@@ -469,7 +469,7 @@ if __name__ == '__main__':
     data_with_provenance = provenance_tracker.add_provenance(
         sample_data,
         source_layer="rules",
-        source_citation="AHA/ASA Clinical Guidelines 2018",
+        source_reference="AHA/ASA Clinical Guidelines 2018",
     )
 
     print(f"\\nAdded provenance tracking to dataset")
@@ -516,7 +516,7 @@ if __name__ == '__main__':
     print(f"  PTI: {validation_results['provenance_traceability_index']:.3f}")
     print(f"  Target PTI: {validation_results['target_pti']}")
     print(f"  PTI met: {validation_results['pti_met']}")
-    print(f"  Missing references: {validation_results['missing_citations']}")
+    print(f"  Missing references: {validation_results['missing_references']}")
     print(f"  Missing rationales: {validation_results['missing_rationales']}")
 
     print(f"\\nXAI-by-Design provenance tracking test completed successfully!")

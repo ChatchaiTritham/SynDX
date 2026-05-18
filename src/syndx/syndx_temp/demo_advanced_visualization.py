@@ -168,10 +168,10 @@ def main():
                 return df
 
         class MockProvenanceTracker:
-            def add_provenance(self, data, source_layer, source_citation):
+            def add_provenance(self, data, source_layer, source_reference):
                 df = data.copy()
                 df['provenance_source_layer'] = source_layer
-                df['provenance_citation'] = source_citation
+                df['provenance_reference'] = source_reference
                 df['provenance_timestamp'] = pd.Timestamp.now().isoformat()
                 return df
 
@@ -253,7 +253,7 @@ def main():
                 rules_with_provenance = self.layer4_xai.add_provenance(
                     rule_based_samples,
                     source_layer="rules",
-                    source_citation="Clinical Guidelines (AHA/ASA, Bรกrรกny ICVD)",
+                    source_reference="Clinical Guidelines (AHA/ASA, Bรกrรกny ICVD)",
                 )
                 self.layer_outputs['rules_provenance'] = rules_with_provenance
                 print("Applied provenance tracking to rule-based samples")

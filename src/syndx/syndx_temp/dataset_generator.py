@@ -545,7 +545,7 @@ class SynDXDatasetGenerator:
             'generation_method': 'rule_based_clinical_guidelines',
             'rule_count': 247,
             'clinical_guidelines': ['AHA/ASA', 'Bรกrรกny_ICVD', 'ACEP'],
-            'citation_tracking': 'complete',
+            'reference_tracking': 'complete',
             'diagnostic_rationale': 'available',
             'generated_features': list(df.columns),
         }
@@ -580,7 +580,7 @@ class SynDXDatasetGenerator:
 
         # Add provenance columns
         df['provenance_source_layer'] = 'rules'
-        df['provenance_citation'] = 'AHA/ASA Clinical Guidelines 2018'
+        df['provenance_reference'] = 'AHA/ASA Clinical Guidelines 2018'
         df['provenance_rationale'] = df['refined_diagnosis'].apply(
             lambda x: f'Diagnosis {x} determined via clinical rule application with TiTrATE framework'
         )
