@@ -58,11 +58,51 @@ The curated visual set is controlled by FIGURE_MANIFEST.csv and currently lists 
 cd D:\PhD-NU\Manuscript\GitHub\SynDX
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
 pip install -e .
-python -m pytest -q
+
+# Regenerate every headline metric deterministically (seed = 42):
+python scripts\run_all.py
 ```
 
+`scripts/run_all.py` builds a seeded synthetic vestibular cohort with the real
+package modules, computes the metrics below, and writes them to
+`results/metrics.json` and `results/metrics.csv`. Running it twice yields
+byte-identical output. The figure scripts in `examples/` read SynDX's own values
+from `results/metrics.json` rather than hard-coded constants.
+
 If figure-generation scripts are present, run the matching script listed in `FIGURE_MANIFEST.csv` from the repository root.
+
+## Reproduced Metrics (seed = 42)
+
+All values below are the actual output of `python scripts/run_all.py` on a
+10,000-record seeded synthetic cohort across 16 vestibular diagnostic
+categories. They are computed, not asserted; the manuscript numbers are
+reconciled to them.
+
+| Metric | Value |
+|---|---|
+| Cohort size | 10,000 archetypes |
+| Diagnostic categories | 16 |
+| Statistical realism: mean per-feature KL divergence (synthetic vs archetype) | 0.071 |
+| Statistical realism: mean Jensen-Shannon divergence | 0.009 |
+| Statistical realism: mean Wasserstein-1 distance | 0.078 |
+| Downstream classifier (XGBoost, 70/30, label excluded): macro ROC-AUC | 0.85 |
+| Downstream classifier: macro specificity | 0.96 |
+| Downstream classifier: macro sensitivity | 0.43 |
+| Downstream classifier: macro F1 | 0.35 |
+| TiTrATE constraint satisfaction (retained cohort) | 100% |
+| TiTrATE candidate acceptance rate | 71.6% |
+| Guideline traceability of populated features | 100% |
+| Counterfactual reaction rate (timing-flip perturbation) | 72.4% |
+
+**Honesty notes.** The diagnosis one-hot block is excluded from the classifier
+input to prevent label leakage (leaving it in inflates ROC-AUC toward 1.0). The
+lower macro sensitivity/F1 are driven by under-determined catch-all categories
+(e.g. "other", "undetermined") with no distinctive clinical signature; these are
+genuine outputs, not tuned figures. No expert-plausibility, inter-rater (Fleiss
+kappa), or real-patient metric is produced here, because none can be reproduced
+by code; those are described in the manuscript as planned validation.
 
 ## Verification Criteria
 

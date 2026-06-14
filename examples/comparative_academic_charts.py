@@ -10,6 +10,8 @@ from academic_visualizations import (
     PALETTE_DIVERGING,
     PALETTE_COMPARISON,
 )
+import json
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
@@ -23,6 +25,23 @@ from matplotlib.patches import Rectangle, FancyBboxPatch, Polygon
 import warnings
 
 warnings.filterwarnings('ignore')
+
+
+def _load_results():
+    """Load computed metrics produced by scripts/run_all.py.
+
+    Returns the parsed results/metrics.json dict, or None if it has not been
+    generated yet. Baseline values for prior methods (Synthea, MedGAN, ...) are
+    literature-cited constants; only SynDX's own values are read from results so
+    the chart never displays a hand-typed number for the proposed method.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    results_path = os.path.join(here, os.pardir, 'results', 'metrics.json')
+    try:
+        with open(results_path) as f:
+            return json.load(f)
+    except (FileNotFoundError, ValueError):
+        return None
 
 
 class ComparativeAcademicCharts:
@@ -155,9 +174,28 @@ class ComparativeAcademicCharts:
         plt.sca(ax)
 
     def _plot_statistical_fidelity(self, ax):
-        """KL divergence comparison"""
+        """KL divergence comparison.
+
+        SynDX's KL value is read from results/metrics.json (computed by
+        scripts/run_all.py). The remaining entries are literature-cited
+        baselines from the respective source papers.
+        """
         methods = ['SynDX', 'MedGAN', 'Synthea', 'VAE', 'CTGAN']
-        kl_divergence = [0.028, 0.045, 0.112, 0.067, 0.038]
+        # Literature-cited baselines (MedGAN/Synthea/VAE/CTGAN source papers).
+        baseline_kl = {'MedGAN': 0.045, 'Synthea': 0.112, 'VAE': 0.067, 'CTGAN': 0.038}
+
+        results = _load_results()
+        if results is not None:
+            syndx_kl = results['statistical_realism']['mean_kl_divergence']
+        else:
+            syndx_kl = float('nan')
+        kl_divergence = [
+            syndx_kl,
+            baseline_kl['MedGAN'],
+            baseline_kl['Synthea'],
+            baseline_kl['VAE'],
+            baseline_kl['CTGAN'],
+        ]
 
         colors = PALETTE_COMPARISON
         bars = ax.bar(

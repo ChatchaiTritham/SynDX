@@ -510,31 +510,43 @@ def main():
                 
                 # Create performance metrics visualization
                 fig, ax = plt.subplots(figsize=(12, 8))
-                
-                # Simulated performance metrics based on manuscript targets
-                metrics = ['KL Divergence', 'ROC-AUC', 'TiTrATE Coverage', 'Expert Plausibility', 
-                          'Provenance Traceability', 'Counterfactual Consistency']
-                target_values = [0.028, 0.94, 0.987, 0.942, 0.962, 0.974]  # Target values from manuscript
-                achieved_values = [0.031, 0.92, 0.981, 0.935, 0.958, 0.969]  # Simulated achieved values
-                
+
+                # Real, computed metrics read from results/metrics.json (produced by
+                # scripts/run_all.py). No expert-plausibility value is shown, because
+                # that metric cannot be reproduced by code.
+                import json
+                _results_path = os.path.join(
+                    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                    'results', 'metrics.json')
+                with open(_results_path) as _f:
+                    _m = json.load(_f)
+                metrics = ['ROC-AUC (macro)', 'Specificity (macro)',
+                           'TiTrATE valid (cohort)', 'Traceability',
+                           'Counterfactual reaction']
+                achieved_values = [
+                    _m['diagnostic_performance']['synthetic_roc_auc_macro'],
+                    _m['diagnostic_performance']['synthetic_specificity_macro'],
+                    _m['coverage']['retained_cohort_valid_fraction'],
+                    _m['traceability']['traceability_rate'],
+                    _m['counterfactual_consistency']['consistency_reaction_rate'],
+                ]
+
                 x = np.arange(len(metrics))
-                width = 0.35
-                
-                bars1 = ax.bar(x - width/2, target_values, width, label='Target', 
-                              color='lightblue', edgecolor='navy', hatch='///')
-                bars2 = ax.bar(x + width/2, achieved_values, width, label='Achieved', 
+                width = 0.55
+
+                bars2 = ax.bar(x, achieved_values, width, label='Computed (seed 42)',
                               color='lightcoral', edgecolor='darkred')
-                
+
                 ax.set_xlabel('Performance Metrics')
                 ax.set_ylabel('Score')
-                ax.set_title('SynDX-Hybrid Performance Metrics: Target vs Achieved', 
+                ax.set_title('SynDX-Hybrid Computed Performance Metrics',
                              fontsize=14, fontweight='bold')
                 ax.set_xticks(x)
                 ax.set_xticklabels(metrics, rotation=45, ha='right')
                 ax.legend()
                 
                 # Add value labels
-                for bars in [bars1, bars2]:
+                for bars in [bars2]:
                     for bar in bars:
                         height = bar.get_height()
                         ax.text(bar.get_x() + bar.get_width()/2., height,

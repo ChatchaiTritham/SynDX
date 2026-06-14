@@ -453,7 +453,7 @@ class ArchetypeGenerator:
         data = []
         for arch in self.archetypes:
             row = arch.to_dict()
-        data.append(row)
+            data.append(row)
 
         return pd.DataFrame(data)
 

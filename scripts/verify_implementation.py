@@ -180,25 +180,42 @@ def verify_implementation():
     
     print(f"\n  Total features implemented: {len(manuscript_features)}")
     
-    # Performance targets from manuscript
-    print("\n6. PERFORMANCE TARGETS FROM MANUSCRIPT:")
-    targets = {
-        "KL Divergence": "<= 0.05 (target: 0.028)",
-        "ROC-AUC": ">= 0.90 (target: 0.94)",
-        "TiTrATE Coverage": ">= 95% (target: 98.7%)",
-        "Expert Plausibility": ">= 90% (target: 94.2%)",
-        "Provenance Traceability": ">= 95% (target: 96.2%)",
-        "Counterfactual Consistency": ">= 95% (target: 97.4%)"
-    }
+    # Real, computed performance metrics (read from results/metrics.json, which is
+    # produced by scripts/run_all.py). No target value is hard-coded here: this
+    # block reports exactly what the seeded pipeline computed. If results are not
+    # present, run `python scripts/run_all.py` first.
+    print("\n6. COMPUTED PERFORMANCE METRICS (from results/metrics.json):")
+    import json
+    results_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                                "results", "metrics.json")
+    try:
+        with open(results_path) as f:
+            metrics = json.load(f)
+        sr = metrics["statistical_realism"]
+        dp = metrics["diagnostic_performance"]
+        cov = metrics["coverage"]
+        cf = metrics["counterfactual_consistency"]
+        tr = metrics["traceability"]
+        print(f"  - Mean KL divergence (synth vs archetype): {sr['mean_kl_divergence']:.4f}")
+        print(f"  - Synthetic ROC-AUC (macro, OvR):          {dp['synthetic_roc_auc_macro']:.4f}")
+        print(f"  - Synthetic sensitivity (macro):           {dp['synthetic_sensitivity_macro']:.4f}")
+        print(f"  - Synthetic specificity (macro):           {dp['synthetic_specificity_macro']:.4f}")
+        print(f"  - Synthetic F1 (macro):                    {dp['synthetic_f1_macro']:.4f}")
+        print(f"  - TiTrATE candidate acceptance rate:       {cov['titrate_candidate_acceptance_rate']:.4f}")
+        print(f"  - Retained cohort TiTrATE-valid fraction:  {cov['retained_cohort_valid_fraction']:.4f}")
+        print(f"  - Counterfactual reaction rate:            {cf['consistency_reaction_rate']:.4f}")
+        print(f"  - Feature traceability rate:               {tr['traceability_rate']:.4f}")
+        print("\n  NOTE: Expert-plausibility / inter-rater (Fleiss kappa) metrics are")
+        print("  NOT reproducible by code and are not reported here.")
+    except (FileNotFoundError, ValueError, KeyError):
+        print("  results/metrics.json not found or incomplete.")
+        print("  Run: python scripts/run_all.py")
 
-    for metric, target in targets.items():
-        print(f"  - {metric}: {target}")
-    
     print("\n" + "="*70)
-    print("VERIFICATION RESULTS: SUCCESS - ALL CHECKS PASSED")
-    print("The SynDX-Hybrid implementation matches the manuscript specifications!")
+    print("MODULE STRUCTURE VERIFIED. Reported metrics are the real, seeded")
+    print("outputs of run_all.py; the manuscript numbers are reconciled to them.")
     print("="*70)
-    
+
     return True
 
 def main():
@@ -206,8 +223,8 @@ def main():
     success = verify_implementation()
     
     if success:
-        print("\nIMPLEMENTATION VERIFICATION SUCCESSFUL!")
-        print("The SynDX-Hybrid framework has been successfully verified against the manuscript.")
+        print("\nIMPLEMENTATION CHECK COMPLETE.")
+        print("Run scripts/run_all.py to (re)compute the reported metrics.")
         return 0
     else:
         print("\nIMPLEMENTATION VERIFICATION FAILED!")
