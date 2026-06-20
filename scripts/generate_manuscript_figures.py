@@ -15,6 +15,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -22,18 +23,61 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_DIR = ROOT / "figures" / "manuscript"
 DEFAULT_MANIFEST = ROOT / "FIGURE_MANIFEST.csv"
-DPI = 600
+DPI = 300
 
+# Canonical Top-Tier figure style (shared across all PhD repos).
+# Color-blind-safe (Okabe-Ito) palette — use in this order.
+PALETTE = ["#0072B2", "#D55E00", "#009E73", "#CC79A7", "#E69F00", "#56B4E9", "#000000"]
+
+# Semantic aliases drawn from the shared palette (no color-only encoding;
+# markers/linestyles carry the distinction where multiple series appear).
 COLORS = {
-    "safe": "#2ca25f",
-    "monitor": "#fdd049",
-    "alert": "#fdae61",
-    "critical": "#de2d26",
-    "emergency": "#54278f",
-    "blue": "#2b6cb0",
-    "teal": "#2c7fb8",
-    "gray": "#4a5568",
+    "blue": PALETTE[0],
+    "orange": PALETTE[1],
+    "green": PALETTE[2],
+    "pink": PALETTE[3],
+    "amber": PALETTE[4],
+    "skyblue": PALETTE[5],
+    "black": PALETTE[6],
+    # backward-compatible semantic names retained, remapped to Okabe-Ito
+    "safe": PALETTE[2],
+    "teal": PALETTE[5],
+    "gray": PALETTE[6],
 }
+
+
+def apply_pub_style() -> None:
+    """Apply the canonical publication style (see _management/FIGURE_STYLE.md)."""
+    mpl.rcParams.update(
+        {
+            "figure.dpi": 150,
+            "savefig.dpi": DPI,
+            "savefig.bbox": "tight",
+            "savefig.pad_inches": 0.02,
+            "font.family": "serif",
+            "font.serif": ["Times New Roman", "Times", "DejaVu Serif"],
+            "mathtext.fontset": "stix",
+            "font.size": 10,
+            "axes.titlesize": 11,
+            "axes.labelsize": 10,
+            "xtick.labelsize": 9,
+            "ytick.labelsize": 9,
+            "legend.fontsize": 9,
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "axes.linewidth": 0.8,
+            "axes.grid": True,
+            "grid.alpha": 0.3,
+            "grid.linewidth": 0.6,
+            "lines.linewidth": 1.6,
+            "lines.markersize": 5,
+            "legend.frameon": False,
+            "figure.constrained_layout.use": True,
+            "axes.prop_cycle": mpl.cycler(color=PALETTE),
+            "pdf.fonttype": 42,
+            "ps.fonttype": 42,
+        }
+    )
 
 CLINICAL_FEATURE_LABELS = {
     "vascular_risk_score": "Vascular risk score",
@@ -59,29 +103,6 @@ def load_json(path: Path) -> dict[str, Any]:
         return json.load(handle)
 
 
-def configure_plotting() -> None:
-    plt.rcParams.update(
-        {
-            "figure.dpi": DPI,
-            "savefig.dpi": DPI,
-            "font.family": "serif",
-            "font.serif": ["Times New Roman", "DejaVu Serif"],
-            "font.size": 9,
-            "axes.labelsize": 9,
-            "axes.titlesize": 10,
-            "axes.titleweight": "bold",
-            "xtick.labelsize": 8,
-            "ytick.labelsize": 8,
-            "legend.fontsize": 8,
-            "axes.linewidth": 0.8,
-            "grid.linewidth": 0.4,
-            "grid.alpha": 0.25,
-            "pdf.fonttype": 42,
-            "ps.fonttype": 42,
-        }
-    )
-
-
 def save_figure(fig: plt.Figure, output_dir: Path, stem: str) -> tuple[Path, Path]:
     png_path = output_dir / f"{stem}.png"
     pdf_path = output_dir / f"{stem}.pdf"
@@ -104,16 +125,16 @@ def figure1_shap_importance(output_dir: Path) -> dict[str, str]:
     values = [float(row["importance"]) for row in features][::-1]
 
     fig, ax = plt.subplots(figsize=(7.2, 4.6))
-    ax.barh(labels, values, color=COLORS["blue"], edgecolor="#1a365d", linewidth=0.5)
-    ax.set_xlabel("Mean absolute SHAP value")
-    ax.set_title("A. Clinically labelled SHAP feature importance")
+    ax.barh(labels, values, color=COLORS["blue"], edgecolor=COLORS["black"], linewidth=0.5)
+    ax.set_xlabel("Mean absolute SHAP value (dimensionless)")
+    ax.set_ylabel("Clinical feature")
+    ax.set_title("Clinically labelled SHAP feature importance")
     ax.grid(axis="x")
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
+    ax.grid(axis="y", visible=False)
     ax.set_xlim(0, max(values) * 1.18)
 
     for y_pos, value in enumerate(values):
-        ax.text(value + max(values) * 0.02, y_pos, f"{value:.3f}", va="center", fontsize=7)
+        ax.text(value + max(values) * 0.02, y_pos, f"{value:.3f}", va="center", fontsize=8)
 
     png_path, pdf_path = save_figure(fig, output_dir, "fig1_shap_importance_clinical")
     return {
@@ -147,16 +168,20 @@ def figure2_validation_metrics(output_dir: Path) -> dict[str, str]:
     ]
     labels = [item[0] for item in metrics]
     values = [float(item[1]) for item in metrics]
-    colors = [COLORS["blue"], COLORS["safe"], COLORS["teal"], COLORS["gray"]]
+    colors = PALETTE[: len(values)]
+    # Distinct hatches so bars remain separable in grayscale / for color-blind readers.
+    hatches = ["", "//", "..", "xx"]
 
     fig, ax = plt.subplots(figsize=(7.2, 4.4))
-    bars = ax.bar(labels, values, color=colors, edgecolor="#2d3748", linewidth=0.6)
+    bars = ax.bar(labels, values, color=colors, edgecolor=COLORS["black"], linewidth=0.6)
+    for bar, hatch in zip(bars, hatches):
+        bar.set_hatch(hatch)
     ax.set_ylim(0, 1.0)
-    ax.set_ylabel("Score")
-    ax.set_title("B. Focused validation metrics")
+    ax.set_ylabel("Score (0–1, dimensionless)")
+    ax.set_xlabel("Validation metric")
+    ax.set_title("Focused validation metrics")
     ax.grid(axis="y")
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
+    ax.grid(axis="x", visible=False)
 
     for bar, value in zip(bars, values):
         ax.text(
@@ -165,10 +190,9 @@ def figure2_validation_metrics(output_dir: Path) -> dict[str, str]:
             f"{value:.2f}",
             ha="center",
             va="bottom",
-            fontsize=8,
+            fontsize=9,
         )
 
-    fig.tight_layout()
     png_path, pdf_path = save_figure(fig, output_dir, "fig2_focused_validation_metrics")
     return {
         "figure_id": "SynDX-F2",
@@ -203,15 +227,26 @@ def figure3_counterfactual_quality(output_dir: Path) -> dict[str, str]:
     values_closed = values + values[:1]
     angles_closed = angles + angles[:1]
 
-    fig, ax = plt.subplots(figsize=(5.4, 5.0), subplot_kw={"polar": True})
-    ax.plot(angles_closed, values_closed, color=COLORS["teal"], linewidth=1.8)
-    ax.fill(angles_closed, values_closed, color=COLORS["teal"], alpha=0.18)
+    fig, ax = plt.subplots(
+        figsize=(5.4, 5.0), subplot_kw={"polar": True}, layout="constrained"
+    )
+    ax.plot(
+        angles_closed,
+        values_closed,
+        color=COLORS["blue"],
+        linewidth=1.8,
+        linestyle="-",
+        marker="o",
+        markersize=5,
+    )
+    ax.fill(angles_closed, values_closed, color=COLORS["blue"], alpha=0.18)
     ax.set_xticks(angles)
     ax.set_xticklabels(labels)
     ax.set_ylim(0, 1)
     ax.set_yticks([0.25, 0.5, 0.75, 1.0])
-    ax.set_yticklabels(["0.25", "0.50", "0.75", "1.00"], fontsize=7)
-    ax.set_title("C. Counterfactual quality profile", pad=18)
+    ax.set_yticklabels(["0.25", "0.50", "0.75", "1.00"], fontsize=8)
+    ax.grid(alpha=0.3, linewidth=0.6)
+    ax.set_title("Counterfactual quality profile (normalised 0–1)", pad=18)
 
     png_path, pdf_path = save_figure(fig, output_dir, "fig3_counterfactual_quality_profile")
     return {
@@ -253,7 +288,7 @@ def main() -> None:
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     args = parser.parse_args()
 
-    configure_plotting()
+    apply_pub_style()
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     rows = [
