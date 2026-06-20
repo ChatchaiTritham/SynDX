@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "SynDX: Synthetic Validation and Explainability Evidence for Dizziness-Focused Clinical Decision Support"
+abstract: >-
+  A synthetic-data validation and explainability evidence package for
+  dizziness-focused clinical decision support. It builds seeded synthetic
+  vestibular cohorts, evaluates statistical realism and downstream diagnostic
+  behavior, computes SHAP, NMF, and counterfactual explainability evidence, and
+  exports curated validation figures. A deterministic seed-42 driver
+  (scripts/run_all.py) regenerates every reported metric to committed result
+  files.
+type: software
+authors:
+  - given-names: Chatchai
+    family-names: Tritham
+    email: chatchait66@nu.ac.th
+    orcid: "https://orcid.org/0000-0001-7899-228X"
+    affiliation: >-
+      Department of Computer Science and Information Technology, Faculty of
+      Science, Naresuan University, Phitsanulok 65000, Thailand
+  - given-names: Chakkrit Snae
+    family-names: Namahoot
+    email: chakkrits@nu.ac.th
+    orcid: "https://orcid.org/0000-0003-4660-4590"
+    affiliation: >-
+      Department of Computer Science and Information Technology, Faculty of
+      Science, Naresuan University, Phitsanulok 65000, Thailand
+license: MIT
+repository-code: "https://github.com/ChatchaiTritham/SynDX"
+version: 1.0.0
+keywords:
+  - clinical decision support systems
+  - synthetic data
+  - explainable AI
+  - counterfactual explanations
+  - vestibular diagnosis
+  - reproducibility

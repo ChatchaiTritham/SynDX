@@ -1,0 +1,28 @@
+{
+  "title": "SynDX: Synthetic Validation and Explainability Evidence for Dizziness-Focused Clinical Decision Support",
+  "description": "A synthetic-data validation and explainability evidence package for dizziness-focused clinical decision support. It builds seeded synthetic vestibular cohorts, evaluates statistical realism and downstream diagnostic behavior, computes SHAP, NMF, and counterfactual explainability evidence, and exports curated validation figures. A deterministic seed-42 driver (scripts/run_all.py) regenerates every reported metric to committed result files.",
+  "upload_type": "software",
+  "license": "MIT",
+  "access_right": "open",
+  "version": "1.0.0",
+  "creators": [
+    {
+      "name": "Tritham, Chatchai",
+      "orcid": "0000-0001-7899-228X",
+      "affiliation": "Department of Computer Science and Information Technology, Faculty of Science, Naresuan University, Phitsanulok 65000, Thailand"
+    },
+    {
+      "name": "Namahoot, Chakkrit Snae",
+      "orcid": "0000-0003-4660-4590",
+      "affiliation": "Department of Computer Science and Information Technology, Faculty of Science, Naresuan University, Phitsanulok 65000, Thailand"
+    }
+  ],
+  "keywords": [
+    "clinical decision support systems",
+    "synthetic data",
+    "explainable AI",
+    "counterfactual explanations",
+    "vestibular diagnosis",
+    "reproducibility"
+  ]
+}
