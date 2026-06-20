@@ -55,7 +55,8 @@ The curated visual set is controlled by FIGURE_MANIFEST.csv and currently lists 
 ## Reproduce
 
 ```powershell
-cd D:\PhD-NU\Manuscript\GitHub\SynDX
+git clone https://github.com/ChatchaiTritham/SynDX.git
+cd SynDX
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -e .
