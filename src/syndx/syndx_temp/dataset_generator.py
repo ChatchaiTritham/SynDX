@@ -769,8 +769,7 @@ class SynDXDatasetGenerator:
         for name, df in self.datasets.items():
             file_path = output_path / f"{name}_dataset.csv"
             df.to_csv(file_path, index=False)
-            logger.info(f"Saved {name} dataset with {
-                    len(df)} samples to {file_path}")
+            logger.info(f"Saved {name} dataset with {len(df)} samples to {file_path}")
 
         # Save metadata
         metadata_path = output_path / "metadata.json"
@@ -821,6 +820,4 @@ print(f"\\nGeneration statistics:")
 print(f"  Total samples across all layers: {stats['total_samples']:,}")
 print(f"  Total features across all layers: {stats['total_features']:,}")
 for dataset_name, info in stats['datasets'].items():
-    print(f"  {dataset_name}: {
-            info['samples']:,} samples, {
-            info['features']} features")
+    print(f"  {dataset_name}: {info['samples']:,} samples, {info['features']} features")

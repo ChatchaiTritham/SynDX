@@ -695,8 +695,7 @@ class SynDXVisualizer:
                 colors=['steelblue', 'lightgray'],
                 wedgeprops=dict(width=0.4),
             )
-            axes[1].set_title(f'Overall XAI Fidelity: {
-                    overall:.3f}', fontsize=16, fontweight='bold')
+            axes[1].set_title(f'Overall XAI Fidelity: {overall:.3f}', fontsize=16, fontweight='bold')
 
         plt.tight_layout()
         plt.savefig(

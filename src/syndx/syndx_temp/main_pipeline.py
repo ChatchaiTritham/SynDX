@@ -118,15 +118,13 @@ class SynDXHybridPipeline:
         logger.info("\\n--- LAYER 2: BAYESIAN NETWORKS ---")
         bayesian_samples = self.layer2_bayesian.generate_samples(n_patients)
         self.layer_outputs['bayesian'] = bayesian_samples
-        logger.info(f"Generated {
-                len(bayesian_samples)} samples via Bayesian networks")
+        logger.info(f"Generated {len(bayesian_samples)} samples via Bayesian networks")
 
         # Layer 3: Rule-Based Expert Systems
         logger.info("\\n--- LAYER 3: RULE-BASED EXPERT SYSTEMS ---")
         rule_based_samples = self.layer3_rules.generate_samples(n_patients)
         self.layer_outputs['rules'] = rule_based_samples
-        logger.info(f"Generated {
-                len(rule_based_samples)} samples via rule-based system")
+        logger.info(f"Generated {len(rule_based_samples)} samples via rule-based system")
 
         # Layer 4: XAI-by-Design Provenance
         logger.info("\\n--- LAYER 4: XAI-BY-DESIGN PROVENANCE ---")
@@ -171,8 +169,7 @@ class SynDXHybridPipeline:
                 cf_placeholder,  # Counterfactual layer placeholder
             ]
         )
-        logger.info(f"Created final dataset with {
-                len(final_dataset)} patients")
+        logger.info(f"Created final dataset with {len(final_dataset)} patients")
 
         # Update layer outputs with final dataset
         self.layer_outputs['final_dataset'] = final_dataset
@@ -276,10 +273,7 @@ def main():
 
     print(f"\\nPipeline completed successfully!")
     print(f"Generated {len(synthetic_data)} synthetic patients")
-    print(f"Features per patient: {
-            synthetic_data.shape[1] if isinstance(
-                synthetic_data,
-                pd.DataFrame) else 'N/A'}")
+    print(f"Features per patient: {synthetic_data.shape[1] if isinstance(synthetic_data,pd.DataFrame) else 'N/A'}")
 
     # Show sample of generated data
     if isinstance(synthetic_data, pd.DataFrame) and not synthetic_data.empty:

@@ -253,9 +253,7 @@ def plot_diagnosis_distribution(archetypes, epidemiology, save_path: Path):
 
     # Add chi-squared test result
     validation = epidemiology.validate_distribution(archetypes)
-    textstr = f"χ² = {
-        validation['chi2_statistic']:.2f}, p = {
-        validation['p_value']:.4f}\n"
+    textstr = f"χ² = {validation['chi2_statistic']:.2f}, p = {validation['p_value']:.4f}\n"
     textstr += f"{'PASS' if validation['accept'] else 'FAIL'} (α = 0.05)"
     props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
     ax.text(
@@ -310,8 +308,7 @@ def plot_nmf_factors(nmf_model, save_path: Path):
 
     ax.set_xlabel('Features')
     ax.set_ylabel('NMF Factors')
-    ax.set_title(f'NMF Factor Loadings (r={
-            nmf_model.n_components})', fontsize=13, fontweight='bold')
+    ax.set_title(f'NMF Factor Loadings (r={nmf_model.n_components})', fontsize=13, fontweight='bold')
 
     # Add factor interpretations on the right
     for i, interp in enumerate(nmf_model.factor_interpretations_):

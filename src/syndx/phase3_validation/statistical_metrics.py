@@ -172,8 +172,7 @@ class StatisticalMetrics:
 
         logger.info(f"Mean KL divergence: {results['summary']['mean_kl']:.4f}")
         logger.info(f"Mean JS divergence: {results['summary']['mean_js']:.4f}")
-        logger.info(f"Mean Wasserstein: {
-                results['summary']['mean_wasserstein']:.4f}")
+        logger.info(f"Mean Wasserstein: {results['summary']['mean_wasserstein']:.4f}")
 
         return results
 

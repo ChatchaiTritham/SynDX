@@ -48,14 +48,8 @@ class WeightedEnsembleMerger:
         weights = np.array(weights)
         self.weights = weights / weights.sum()
 
-        logger.info(f"Initialized WeightedEnsembleMerger with weights: {
-                self.weights}")
-        logger.info(f"Weight breakdown: [Comb:{
-                self.weights[0]:.2f}, Bayes:{
-                self.weights[1]:.2f}, " f"Rules:{
-                self.weights[2]:.2f}, XAI:{
-                    self.weights[3]:.2f}, CF:{
-                        self.weights[4]:.2f}]")
+        logger.info(f"Initialized WeightedEnsembleMerger with weights: {self.weights}")
+        logger.info(f"Weight breakdown: [Comb:{self.weights[0]:.2f}, Bayes:{self.weights[1]:.2f}, " f"Rules:{self.weights[2]:.2f}, XAI:{self.weights[3]:.2f}, CF:{self.weights[4]:.2f}]")
 
     def merge_datasets(self, datasets: List[pd.DataFrame]) -> pd.DataFrame:
         """
@@ -70,8 +64,7 @@ class WeightedEnsembleMerger:
         if len(datasets) != 5:
             raise ValueError("Must provide exactly 5 datasets for the 5 layers")
 
-        logger.info(f"Merging {
-                len(datasets)} datasets using weighted ensemble...")
+        logger.info(f"Merging {len(datasets)} datasets using weighted ensemble...")
 
         # Get the largest dataset size to determine target size
         sizes = [len(ds) for ds in datasets]
@@ -150,10 +143,7 @@ class WeightedEnsembleMerger:
         final_df['ensemble_weights_used'] = str(self.weights.tolist())
         final_df['merge_timestamp'] = pd.Timestamp.now().isoformat()
 
-        logger.info(f"Merged dataset created with {
-                len(final_df)} samples and {
-                len(
-                    final_df.columns)} columns")
+        logger.info(f"Merged dataset created with {len(final_df)} samples and {len(final_df.columns)} columns")
 
         # Apply diversity-aware sampling to ensure representation of edge cases
         final_df = self._apply_diversity_sampling(final_df)
@@ -192,8 +182,7 @@ class WeightedEnsembleMerger:
         cluster_data = df[numeric_cols].dropna()
 
         if len(cluster_data) < n_clusters:
-            logger.warning(f"Not enough samples ({
-                    len(cluster_data)}) for {n_clusters} clusters, reducing clusters")
+            logger.warning(f"Not enough samples ({len(cluster_data)}) for {n_clusters} clusters, reducing clusters")
             n_clusters = max(2, len(cluster_data) // 2)
 
         if n_clusters < 2:
@@ -292,8 +281,7 @@ class WeightedEnsembleMerger:
                     'cluster_label', axis=1, errors='ignore'
                 )
 
-                logger.info(f"Diversity sampling completed: {
-                        len(diversified_df)} samples")
+                logger.info(f"Diversity sampling completed: {len(diversified_df)} samples")
                 return diversified_df
             else:
                 logger.warning("No clusters found, returning original data")
@@ -370,8 +358,7 @@ class DiversityAwareSampler:
         Returns:
             Diverse subset of the original DataFrame
         """
-        logger.info(f"Sampling {n_samples} diverse samples from dataset of {
-                len(df)}...")
+        logger.info(f"Sampling {n_samples} diverse samples from dataset of {len(df)}...")
 
         # Identify numeric columns for clustering
         numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
@@ -498,8 +485,7 @@ class DiversityAwareSampler:
                     'cluster_label', axis=1, errors='ignore'
                 )
 
-                logger.info(f"Diversity sampling completed: {
-                        len(diverse_subset)} samples")
+                logger.info(f"Diversity sampling completed: {len(diverse_subset)} samples")
                 return diverse_subset
             else:
                 logger.warning("No clusters found, using random sampling")
@@ -559,8 +545,7 @@ class EnsembleIntegrationPipeline:
         if len(layer_outputs) != 5:
             raise ValueError("Must provide exactly 5 layer outputs")
 
-        logger.info(f"Integrating 5 layers with ensemble weights: {
-                self.ensemble_weights}")
+        logger.info(f"Integrating 5 layers with ensemble weights: {self.ensemble_weights}")
 
         # Merge datasets using weighted ensemble
         merged_df = self.merger.merge_datasets(layer_outputs)
@@ -578,8 +563,7 @@ class EnsembleIntegrationPipeline:
                     merged_df, target_size
                 )
 
-        logger.info(f"Ensemble integration completed: {
-                len(merged_df)} samples")
+        logger.info(f"Ensemble integration completed: {len(merged_df)} samples")
 
         return merged_df
 
@@ -752,14 +736,7 @@ if __name__ == '__main__':
     )
 
     print(f"\\nEnsemble integration completed!")
-    print(f"  Original sizes: {
-            [
-                len(ds) for ds in [
-                    layer1_data,
-                    layer2_data,
-                    layer3_data,
-                    layer4_data,
-                    layer5_data]]}")
+    print(f"  Original sizes: {[len(ds) for ds in [layer1_data,layer2_data,layer3_data,layer4_data,layer5_data]]}")
     print(f"  Integrated size: {len(integrated_data)}")
     print(f"  Integrated features: {len(integrated_data.columns)}")
 

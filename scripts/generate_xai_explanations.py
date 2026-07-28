@@ -154,9 +154,7 @@ class XAIExplainer:
 
             # Ensure correct length
             if len(mean_abs_shap) != len(feature_names):
-                logger.warning(f"SHAP shape mismatch: {
-                        len(mean_abs_shap)} vs {
-                        len(feature_names)} features")
+                logger.warning(f"SHAP shape mismatch: {len(mean_abs_shap)} vs {len(feature_names)} features")
                 mean_abs_shap = mean_abs_shap[: len(feature_names)]
 
             # Create importance DataFrame
@@ -369,8 +367,7 @@ class XAIExplainer:
         report_lines.append("SHAP FEATURE IMPORTANCE REPORT")
         report_lines.append("SynDX Explainable AI Framework")
         report_lines.append("=" * 80)
-        report_lines.append(f"Generated: {
-                datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        report_lines.append(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         report_lines.append(f"Samples analyzed: {shap_results['n_samples']}")
         report_lines.append("")
 
@@ -396,8 +393,7 @@ class XAIExplainer:
                 )
 
             report_lines.append("")
-            report_lines.append(f"Total features analyzed: {
-                    len(importance_df)}")
+            report_lines.append(f"Total features analyzed: {len(importance_df)}")
             report_lines.append("")
 
         report_lines.append("=" * 80)
@@ -598,8 +594,7 @@ class XAIExplainer:
             'feature_names': feature_names,
         }
 
-        logger.info(f"Generated {
-                len(counterfactuals)} counterfactual explanations")
+        logger.info(f"Generated {len(counterfactuals)} counterfactual explanations")
         return results
 
     def plot_counterfactuals(
@@ -714,9 +709,7 @@ class XAIExplainer:
         )
         plt.close()
 
-        logger.info(f"Counterfactual plots saved to {
-                self.output_dir /
-                'counterfactuals'}")
+        logger.info(f"Counterfactual plots saved to {self.output_dir /'counterfactuals'}")
 
     def generate_counterfactual_report(
         self,
@@ -758,8 +751,7 @@ class XAIExplainer:
             "SynDX Explainable AI Framework - Clinical Decision Support"
         )
         report_lines.append("=" * 80)
-        report_lines.append(f"Generated: {
-                datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        report_lines.append(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         report_lines.append("")
 
         # Original prediction
@@ -767,8 +759,7 @@ class XAIExplainer:
         report_lines.append("ORIGINAL PREDICTION")
         report_lines.append("-" * 80)
         report_lines.append(f"Class: {class_names[cf_results['original_prediction']]}")
-        report_lines.append(f"Confidence: {
-                cf_results['original_confidence']:.2%}")
+        report_lines.append(f"Confidence: {cf_results['original_confidence']:.2%}")
         report_lines.append("")
         report_lines.append("Probabilities:")
         for i, (cls, prob) in enumerate(
@@ -869,9 +860,7 @@ class XAIExplainer:
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(json_safe_results, f, indent=2)
 
-        logger.info(f"Counterfactual reports saved to {
-                self.output_dir /
-                'clinical'}")
+        logger.info(f"Counterfactual reports saved to {self.output_dir /'clinical'}")
 
 
 # =============================================================================

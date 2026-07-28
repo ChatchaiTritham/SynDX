@@ -103,14 +103,11 @@ def main():
 
     print(f"โ“ Target calculated: n_target = {n_target:,}")
     print(f"\nTarget Breakdown (Eq. 8-14):")
-    print(f"  โ€ข Statistical requirement (n_stat):  {
-            breakdown['n_statistical']:,}")
+    print(f"  โ€ข Statistical requirement (n_stat):  {breakdown['n_statistical']:,}")
     print(f"    ฮบ = 0.05, confidence = 95%")
-    print(f"  โ€ข Coverage requirement (n_cov):      {
-            breakdown['n_coverage']:,}")
+    print(f"  โ€ข Coverage requirement (n_cov):      {breakdown['n_coverage']:,}")
     print(f"    q = 750 per diagnosis, r = 20 NMF factors")
-    print(f"  โ€ข Clinical requirement (n_clin):     {
-            breakdown['n_clinical']:,}")
+    print(f"  โ€ข Clinical requirement (n_clin):     {breakdown['n_clinical']:,}")
     print(f"    Critical scenarios: 15% (stroke/TIA)")
     print(f"  โ€ข Optimal formula (n_opt):           {breakdown['n_optimal']:,}")
     print(f"  โ€ข Complexity factor (ฯ):             {psi}")
@@ -128,10 +125,7 @@ def main():
     print(f"โ“ NMF factors determined: r = {r}")
     print(f"\nNMF Configuration (Eq. 16):")
     print(f"  โ€ข Formula: r_clinical = โlogโ(|D|) + โ(m/10)โ")
-    print(f"  โ€ข logโ({
-            param_space.D_size}) = {
-            np.log2(
-                param_space.D_size):.2f}")
+    print(f"  โ€ข logโ({param_space.D_size}) = {np.log2(param_space.D_size):.2f}")
     print(f"  โ€ข โ({param_space.m}/10) = {np.sqrt(param_space.m / 10):.2f}")
     print(f"  โ€ข Result: r = {r} latent clinical patterns")
 
@@ -196,8 +190,7 @@ def main():
     print_section("6.1 Generation Statistics")
     print(f"  Final archetypes:      {stats['final_count']:,}")
     print(f"  Target:                {stats['configuration']['n_target']:,}")
-    print(f"  Achievement rate:      {
-            stats['final_count'] / stats['configuration']['n_target'] * 100:.1f}%")
+    print(f"  Achievement rate:      {stats['final_count'] / stats['configuration']['n_target'] * 100:.1f}%")
     print()
 
     print_section("6.2 Sampling Performance by Phase")
@@ -228,8 +221,7 @@ def main():
         nmf = stats['nmf_summary']
         print(f"  Components:            {nmf['n_components']}")
         print(f"  Reconstruction error:  {nmf['reconstruction_error']:.4f}")
-        print(f"  Explained variance:    {
-                1 - nmf['reconstruction_error']:.1%}")
+        print(f"  Explained variance:    {1 - nmf['reconstruction_error']:.1%}")
         print(f"\n  Discovered Clinical Patterns:")
         for i, interp in enumerate(nmf['factor_interpretations'][:5], 1):
             print(f"    {i}. {interp['clinical_pattern']}")
@@ -251,28 +243,16 @@ def main():
     for i, archetype in enumerate(archetypes[:3], 1):
         print(f"\n  Archetype #{i}:")
         print(f"    Diagnosis:        {archetype.diagnosis}")
-        print(f"    Age:              {
-                archetype.parameters.get(
-                    'age',
-                    'N/A')} years")
-        print(f"    Timing:           {
-                archetype.parameters.get(
-                    'timing',
-                    'N/A')}")
-        print(f"    Trigger:          {
-                archetype.parameters.get(
-                    'trigger',
-                    'N/A')}")
+        print(f"    Age:              {archetype.parameters.get('age','N/A')} years")
+        print(f"    Timing:           {archetype.parameters.get('timing','N/A')}")
+        print(f"    Trigger:          {archetype.parameters.get('trigger','N/A')}")
         print(
             f"    HINTS-Nystagmus:  {archetype.parameters.get('nystagmus_type', 'N/A')}"
         )
         print(
             f"    HINTS-Skew:       {archetype.parameters.get('skew_deviation', 'N/A')}"
         )
-        print(f"    Urgency:          {
-                archetype.parameters.get(
-                    'urgency',
-                    'N/A')}")
+        print(f"    Urgency:          {archetype.parameters.get('urgency','N/A')}")
 
     # ========================================================================
     # PHASE 7: Commercial-Grade Visualization Generation
@@ -331,18 +311,10 @@ def main():
     print(f"  โ“ SHAP analysis: Complete")
     print(f"  โ“ Figures: 10 manuscript-preparation")
     print(f"\n  โฑ  Total execution time: {total_time:.2f} seconds")
-    print(f"  โฑ  Exploration: {
-            exploration_time:.2f}s ({
-            exploration_time /
-            total_time *
-            100:.1f}%)")
+    print(f"  โฑ  Exploration: {exploration_time:.2f}s ({exploration_time /total_time *100:.1f}%)")
 
     if 'viz_time' in locals():
-        print(f"  โฑ  Visualization: {
-                viz_time:.2f}s ({
-                viz_time /
-                total_time *
-                100:.1f}%)")
+        print(f"  โฑ  Visualization: {viz_time:.2f}s ({viz_time /total_time *100:.1f}%)")
 
     print(f"\nOutput Files:")
     print(f"  ๐“ Figures: {output_dir}")

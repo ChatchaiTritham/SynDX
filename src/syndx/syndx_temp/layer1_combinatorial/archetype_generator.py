@@ -162,8 +162,7 @@ class ArchetypeGenerator:
         Returns:
             List of ClinicalArchetype objects
         """
-        logger.info(f"Generating {
-                self.n_archetypes} computational archetypes...")
+        logger.info(f"Generating {self.n_archetypes} computational archetypes...")
 
         # Generate archetypes systematically based on TiTrATE constraints
         archetypes = []
@@ -496,10 +495,6 @@ if __name__ == '__main__':
     print(f"  Total archetypes: {stats['total_archetypes']}")
     print(f"  Age mean: {stats['age_stats']['mean']:.1f}")
     print(f"  Age std: {stats['age_stats']['std']:.1f}")
-    print(f"  Diagnosis distribution: {
-            dict(
-                list(
-                    stats['diagnosis_distribution'].items())[
-                    :5])}...")  # First 5
+    print(f"  Diagnosis distribution: {dict(list(stats['diagnosis_distribution'].items())[:5])}...")  # First 5
 
     print(f"\\nArchetype generation test completed successfully!")

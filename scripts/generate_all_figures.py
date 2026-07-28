@@ -512,8 +512,7 @@ def main():
 
             supp_figures = supp_viz.generate_all_supplementary(**supp_data)
 
-            logger.info(f"โ“ Generated {
-                    len(supp_figures)} supplementary figures")
+            logger.info(f"โ“ Generated {len(supp_figures)} supplementary figures")
 
         except Exception as e:
             logger.error(f"โ— Supplementary figures failed: {e}")

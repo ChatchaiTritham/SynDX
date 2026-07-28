@@ -128,9 +128,7 @@ class XAIFidelity:
         self.archetype_explainer = shap.TreeExplainer(self.archetype_model, background)
         self.archetype_shap = self.archetype_explainer.shap_values(X_arch)
 
-        logger.info(f"โ“ SHAP values computed for archetype model. Shape: {
-                np.array(
-                    self.archetype_shap).shape}")
+        logger.info(f"โ“ SHAP values computed for archetype model. Shape: {np.array(self.archetype_shap).shape}")
 
     def fit_synthetic_model(self, X_synth: np.ndarray, y_synth: np.ndarray):
         """
@@ -175,9 +173,7 @@ class XAIFidelity:
         self.synthetic_explainer = shap.TreeExplainer(self.synthetic_model, background)
         self.synthetic_shap = self.synthetic_explainer.shap_values(X_synth)
 
-        logger.info(f"โ“ SHAP values computed for synthetic model. Shape: {
-                np.array(
-                    self.synthetic_shap).shape}")
+        logger.info(f"โ“ SHAP values computed for synthetic model. Shape: {np.array(self.synthetic_shap).shape}")
 
     def compute_shap_correlation(self) -> float:
         """
@@ -233,9 +229,7 @@ class XAIFidelity:
                 rho, pvalue = spearmanr(arch_flat, synth_flat)
                 correlations.append(rho)
 
-                logger.info(f"  Class {class_idx}: ฯ = {
-                        rho:.3f} (p={
-                        pvalue:.4f})")
+                logger.info(f"  Class {class_idx}: ฯ = {rho:.3f} (p={pvalue:.4f})")
 
             # Average across classes
             if correlations:
@@ -255,9 +249,7 @@ class XAIFidelity:
             synth_flat = synth_flat[:min_size]
 
             avg_correlation, pvalue = spearmanr(arch_flat, synth_flat)
-            logger.info(f"  Binary: ฯ = {
-                    avg_correlation:.3f} (p={
-                    pvalue:.4f})")
+            logger.info(f"  Binary: ฯ = {avg_correlation:.3f} (p={pvalue:.4f})")
 
         self.fidelity_scores['shap_correlation'] = avg_correlation
         logger.info(f"โ“ Overall SHAP Correlation: ฯ = {avg_correlation:.3f}")
@@ -418,9 +410,7 @@ class XAIFidelity:
 
         # Ensure same shape
         if arch_interactions.shape != synth_interactions.shape:
-            logger.warning(f"Interaction matrix shape mismatch: arch={
-                    arch_interactions.shape}, " f"synth={
-                    synth_interactions.shape}. Using minimum dimensions.")
+            logger.warning(f"Interaction matrix shape mismatch: arch={arch_interactions.shape}, " f"synth={synth_interactions.shape}. Using minimum dimensions.")
             min_rows = min(arch_interactions.shape[0], synth_interactions.shape[0])
             min_cols = min(arch_interactions.shape[1], synth_interactions.shape[1])
             arch_interactions = arch_interactions[:min_rows, :min_cols]
@@ -528,8 +518,9 @@ class XAIFidelity:
     def __repr__(self) -> str:
         """String representation"""
         if not self.fidelity_scores:
-            return f"XAIFidelity(model_type='{
-                self.model_type}', evaluated=False)"
+            return (
+                f"XAIFidelity(model_type='{self.model_type}', evaluated=False)"
+            )
         else:
             overall = self.fidelity_scores.get('overall_fidelity', 0.0)
             return f"XAIFidelity(overall_score={overall:.3f}, evaluated=True)"
@@ -583,12 +574,8 @@ if __name__ == '__main__':
         else:
             y_synth[i] = 0
 
-    logger.info(f"Generated archetype data: {
-            X_arch.shape}, {
-            np.bincount(y_arch)}")
-    logger.info(f"Generated synthetic data: {
-            X_synth.shape}, {
-            np.bincount(y_synth)}")
+    logger.info(f"Generated archetype data: {X_arch.shape}, {np.bincount(y_arch)}")
+    logger.info(f"Generated synthetic data: {X_synth.shape}, {np.bincount(y_synth)}")
 
     # Initialize XAI fidelity evaluator
     fidelity = XAIFidelity(background_samples=100)

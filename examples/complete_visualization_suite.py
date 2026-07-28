@@ -201,8 +201,7 @@ class CompleteSynDXVisualizationSuite:
         print("-" * 80)
         print(f"  Total Archetypes Generated: {stats['final_count']:,}")
         print(f"  Target Archetypes: {stats['configuration']['n_target']:,}")
-        print(f"  Achievement Rate: {
-                stats['final_count'] / stats['configuration']['n_target'] * 100:.1f}%")
+        print(f"  Achievement Rate: {stats['final_count'] / stats['configuration']['n_target'] * 100:.1f}%")
         print(f"  Parameter Space Size: {param_space.space_size:,}")
         print(
             f"  Valid Space Size: {int(param_space.space_size * param_space.acceptance_rate):,}"
@@ -210,8 +209,7 @@ class CompleteSynDXVisualizationSuite:
         print(f"  NMF Factors: {stats['configuration']['nmf_factors']}")
 
         if stats['nmf_summary']:
-            print(f"  NMF Reconstruction Error: {
-                    stats['nmf_summary']['reconstruction_error']:.4f}")
+            print(f"  NMF Reconstruction Error: {stats['nmf_summary']['reconstruction_error']:.4f}")
 
         print("\n" + "-" * 80)
         print("Manuscript Review Requirements:")

@@ -111,8 +111,7 @@ class XAIValidator:
             shap_values, X_data, model, n_bootstrap
         )
         results['bootstrap_consistency'] = consistency
-        logger.info(f"Bootstrap consistency: {
-                consistency['mean_rank_correlation']:.4f}")
+        logger.info(f"Bootstrap consistency: {consistency['mean_rank_correlation']:.4f}")
 
         # 2. Correlation with model feature importance
         logger.info("Comparing with model feature importance...")
@@ -120,8 +119,7 @@ class XAIValidator:
             shap_values, model, feature_names
         )
         results['model_correlation'] = model_correlation
-        logger.info(f"Correlation with model importance: {
-                model_correlation['spearman_r']:.4f}")
+        logger.info(f"Correlation with model importance: {model_correlation['spearman_r']:.4f}")
 
         # 3. Permutation importance comparison
         logger.info("Comparing with permutation importance...")
@@ -129,15 +127,13 @@ class XAIValidator:
             shap_values, X_data, model, feature_names
         )
         results['permutation_correlation'] = perm_correlation
-        logger.info(f"Correlation with permutation: {
-                perm_correlation['spearman_r']:.4f}")
+        logger.info(f"Correlation with permutation: {perm_correlation['spearman_r']:.4f}")
 
         # 4. Rank stability across different samples
         logger.info("Computing rank stability...")
         rank_stability = self._shap_rank_stability(shap_values)
         results['rank_stability'] = rank_stability
-        logger.info(f"Rank stability (Kendall tau): {
-                rank_stability['mean_kendall_tau']:.4f}")
+        logger.info(f"Rank stability (Kendall tau): {rank_stability['mean_kendall_tau']:.4f}")
 
         # 5. Save results
         self._save_shap_validation_results(results, feature_names)
@@ -339,42 +335,26 @@ class XAIValidator:
 
             f.write("1. BOOTSTRAP CONSISTENCY\n")
             bc = results['bootstrap_consistency']
-            f.write(f"   Mean rank correlation: {
-                    bc['mean_rank_correlation']:.4f}\n")
-            f.write(f"   Std rank correlation: {
-                    bc['std_rank_correlation']:.4f}\n")
-            f.write(f"   Range: [{
-                    bc['min_rank_correlation']:.4f}, {
-                    bc['max_rank_correlation']:.4f}]\n\n")
+            f.write(f"   Mean rank correlation: {bc['mean_rank_correlation']:.4f}\n")
+            f.write(f"   Std rank correlation: {bc['std_rank_correlation']:.4f}\n")
+            f.write(f"   Range: [{bc['min_rank_correlation']:.4f}, {bc['max_rank_correlation']:.4f}]\n\n")
 
             f.write("2. CORRELATION WITH MODEL IMPORTANCE\n")
             mc = results['model_correlation']
-            f.write(f"   Spearman r: {
-                    mc['spearman_r']:.4f} (p={
-                    mc['spearman_p']:.4e})\n")
-            f.write(f"   Pearson r: {
-                    mc['pearson_r']:.4f} (p={
-                    mc['pearson_p']:.4e})\n")
-            f.write(f"   Kendall tau: {
-                    mc['kendall_tau']:.4f} (p={
-                    mc['kendall_p']:.4e})\n\n")
+            f.write(f"   Spearman r: {mc['spearman_r']:.4f} (p={mc['spearman_p']:.4e})\n")
+            f.write(f"   Pearson r: {mc['pearson_r']:.4f} (p={mc['pearson_p']:.4e})\n")
+            f.write(f"   Kendall tau: {mc['kendall_tau']:.4f} (p={mc['kendall_p']:.4e})\n\n")
 
             f.write("3. CORRELATION WITH PERMUTATION IMPORTANCE\n")
             pc = results['permutation_correlation']
-            f.write(f"   Spearman r: {
-                    pc['spearman_r']:.4f} (p={
-                    pc['spearman_p']:.4e})\n")
-            f.write(f"   Pearson r: {
-                    pc['pearson_r']:.4f} (p={
-                    pc['pearson_p']:.4e})\n\n")
+            f.write(f"   Spearman r: {pc['spearman_r']:.4f} (p={pc['spearman_p']:.4e})\n")
+            f.write(f"   Pearson r: {pc['pearson_r']:.4f} (p={pc['pearson_p']:.4e})\n\n")
 
             f.write("4. RANK STABILITY\n")
             rs = results['rank_stability']
             f.write(f"   Mean Kendall tau: {rs['mean_kendall_tau']:.4f}\n")
             f.write(f"   Std: {rs['std_kendall_tau']:.4f}\n")
-            f.write(f"   Range: [{
-                    rs['min_kendall_tau']:.4f}, {
-                    rs['max_kendall_tau']:.4f}]\n\n")
+            f.write(f"   Range: [{rs['min_kendall_tau']:.4f}, {rs['max_kendall_tau']:.4f}]\n\n")
 
             f.write("INTERPRETATION:\n")
             f.write("- Bootstrap consistency > 0.9 → Excellent stability\n")
@@ -441,8 +421,7 @@ class XAIValidator:
         logger.info("Computing diversity...")
         diversity = self._cf_diversity(counterfactuals)
         results['diversity'] = diversity
-        logger.info(f"Diversity score: {
-                diversity['mean_pairwise_distance']:.4f}")
+        logger.info(f"Diversity score: {diversity['mean_pairwise_distance']:.4f}")
 
         # 5. Clinical Plausibility
         if clinical_plausibility_scores is not None:
@@ -578,8 +557,7 @@ class XAIValidator:
 
             f.write(f"1. SUCCESS RATE\n")
             f.write(
-                f"   {
-                    results['success_rate']:.2%} of attempts generated counterfactuals\n\n"
+                f"   {results['success_rate']:.2%} of attempts generated counterfactuals\n\n"
             )
 
             f.write("2. SPARSITY (Features Changed)\n")
@@ -595,15 +573,13 @@ class XAIValidator:
 
             f.write("4. DIVERSITY\n")
             div = results['diversity']
-            f.write(f"   Mean pairwise distance: {
-                    div['mean_pairwise_distance']:.4f}\n\n")
+            f.write(f"   Mean pairwise distance: {div['mean_pairwise_distance']:.4f}\n\n")
 
             if 'clinical_plausibility' in results:
                 f.write("5. CLINICAL PLAUSIBILITY (Expert Ratings)\n")
                 cp = results['clinical_plausibility']
                 f.write(f"   Mean score: {cp['mean']:.2f}/5\n")
-                f.write(f"   Percent plausible (≥3): {
-                        cp['percent_plausible']:.1f}%\n\n")
+                f.write(f"   Percent plausible (≥3): {cp['percent_plausible']:.1f}%\n\n")
 
             f.write("INTERPRETATION:\n")
             f.write("- Success rate > 70% → Good coverage\n")
@@ -655,8 +631,7 @@ class XAIValidator:
         logger.info("Computing bootstrap stability...")
         stability = self._nmf_bootstrap_stability(X_data, n_factors, n_bootstrap)
         results['stability'] = stability
-        logger.info(f"Factor stability (mean correlation): {
-                stability['mean_correlation']:.4f}")
+        logger.info(f"Factor stability (mean correlation): {stability['mean_correlation']:.4f}")
 
         # 2. Reconstruction Error
         logger.info("Computing reconstruction error...")
@@ -668,9 +643,7 @@ class XAIValidator:
         logger.info("Comparing with PCA...")
         pca_comparison = self._nmf_vs_pca(X_data, n_factors)
         results['pca_comparison'] = pca_comparison
-        logger.info(f"Explained variance: NMF={
-                pca_comparison['nmf_variance']:.2%}, PCA={
-                pca_comparison['pca_variance']:.2%}")
+        logger.info(f"Explained variance: NMF={pca_comparison['nmf_variance']:.2%}, PCA={pca_comparison['pca_variance']:.2%}")
 
         # 4. Comparison with ICA
         logger.info("Comparing with ICA...")
@@ -865,9 +838,7 @@ class XAIValidator:
             st = results['stability']
             f.write(f"   Mean correlation: {st['mean_correlation']:.4f}\n")
             f.write(f"   Std: {st['std_correlation']:.4f}\n")
-            f.write(f"   Range: [{
-                    st['min_correlation']:.4f}, {
-                    st['max_correlation']:.4f}]\n\n")
+            f.write(f"   Range: [{st['min_correlation']:.4f}, {st['max_correlation']:.4f}]\n\n")
 
             f.write("2. RECONSTRUCTION ERROR\n")
             re = results['reconstruction']

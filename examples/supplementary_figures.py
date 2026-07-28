@@ -388,8 +388,7 @@ class SupplementaryFigures:
                 color='green',
                 linestyle='--',
                 linewidth=1.5,
-                label=f'Mean: {
-                    np.mean(feature_shap):.3f}',
+                label=f'Mean: {np.mean(feature_shap):.3f}',
             )
 
             ax.set_title(feature_names[feature_idx], fontsize=7, fontweight='bold')
@@ -700,8 +699,7 @@ class SupplementaryFigures:
                 ax_c.text(
                     j,
                     i,
-                    f'{corr_matrix[i,
-                                         j]:.2f}',
+                    f'{corr_matrix[i, j]:.2f}',
                     ha='center',
                     va='center',
                     color=text_color,
@@ -871,8 +869,7 @@ class SupplementaryFigures:
                 ax_c.text(
                     j,
                     i,
-                    f'{comorbidity_matrix[i,
-                                                j]:.0f}',
+                    f'{comorbidity_matrix[i, j]:.0f}',
                     ha='center',
                     va='center',
                     color=text_color,

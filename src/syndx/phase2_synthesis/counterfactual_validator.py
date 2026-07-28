@@ -142,8 +142,7 @@ class CounterfactualValidator:
                     }
 
                     logger.debug(
-                        f"Iteration {iteration}: Found valid counterfactual (distance={
-                            distance:.3f})"
+                        f"Iteration {iteration}: Found valid counterfactual (distance={distance:.3f})"
                     )
 
                     # Early stopping if very close
@@ -151,12 +150,10 @@ class CounterfactualValidator:
                         break
 
         if best_counterfactual is not None:
-            logger.info(f"✓ Counterfactual found (distance={
-                    best_distance:.3f})")
+            logger.info(f"✓ Counterfactual found (distance={best_distance:.3f})")
             return best_counterfactual
         else:
-            logger.warning(f"✗ No valid counterfactual found after {
-                    self.max_iterations} iterations")
+            logger.warning(f"✗ No valid counterfactual found after {self.max_iterations} iterations")
             return None
 
     def generate_counterfactuals(
@@ -195,11 +192,9 @@ class CounterfactualValidator:
             if cf is not None:
                 counterfactuals.append(cf)
             else:
-                logger.warning(f"Failed to generate counterfactual {
-                        i + 1}/{n_counterfactuals}")
+                logger.warning(f"Failed to generate counterfactual {i + 1}/{n_counterfactuals}")
 
-        logger.info(f"✓ Generated {
-                len(counterfactuals)}/{n_counterfactuals} valid counterfactuals")
+        logger.info(f"✓ Generated {len(counterfactuals)}/{n_counterfactuals} valid counterfactuals")
 
         return counterfactuals
 
@@ -298,8 +293,7 @@ class CounterfactualValidator:
         elif self.distance_metric == 'l2':
             return np.linalg.norm(original - counterfactual, ord=2)
         else:
-            raise ValueError(f"Unknown distance metric: {
-                    self.distance_metric}")
+            raise ValueError(f"Unknown distance metric: {self.distance_metric}")
 
     def _identify_changes(
         self,
@@ -384,8 +378,7 @@ class CounterfactualValidator:
         Returns:
             List of actionable insights (one per diagnosis)
         """
-        logger.info(f"Computing actionable insights for {
-                len(possible_diagnoses)} diagnoses...")
+        logger.info(f"Computing actionable insights for {len(possible_diagnoses)} diagnoses...")
 
         insights = []
 
@@ -528,8 +521,7 @@ if __name__ == '__main__':
     # Generate counterfactuals for different diagnoses
     diagnoses = ['BPPV', 'VM', 'VN', 'Stroke']
 
-    logger.info(f"\nGenerating counterfactuals for {
-            len(diagnoses)} diagnoses...")
+    logger.info(f"\nGenerating counterfactuals for {len(diagnoses)} diagnoses...")
 
     for diagnosis in diagnoses:
         logger.info(f"\n{'=' * 80}")

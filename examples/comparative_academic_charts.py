@@ -421,8 +421,7 @@ class ComparativeAcademicCharts:
         validation = epidemiology.validate_distribution(archetypes)
         textstr = f"χ² = {validation['chi2_statistic']:.2f}\n"
         textstr += f"p-value = {validation['p_value']:.4f}\n"
-        textstr += f"Result: {
-            'PASS' if validation['accept'] else 'FAIL'} (α=0.05)"
+        textstr += f"Result: {'PASS' if validation['accept'] else 'FAIL'} (α=0.05)"
 
         props = dict(
             boxstyle='round,pad=0.5',

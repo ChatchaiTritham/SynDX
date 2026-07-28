@@ -529,48 +529,28 @@ class PerformanceMetricsCalculator:
 
         print("\n--- Overall Metrics ---")
         print(f"Accuracy:            {self.metrics.get('accuracy', 0):.4f}")
-        print(f"Precision (Macro):   {
-                self.metrics.get(
-                    'precision_macro',
-                    0):.4f}")
-        print(f"Recall (Macro):      {
-                self.metrics.get(
-                    'recall_macro',
-                    0):.4f}")
+        print(f"Precision (Macro):   {self.metrics.get('precision_macro',0):.4f}")
+        print(f"Recall (Macro):      {self.metrics.get('recall_macro',0):.4f}")
         print(f"F1-Score (Macro):    {self.metrics.get('f1_macro', 0):.4f}")
         print(f"ROC-AUC (Macro):     {self.metrics.get('roc_auc_macro', np.nan):.4f}")
         print(f"MCC:                 {self.metrics.get('mcc', 0):.4f}")
         print(f"Cohen's Kappa:       {self.metrics.get('cohen_kappa', 0):.4f}")
 
         if 'brier_score_mean' in self.metrics:
-            print(f"Brier Score (Mean):  {
-                    self.metrics['brier_score_mean']:.4f}")
+            print(f"Brier Score (Mean):  {self.metrics['brier_score_mean']:.4f}")
 
         if 'expected_calibration_error' in self.metrics:
-            print(f"ECE:                 {
-                    self.metrics['expected_calibration_error']:.4f}")
+            print(f"ECE:                 {self.metrics['expected_calibration_error']:.4f}")
 
         print("\n--- Per-Class Metrics ---")
         if self.class_names:
             for cn in self.class_names:
                 print(f"\n{cn}:")
-                print(f"  Precision:   {
-                        self.metrics.get(
-                            f'precision_{cn}',
-                            0):.4f}")
-                print(f"  Recall:      {
-                        self.metrics.get(
-                            f'recall_{cn}',
-                            0):.4f}")
+                print(f"  Precision:   {self.metrics.get(f'precision_{cn}',0):.4f}")
+                print(f"  Recall:      {self.metrics.get(f'recall_{cn}',0):.4f}")
                 print(f"  F1-Score:    {self.metrics.get(f'f1_{cn}', 0):.4f}")
-                print(f"  Sensitivity: {
-                        self.metrics.get(
-                            f'sensitivity_{cn}',
-                            0):.4f}")
-                print(f"  Specificity: {
-                        self.metrics.get(
-                            f'specificity_{cn}',
-                            0):.4f}")
+                print(f"  Sensitivity: {self.metrics.get(f'sensitivity_{cn}',0):.4f}")
+                print(f"  Specificity: {self.metrics.get(f'specificity_{cn}',0):.4f}")
 
         print("\n" + "=" * 80 + "\n")
 

@@ -238,15 +238,13 @@ def main():
                 print("\\n--- LAYER 2: BAYESIAN NETWORKS ---")
                 bayesian_samples = self.layer2_bayesian.generate_samples(n_patients)
                 self.layer_outputs['bayesian'] = bayesian_samples
-                print(f"Generated {
-                        len(bayesian_samples)} samples via Bayesian networks")
+                print(f"Generated {len(bayesian_samples)} samples via Bayesian networks")
 
                 # Layer 3: Rule-Based Expert Systems
                 print("\\n--- LAYER 3: RULE-BASED EXPERT SYSTEMS ---")
                 rule_based_samples = self.layer3_rules.generate_samples(n_patients)
                 self.layer_outputs['rules'] = rule_based_samples
-                print(f"Generated {
-                        len(rule_based_samples)} samples via rule-based system")
+                print(f"Generated {len(rule_based_samples)} samples via rule-based system")
 
                 # Layer 4: XAI-by-Design Provenance
                 print("\\n--- LAYER 4: XAI-BY-DESIGN PROVENANCE ---")
@@ -292,8 +290,7 @@ def main():
                         cf_placeholder,  # Counterfactual layer placeholder
                     ]
                 )
-                print(f"Created final dataset with {
-                        len(final_dataset)} patients")
+                print(f"Created final dataset with {len(final_dataset)} patients")
 
                 # Update layer outputs with final dataset
                 self.layer_outputs['final_dataset'] = final_dataset
@@ -382,10 +379,7 @@ def main():
 
     print(f"\\nPipeline completed successfully!")
     print(f"Generated {len(synthetic_data)} synthetic patients")
-    print(f"Features per patient: {
-            synthetic_data.shape[1] if isinstance(
-                synthetic_data,
-                pd.DataFrame) else 'N/A'}")
+    print(f"Features per patient: {synthetic_data.shape[1] if isinstance(synthetic_data,pd.DataFrame) else 'N/A'}")
 
     # Show sample of generated data
     if isinstance(synthetic_data, pd.DataFrame) and not synthetic_data.empty:
@@ -469,8 +463,7 @@ def main():
                 for name, df in self.datasets.items():
                     file_path = output_path / f"{name}_dataset.csv"
                     df.to_csv(file_path, index=False)
-                    print(f"Saved {name} dataset with {
-                            len(df)} samples to {file_path}")
+                    print(f"Saved {name} dataset with {len(df)} samples to {file_path}")
 
                 # Save metadata
                 metadata_path = output_path / "metadata.json"
@@ -514,12 +507,9 @@ def main():
     gen_stats = generator.get_statistics()
     print(f"\\nGeneration statistics:")
     print(f"  Total samples across all layers: {gen_stats['total_samples']:,}")
-    print(f"  Total features across all layers: {
-            gen_stats['total_features']:,}")
+    print(f"  Total features across all layers: {gen_stats['total_features']:,}")
     for dataset_name, info in gen_stats['datasets'].items():
-        print(f"  {dataset_name}: {
-                info['samples']:,} samples, {
-                info['features']} features")
+        print(f"  {dataset_name}: {info['samples']:,} samples, {info['features']} features")
 
     # Initialize visualizer
     try:
@@ -534,8 +524,7 @@ def main():
                 self.generator = dataset_generator
                 self.figure_dir = Path(output_dir)
                 self.figure_dir.mkdir(exist_ok=True)
-                print(f"Mock visualizer initialized with output directory: {
-                        self.figure_dir}")
+                print(f"Mock visualizer initialized with output directory: {self.figure_dir}")
 
             def generate_all_visualizations(self, datasets):
                 print(f"Creating mock visualizations (600 DPI)...")
@@ -870,19 +859,12 @@ def main():
     )
     print(f"  Features per patient: {generator.datasets['ensemble'].shape[1]}")
     print(f"  Total data points: {generator.datasets['ensemble'].size:,}")
-    print(f"  Memory usage: {
-            generator.datasets['ensemble'].memory_usage(
-                deep=True).sum() /
-            1024 /
-            1024:.2f} MB")
+    print(f"  Memory usage: {generator.datasets['ensemble'].memory_usage(deep=True).sum() /1024 /1024:.2f} MB")
 
     # Layer-specific statistics
     print(f"\\nLAYER STATISTICS:")
     for layer_name, layer_data in generator.datasets.items():
-        print(f"  {
-                layer_name.upper()}: {
-                len(layer_data):,} samples, {
-                layer_data.shape[1]} features")
+        print(f"  {layer_name.upper()}: {len(layer_data):,} samples, {layer_data.shape[1]} features")
 
     # Visualization statistics
     total_figures = len(list(visualizer.figure_dir.glob('*.png')))
