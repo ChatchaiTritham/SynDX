@@ -139,8 +139,7 @@ def main():
 
     print(f"Final archetypes generated: {stats['final_count']}")
     print(f"Target: {stats['configuration']['n_target']}")
-    print(f"Achievement: {
-            stats['final_count'] / stats['configuration']['n_target'] * 100:.1f}%")
+    print(f"Achievement: {stats['final_count'] / stats['configuration']['n_target'] * 100:.1f}%")
     print()
 
     print("Sampling Statistics:")
@@ -182,9 +181,7 @@ def main():
         )
         print(f"  - Discovered patterns:")
         for interp in stats['nmf_summary']['factor_interpretations']:
-            print(f"    Factor {
-                    interp['factor_id']}: {
-                    interp['clinical_pattern']}")
+            print(f"    Factor {interp['factor_id']}: {interp['clinical_pattern']}")
         print()
 
     # SHAP Results

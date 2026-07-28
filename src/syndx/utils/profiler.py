@@ -185,10 +185,11 @@ class SynDXProfiler:
                 }
             )
 
-            logger.info(f"Phase '{phase_name}' completed: {
-                    end_time -
-                    start_time:.2f}s, " f"peak_mem={
-                    end_memory:.1f}MB")
+            duration = end_time - start_time
+            logger.info(
+                f"Phase '{phase_name}' completed: {duration:.2f}s, "
+                f"peak_mem={end_memory:.1f}MB"
+            )
 
     def record_subphase(
         self,

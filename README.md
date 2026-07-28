@@ -59,9 +59,18 @@ git clone https://github.com/ChatchaiTritham/SynDX.git
 cd SynDX
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
 pip install -e .
 python -m pytest -q
+python scripts/run_all.py
 ```
+
+`scripts/run_all.py` is the deterministic driver (fixed `seed = 42`). It rebuilds the
+10,000-archetype cohort with the committed package modules and writes every reported
+metric to `results/metrics.json` and `results/metrics.csv` — no value is hand-typed.
+`data/archetype_sample.csv` holds a readable sample of the generated cohort.
+See `REPRODUCIBILITY.md` for the metric-by-metric map to the manuscript, including which
+quantities the committed code *cannot* produce.
 
 If figure-generation scripts are present, run the matching script listed in `FIGURE_MANIFEST.csv` from the repository root.
 

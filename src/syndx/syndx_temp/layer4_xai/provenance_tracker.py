@@ -71,10 +71,7 @@ class ProvenanceTracker:
             )
             df[f'{col}_provenance_confidence'] = np.random.uniform(0.7, 1.0, n_rows)
 
-        logger.info(f"Added provenance tracking to {
-                len(df)} samples with {
-                len(
-                    df.columns)} total columns")
+        logger.info(f"Added provenance tracking to {len(df)} samples with {len(df.columns)} total columns")
 
         # Calculate Provenance Traceability Index (PTI)
         pti = self._calculate_pti(df)
@@ -474,8 +471,7 @@ if __name__ == '__main__':
 
     print(f"\\nAdded provenance tracking to dataset")
     print(f"New feature count: {len(data_with_provenance.columns)}")
-    print(f"Provenance Traceability Index: {
-            provenance_tracker._calculate_pti(data_with_provenance):.3f}")
+    print(f"Provenance Traceability Index: {provenance_tracker._calculate_pti(data_with_provenance):.3f}")
 
     # Show sample of provenance-enhanced data
     print(f"\\nSample of provenance-enhanced data:")
@@ -502,13 +498,8 @@ if __name__ == '__main__':
     )
 
     print(f"\\nFeature importance analysis:")
-    print(f"  Total features analyzed: {
-            importance_analysis['total_features_analyzed']}")
-    print(f"  Top 5 correlated features with diagnosis: {
-            dict(
-                list(
-                    importance_analysis['feature_correlations'].items())[
-                    :5])}")
+    print(f"  Total features analyzed: {importance_analysis['total_features_analyzed']}")
+    print(f"  Top 5 correlated features with diagnosis: {dict(list(importance_analysis['feature_correlations'].items())[:5])}")
 
     # Validate provenance
     validation_results = provenance_tracker.validate_provenance(explained_data)

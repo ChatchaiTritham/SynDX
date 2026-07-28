@@ -256,8 +256,7 @@ class NMFInterpreter:
 
             ax.barh(features, weights, color='steelblue', edgecolor='navy', alpha=0.7)
             ax.set_xlabel('Weight', fontsize=10, fontweight='bold')
-            ax.set_title(f'{factor_key}\n(Top {
-                    len(top_feats)} Features)', fontsize=11, fontweight='bold')
+            ax.set_title(f'{factor_key}\n(Top {len(top_feats)} Features)', fontsize=11, fontweight='bold')
             ax.invert_yaxis()
             ax.grid(True, alpha=0.3, axis='x')
 
@@ -276,9 +275,7 @@ class NMFInterpreter:
         )
         plt.close()
 
-        logger.info(f"Factor composition plots saved to {
-                self.output_dir /
-                'factors'}")
+        logger.info(f"Factor composition plots saved to {self.output_dir /'factors'}")
 
     def generate_factor_report(
         self,
@@ -299,8 +296,7 @@ class NMFInterpreter:
         report_lines.append("NMF FACTOR INTERPRETATION REPORT")
         report_lines.append("SynDX Framework - Latent Factor Analysis")
         report_lines.append("=" * 80)
-        report_lines.append(f"Generated: {
-                datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        report_lines.append(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         report_lines.append(f"Number of Factors: {len(interpretations)}")
         report_lines.append("")
 
@@ -325,10 +321,8 @@ class NMFInterpreter:
             report_lines.append("")
             report_lines.append(f"Statistics:")
             report_lines.append(f"  Sparsity: {factor_data['sparsity']:.2%}")
-            report_lines.append(f"  Max Weight: {
-                    factor_data['max_weight']:.6f}")
-            report_lines.append(f"  Mean Weight: {
-                    factor_data['mean_weight']:.6f}")
+            report_lines.append(f"  Max Weight: {factor_data['max_weight']:.6f}")
+            report_lines.append(f"  Mean Weight: {factor_data['mean_weight']:.6f}")
             report_lines.append("")
 
         # Clinical interpretation guide
@@ -526,9 +520,7 @@ class NMFInterpreter:
         )
         plt.close()
 
-        logger.info(f"Patient profile plots saved to {
-                self.output_dir /
-                'patients'}")
+        logger.info(f"Patient profile plots saved to {self.output_dir /'patients'}")
 
     # =========================================================================
     # 3. FACTOR-DISEASE ASSOCIATION

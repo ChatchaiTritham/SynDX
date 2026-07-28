@@ -48,8 +48,7 @@ class SynDXVisualizer:
         """
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
-        logger.info(f"Initialized SynDXVisualizer with output directory: {
-                self.output_dir}")
+        logger.info(f"Initialized SynDXVisualizer with output directory: {self.output_dir}")
 
     def create_layer1_visualizations(self, data: pd.DataFrame):
         """

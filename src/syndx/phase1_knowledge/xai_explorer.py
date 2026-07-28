@@ -277,8 +277,7 @@ class XAIGuidedExplorer:
         self.stats['phase1_valid'] = len(archetypes)
 
         logger.info(f"Phase 1 complete: {len(archetypes)} valid archetypes")
-        logger.info(f"  Acceptance rate: {
-                len(archetypes) / attempts * 100:.1f}%")
+        logger.info(f"  Acceptance rate: {len(archetypes) / attempts * 100:.1f}%")
 
         return archetypes
 
@@ -297,9 +296,7 @@ class XAIGuidedExplorer:
         # Log interpretations
         logger.info(f"Discovered {nmf.n_components} clinical patterns:")
         for interp in nmf.factor_interpretations_:
-            logger.info(f"  Factor {
-                    interp['factor_id']}: {
-                    interp['clinical_pattern']}")
+            logger.info(f"  Factor {interp['factor_id']}: {interp['clinical_pattern']}")
 
         return nmf
 
@@ -349,8 +346,7 @@ class XAIGuidedExplorer:
         self.stats['phase4_valid'] = len(archetypes)
 
         logger.info(f"Phase 4 complete: {len(archetypes)} archetypes")
-        logger.info(f"  Acceptance rate: {
-                len(archetypes) / attempts * 100:.1f}%")
+        logger.info(f"  Acceptance rate: {len(archetypes) / attempts * 100:.1f}%")
 
         return archetypes
 
@@ -372,8 +368,7 @@ class XAIGuidedExplorer:
 
     def _phase5_critical_sampling(self) -> List[Archetype]:
         """Phase 5: Critical scenario targeting (30%)"""
-        logger.info(f"Critical scenario sampling: {
-                self.n_critical} archetypes...")
+        logger.info(f"Critical scenario sampling: {self.n_critical} archetypes...")
 
         # Define critical scenarios
         critical_diagnoses = ['stroke', 'tia']
@@ -400,8 +395,7 @@ class XAIGuidedExplorer:
         self.stats['phase5_valid'] = len(archetypes)
 
         logger.info(f"Phase 5 complete: {len(archetypes)} archetypes")
-        logger.info(f"  Acceptance rate: {
-                len(archetypes) / attempts * 100:.1f}%")
+        logger.info(f"  Acceptance rate: {len(archetypes) / attempts * 100:.1f}%")
 
         return archetypes
 
@@ -456,8 +450,7 @@ class XAIGuidedExplorer:
         # Find underrepresented clusters
         underrep_clusters = np.argsort(cluster_counts)[: n_clusters // 2]
 
-        logger.info(f"Targeting {
-                len(underrep_clusters)} underrepresented clusters")
+        logger.info(f"Targeting {len(underrep_clusters)} underrepresented clusters")
 
         archetypes = []
         attempts = 0
@@ -481,8 +474,7 @@ class XAIGuidedExplorer:
         self.stats['phase6_valid'] = len(archetypes)
 
         logger.info(f"Phase 6 complete: {len(archetypes)} archetypes")
-        logger.info(f"  Acceptance rate: {
-                len(archetypes) / attempts * 100:.1f}%")
+        logger.info(f"  Acceptance rate: {len(archetypes) / attempts * 100:.1f}%")
 
         return archetypes
 
@@ -550,11 +542,8 @@ class XAIGuidedExplorer:
             self.final_archetypes
         )
 
-        logger.info(f"Chi-squared test: χ²={
-                validation_result['chi2_statistic']:.4f}, " f"p={
-                validation_result['p_value']:.4f}")
-        logger.info(f"Distribution match: {
-                'PASS' if validation_result['accept'] else 'FAIL'}")
+        logger.info(f"Chi-squared test: χ²={validation_result['chi2_statistic']:.4f}, " f"p={validation_result['p_value']:.4f}")
+        logger.info(f"Distribution match: {'PASS' if validation_result['accept'] else 'FAIL'}")
 
         # Check critical scenario coverage
         critical_count = sum(
@@ -563,13 +552,10 @@ class XAIGuidedExplorer:
         critical_rate = critical_count / len(self.final_archetypes)
         expected_rate = 0.15  # 15% from epidemiology
 
-        logger.info(f"Critical scenarios: {critical_count} ({
-                critical_rate * 100:.1f}%)")
+        logger.info(f"Critical scenarios: {critical_count} ({critical_rate * 100:.1f}%)")
         logger.info(f"Expected: {expected_rate * 100:.1f}%")
-        logger.info(f"Match: {abs(critical_rate -
-                                  expected_rate) /
-                              expected_rate *
-                              100:.1f}% deviation")
+        deviation = abs(critical_rate - expected_rate) / expected_rate * 100
+        logger.info(f"Match: {deviation:.1f}% deviation")
 
     def get_statistics(self) -> Dict:
         """Get comprehensive statistics"""

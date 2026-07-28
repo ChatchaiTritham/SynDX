@@ -44,8 +44,7 @@ class PerturbationEngine:
         Returns:
             DataFrame with validation results
         """
-        logger.info(f"Validating {
-                len(data)} samples using {validation_type}...")
+        logger.info(f"Validating {len(data)} samples using {validation_type}...")
 
         df = data.copy()
 
@@ -297,8 +296,7 @@ class PerturbationEngine:
         else:
             result_df = original_df
 
-        logger.info(f"Generated {
-                len(counterfactuals)} counterfactual examples")
+        logger.info(f"Generated {len(counterfactuals)} counterfactual examples")
 
         return result_df
 
@@ -446,8 +444,7 @@ class TiTrATEConsistencyChecker:
         Returns:
             DataFrame with validation results added
         """
-        logger.info(f"Validating {
-                len(df)} samples against TiTrATE principles...")
+        logger.info(f"Validating {len(df)} samples against TiTrATE principles...")
 
         validation_results = []
         for idx in df.index:
@@ -477,9 +474,7 @@ class TiTrATEConsistencyChecker:
                 1.0,
             )
 
-        logger.info(f"TiTrATE validation completed: {
-                validation_df['ti_trate_compliant'].sum()}/{
-                len(df)} compliant")
+        logger.info(f"TiTrATE validation completed: {validation_df['ti_trate_compliant'].sum()}/{len(df)} compliant")
 
         return df_with_validation
 
@@ -509,8 +504,7 @@ class ValidationEngine:
         Returns:
             Tuple of (validation_results, validated_data)
         """
-        logger.info(f"Performing comprehensive validation on {
-                len(synthetic_data)} samples...")
+        logger.info(f"Performing comprehensive validation on {len(synthetic_data)} samples...")
 
         results = {
             'validation_timestamp': pd.Timestamp.now().isoformat(),
@@ -576,8 +570,7 @@ class ValidationEngine:
             if isinstance(res, dict) and 'met_target' in res
         )
 
-        logger.info(f"Overall validation score: {
-                results['overall_validation_score']:.3f}")
+        logger.info(f"Overall validation score: {results['overall_validation_score']:.3f}")
         logger.info(f"Validation passed: {results['validation_passed']}")
 
         return results, validated_data
@@ -724,11 +717,8 @@ if __name__ == '__main__':
     print(
         f"  Samples passing validation: {(validated_data['validation_ti_trate_consistent']).sum()}"
     )
-    print(f"  Samples failing validation: {
-            (
-                validated_data['validation_ti_trate_consistent'] == False).sum()}")
-    print(f"  Counterfactual Consistency Rate: {
-            perturbation_engine._calculate_ccr(validated_data):.3f}")
+    print(f"  Samples failing validation: {(validated_data['validation_ti_trate_consistent'] == False).sum()}")
+    print(f"  Counterfactual Consistency Rate: {perturbation_engine._calculate_ccr(validated_data):.3f}")
 
     # Generate counterfactuals
     counterfactual_data = perturbation_engine.generate_counterfactuals(
@@ -736,8 +726,8 @@ if __name__ == '__main__':
         n_perturbations=10,
     )
 
-    print(f"\\nGenerated {len(counterfactual_data) -
-                          len(validated_data.head(20))} counterfactual examples")
+    generated_count = len(counterfactual_data) - len(validated_data.head(20))
+    print(f"\\nGenerated {generated_count} counterfactual examples")
 
     # Initialize TiTrATE consistency checker
     titrate_checker = TiTrATEConsistencyChecker()
@@ -748,13 +738,11 @@ if __name__ == '__main__':
     )  # Validate first 50
 
     print(f"\\nTiTrATE pathway validation completed")
-    print(f"  TiTrATE compliant samples: {
-            ti_trate_validated['ti_trate_compliant'].sum()}")
+    print(f"  TiTrATE compliant samples: {ti_trate_validated['ti_trate_compliant'].sum()}")
     print(
         f"  Non-compliant samples: {(ti_trate_validated['ti_trate_compliant'] == False).sum()}"
     )
-    print(f"  Compliance rate: {
-            ti_trate_validated['ti_trate_compliant'].mean():.3f}")
+    print(f"  Compliance rate: {ti_trate_validated['ti_trate_compliant'].mean():.3f}")
 
     # Initialize validation engine
     validation_engine = ValidationEngine()
@@ -770,8 +758,7 @@ if __name__ == '__main__':
         for key, value in result.items():
             print(f"    {key}: {value}")
 
-    print(f"\\nOverall validation score: {
-            validation_results['overall_validation_score']:.3f}")
+    print(f"\\nOverall validation score: {validation_results['overall_validation_score']:.3f}")
     print(f"Validation passed: {validation_results['validation_passed']}")
 
     print(f"\\nCounterfactual reasoning engine test completed successfully!")

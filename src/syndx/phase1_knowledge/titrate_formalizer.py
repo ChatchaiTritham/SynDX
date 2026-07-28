@@ -435,5 +435,4 @@ if __name__ == "__main__":
     print(f" Timing patterns: {space['timing_count']}")
     print(f" Trigger types: {space['trigger_count']}")
     print(f" Diagnoses: {space['diagnosis_count']}")
-    print(f" Expected valid archetypes: {
-            TiTrATEFormalizer.get_expected_archetype_count()}")
+    print(f" Expected valid archetypes: {TiTrATEFormalizer.get_expected_archetype_count()}")

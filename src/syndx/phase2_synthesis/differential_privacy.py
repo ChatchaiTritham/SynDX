@@ -108,9 +108,7 @@ class DifferentialPrivacy:
         sigma = self.clip_norm * np.sqrt(2 * np.log(1.25 / self.delta)) / self.epsilon
         noise_multiplier = sigma / self.clip_norm
 
-        logger.info(f"Calibrated noise: σ = {
-                sigma:.3f}, multiplier = {
-                noise_multiplier:.3f}")
+        logger.info(f"Calibrated noise: σ = {sigma:.3f}, multiplier = {noise_multiplier:.3f}")
 
         return noise_multiplier
 
@@ -314,9 +312,7 @@ class DifferentialPrivacy:
 
         # Warn if budget exceeded
         if epsilon_spent > self.epsilon:
-            logger.warning(f"Privacy budget EXCEEDED: ε={
-                    epsilon_spent:.2f} > {
-                    self.epsilon:.2f}. " f"Consider stopping training or increasing ε.")
+            logger.warning(f"Privacy budget EXCEEDED: ε={epsilon_spent:.2f} > {self.epsilon:.2f}. " f"Consider stopping training or increasing ε.")
         else:
             logger.info(
                 f"Privacy spent: ε={epsilon_spent:.2f}/{self.epsilon:.2f}, "
@@ -395,11 +391,7 @@ class DifferentialPrivacy:
 
     def __repr__(self) -> str:
         """String representation"""
-        return f"DifferentialPrivacy(ε={
-                self.epsilon:.2f}, δ={
-                self.delta:.2e}, " f"C={
-                self.clip_norm:.2f}, σ={
-                    self.noise_multiplier:.3f})"
+        return f"DifferentialPrivacy(ε={self.epsilon:.2f}, δ={self.delta:.2e}, " f"C={self.clip_norm:.2f}, σ={self.noise_multiplier:.3f})"
 
 
 # Main demonstration

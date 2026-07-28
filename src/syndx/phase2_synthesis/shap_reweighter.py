@@ -123,8 +123,7 @@ class SHAPReweighter:
             background = X_archetypes
 
         self.explainer = shap.TreeExplainer(self.model, background)
-        logger.info(f"โ“ SHAP explainer created with {
-                len(background)} background samples")
+        logger.info(f"โ“ SHAP explainer created with {len(background)} background samples")
 
         # =====================================================================
         # STEP 3: Compute SHAP values (Eq. 19)
@@ -133,9 +132,7 @@ class SHAPReweighter:
 
         self.shap_values = self.explainer.shap_values(X_archetypes)
 
-        logger.info(f"โ“ SHAP values computed. Shape: {
-                np.array(
-                    self.shap_values).shape}")
+        logger.info(f"โ“ SHAP values computed. Shape: {np.array(self.shap_values).shape}")
 
         # =====================================================================
         # STEP 4: Aggregate to global importance (Eq. 20)
@@ -165,9 +162,7 @@ class SHAPReweighter:
         # Eq. 21: wโฑผ = ฮฆโฑผ / ฮฃโ– ฮฆโ–
         self.feature_weights = global_importance / np.sum(global_importance)
 
-        logger.info(f"โ“ Feature weights computed. Sum: {
-                np.sum(
-                    self.feature_weights):.6f} " f"(should be 1.0)")
+        logger.info(f"โ“ Feature weights computed. Sum: {np.sum(self.feature_weights):.6f} " f"(should be 1.0)")
 
         # Log top features
         top_features = self.get_top_features(n=5)
@@ -431,10 +426,7 @@ if __name__ == '__main__':
     logger.info("\nTop 10 most important features:")
     for idx, (feat_idx, weight) in enumerate(reweighter.get_top_features(n=10), 1):
         marker = "โ…" if feat_idx in important_features else " "
-        logger.info(f"  {
-                idx:2d}. Feature {
-                feat_idx:2d}: {
-                weight:.6f} {marker}")
+        logger.info(f"  {idx:2d}. Feature {feat_idx:2d}: {weight:.6f} {marker}")
 
     # Apply transformation
     X_synthetic = np.random.randn(100, n_features)
@@ -451,8 +443,6 @@ if __name__ == '__main__':
     logger.info(f"\nSummary:")
     logger.info(f"  Status: {summary['status']}")
     logger.info(f"  N features: {summary['n_features']}")
-    logger.info(f"  Weight stats: mean={
-            summary['weight_statistics']['mean']:.6f}, " f"std={
-            summary['weight_statistics']['std']:.6f}")
+    logger.info(f"  Weight stats: mean={summary['weight_statistics']['mean']:.6f}, " f"std={summary['weight_statistics']['std']:.6f}")
 
     logger.info("\nโ“ Demo complete!")

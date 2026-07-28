@@ -115,8 +115,7 @@ class NMFFactorDiscovery:
         logger.info(f"NMF fitting complete")
         logger.info(f"  W shape: {self.W_.shape} (archetypes × factors)")
         logger.info(f"  H shape: {self.H_.shape} (factors × features)")
-        logger.info(f"  Reconstruction error: {
-                self.reconstruction_error_:.4f}")
+        logger.info(f"  Reconstruction error: {self.reconstruction_error_:.4f}")
 
         # Interpret factors
         self.factor_interpretations_ = self._interpret_factors()
@@ -168,8 +167,7 @@ class NMFFactorDiscovery:
 
             interpretations.append(interpretation)
 
-            logger.info(f"Factor {factor_idx}: {
-                    interpretation['clinical_pattern']}")
+            logger.info(f"Factor {factor_idx}: {interpretation['clinical_pattern']}")
             logger.debug(f"  Top features: {top_features[:5]}")
 
         return interpretations

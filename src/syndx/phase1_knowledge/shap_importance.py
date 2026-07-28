@@ -119,8 +119,7 @@ class SHAPImportanceAnalyzer:
         # Mean absolute SHAP value per feature
         self.feature_importance_ = np.mean(self.shap_values_, axis=0)
 
-        logger.info(f"Feature importance computed: {
-                self.feature_importance_.shape}")
+        logger.info(f"Feature importance computed: {self.feature_importance_.shape}")
         logger.debug(
             f"  Top 5 features: {np.argsort(self.feature_importance_)[-5:][::-1]}"
         )
@@ -140,9 +139,7 @@ class SHAPImportanceAnalyzer:
                 self.feature_importance_
             )
 
-        logger.info(f"Sampling weights computed (sum={
-                np.sum(
-                    self.sampling_weights_):.4f})")
+        logger.info(f"Sampling weights computed (sum={np.sum(self.sampling_weights_):.4f})")
 
     def get_feature_importance(self, top_k: int = None) -> np.ndarray:
         """

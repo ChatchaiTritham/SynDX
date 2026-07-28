@@ -118,8 +118,7 @@ class DiagnosticEvaluator:
         self.archetype_model.fit(X_train, y_train)
 
         train_accuracy = self.archetype_model.score(X_train, y_train)
-        logger.info(f"✓ Archetype model trained. Train accuracy: {
-                train_accuracy:.3f}")
+        logger.info(f"✓ Archetype model trained. Train accuracy: {train_accuracy:.3f}")
 
     def fit_synthetic_model(self, X_train: np.ndarray, y_train: np.ndarray):
         """
@@ -141,8 +140,7 @@ class DiagnosticEvaluator:
         self.synthetic_model.fit(X_train, y_train)
 
         train_accuracy = self.synthetic_model.score(X_train, y_train)
-        logger.info(f"✓ Synthetic model trained. Train accuracy: {
-                train_accuracy:.3f}")
+        logger.info(f"✓ Synthetic model trained. Train accuracy: {train_accuracy:.3f}")
 
     def evaluate(self, X_test: np.ndarray, y_test: np.ndarray) -> Dict:
         """
@@ -199,10 +197,8 @@ class DiagnosticEvaluator:
         logger.info("=" * 80)
         logger.info("DIAGNOSTIC PERFORMANCE SUMMARY")
         logger.info("=" * 80)
-        logger.info(f"Archetype Model Accuracy:  {
-                arch_metrics['accuracy']:.3f}")
-        logger.info(f"Synthetic Model Accuracy:  {
-                synth_metrics['accuracy']:.3f}")
+        logger.info(f"Archetype Model Accuracy:  {arch_metrics['accuracy']:.3f}")
+        logger.info(f"Synthetic Model Accuracy:  {synth_metrics['accuracy']:.3f}")
         logger.info(
             f"Utility Gap:               {utility_gap:+.3f} ({utility_gap * 100:+.1f}%)"
         )
@@ -405,12 +401,8 @@ class DiagnosticEvaluator:
             'cv_folds': self.cv_folds,
         }
 
-        logger.info(f"✓ CV Accuracy:     {
-                results['accuracy_mean']:.3f} ± {
-                results['accuracy_std']:.3f}")
-        logger.info(f"✓ CV F1 (macro):   {
-                results['f1_macro_mean']:.3f} ± {
-                results['f1_macro_std']:.3f}")
+        logger.info(f"✓ CV Accuracy:     {results['accuracy_mean']:.3f} ± {results['accuracy_std']:.3f}")
+        logger.info(f"✓ CV F1 (macro):   {results['f1_macro_mean']:.3f} ± {results['f1_macro_std']:.3f}")
 
         return results
 
@@ -479,8 +471,10 @@ class DiagnosticEvaluator:
     def __repr__(self) -> str:
         """String representation"""
         if not self.results:
-            return f"DiagnosticEvaluator(model_type='{
-                self.model_type}', evaluated=False)"
+            return (
+                f"DiagnosticEvaluator(model_type='{self.model_type}', "
+                "evaluated=False)"
+            )
         else:
             utility_gap = self.results['utility_gap']
             return (
@@ -561,15 +555,9 @@ if __name__ == '__main__':
             y_synth_train[i] = 0
 
     logger.info(f"\nDataset sizes:")
-    logger.info(f"  Archetype train: {
-            X_arch_train.shape}, classes: {
-            np.bincount(y_arch_train)}")
-    logger.info(f"  Archetype test:  {
-            X_arch_test.shape}, classes: {
-            np.bincount(y_arch_test)}")
-    logger.info(f"  Synthetic train: {
-            X_synth_train.shape}, classes: {
-            np.bincount(y_synth_train)}")
+    logger.info(f"  Archetype train: {X_arch_train.shape}, classes: {np.bincount(y_arch_train)}")
+    logger.info(f"  Archetype test:  {X_arch_test.shape}, classes: {np.bincount(y_arch_test)}")
+    logger.info(f"  Synthetic train: {X_synth_train.shape}, classes: {np.bincount(y_synth_train)}")
 
     # Initialize evaluator
     evaluator = DiagnosticEvaluator(model_type='xgboost', cv_folds=5)
