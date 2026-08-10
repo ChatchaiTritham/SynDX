@@ -4,6 +4,14 @@ This script creates the small article-ready figure set used for top-tier
 readiness claims. It keeps broad demo outputs in ``outputs/`` and writes the
 curated, reproducible submission set to ``figures/manuscript/`` with a figure
 manifest.
+
+Visualization style and the save/load helpers are imported, byte-identical,
+from the vendored ``pubviz.py`` (mirrors _management/FIGURE_STYLE.md). Data is
+always loaded from ``outputs/`` / ``results/`` at run time -- never hardcoded.
+
+Encoding choices follow Cleveland--McGill: position/length on a common scale
+(dot/bar small multiples, horizontal bars) is preferred over angle (radar) or
+area (pie/donut), which are weak perceptual channels.
 """
 
 from __future__ import annotations
@@ -16,23 +24,25 @@ from pathlib import Path
 from typing import Any
 
 import matplotlib.pyplot as plt
-import numpy as np
+
+from pubviz import PALETTE, apply_pub_style, load_results, results_dir, save_fig  # noqa: F401
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_DIR = ROOT / "figures" / "manuscript"
 DEFAULT_MANIFEST = ROOT / "FIGURE_MANIFEST.csv"
-DPI = 600
+DPI = 300
 
+# Semantic aliases drawn from the shared Okabe-Ito palette (no color-only
+# encoding; markers/hatches carry the distinction where multiple series appear).
 COLORS = {
-    "safe": "#2ca25f",
-    "monitor": "#fdd049",
-    "alert": "#fdae61",
-    "critical": "#de2d26",
-    "emergency": "#54278f",
-    "blue": "#2b6cb0",
-    "teal": "#2c7fb8",
-    "gray": "#4a5568",
+    "blue": PALETTE[0],
+    "orange": PALETTE[1],
+    "green": PALETTE[2],
+    "pink": PALETTE[3],
+    "amber": PALETTE[4],
+    "skyblue": PALETTE[5],
+    "black": PALETTE[6],
 }
 
 CLINICAL_FEATURE_LABELS = {
@@ -59,36 +69,11 @@ def load_json(path: Path) -> dict[str, Any]:
         return json.load(handle)
 
 
-def configure_plotting() -> None:
-    plt.rcParams.update(
-        {
-            "figure.dpi": DPI,
-            "savefig.dpi": DPI,
-            "font.family": "serif",
-            "font.serif": ["Times New Roman", "DejaVu Serif"],
-            "font.size": 9,
-            "axes.labelsize": 9,
-            "axes.titlesize": 10,
-            "axes.titleweight": "bold",
-            "xtick.labelsize": 8,
-            "ytick.labelsize": 8,
-            "legend.fontsize": 8,
-            "axes.linewidth": 0.8,
-            "grid.linewidth": 0.4,
-            "grid.alpha": 0.25,
-            "pdf.fonttype": 42,
-            "ps.fonttype": 42,
-        }
-    )
-
-
 def save_figure(fig: plt.Figure, output_dir: Path, stem: str) -> tuple[Path, Path]:
-    png_path = output_dir / f"{stem}.png"
-    pdf_path = output_dir / f"{stem}.pdf"
-    fig.savefig(png_path, dpi=DPI, bbox_inches="tight")
-    fig.savefig(pdf_path, bbox_inches="tight")
+    """Write matched vector PDF + 300-dpi PNG via the canonical helper."""
+    save_fig(fig, stem, out_dir=str(output_dir))
     plt.close(fig)
-    return png_path, pdf_path
+    return output_dir / f"{stem}.png", output_dir / f"{stem}.pdf"
 
 
 def format_feature_name(feature: str) -> str:
@@ -104,16 +89,17 @@ def figure1_shap_importance(output_dir: Path) -> dict[str, str]:
     values = [float(row["importance"]) for row in features][::-1]
 
     fig, ax = plt.subplots(figsize=(7.2, 4.6))
-    ax.barh(labels, values, color=COLORS["blue"], edgecolor="#1a365d", linewidth=0.5)
-    ax.set_xlabel("Mean absolute SHAP value")
-    ax.set_title("A. Clinically labelled SHAP feature importance")
+    ax.barh(labels, values, color=COLORS["blue"], edgecolor=COLORS["black"], linewidth=0.5)
+    ax.set_xlabel("Mean absolute SHAP value (dimensionless)")
+    ax.set_ylabel("Clinical feature")
+    ax.set_title("Clinically labelled SHAP feature importance")
     ax.grid(axis="x")
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.set_xlim(0, max(values) * 1.18)
+    ax.grid(axis="y", visible=False)
+    ax.set_xlim(0, max(values) * 1.20)
 
+    # Value labels on every bar (position on a common scale + explicit number).
     for y_pos, value in enumerate(values):
-        ax.text(value + max(values) * 0.02, y_pos, f"{value:.3f}", va="center", fontsize=7)
+        ax.text(value + max(values) * 0.02, y_pos, f"{value:.3f}", va="center", fontsize=8)
 
     png_path, pdf_path = save_figure(fig, output_dir, "fig1_shap_importance_clinical")
     return {
@@ -123,7 +109,12 @@ def figure1_shap_importance(output_dir: Path) -> dict[str, str]:
         "pdf": str(pdf_path.relative_to(ROOT)),
         "source_script": "scripts/generate_manuscript_figures.py",
         "source_data": str(report_path.relative_to(ROOT)),
-        "caption": "Clinically labelled SHAP feature-importance panel for SynDX dizziness-case modeling.",
+        "caption": (
+            "Clinically labelled SHAP feature-importance panel for SynDX "
+            "dizziness-case modeling; bars annotated with mean absolute SHAP "
+            "values. Per-sample SHAP arrays are not exported, so no bootstrap "
+            "confidence interval is shown (see human-review note)."
+        ),
         "article_section": "Explainability validation",
     }
 
@@ -147,16 +138,20 @@ def figure2_validation_metrics(output_dir: Path) -> dict[str, str]:
     ]
     labels = [item[0] for item in metrics]
     values = [float(item[1]) for item in metrics]
-    colors = [COLORS["blue"], COLORS["safe"], COLORS["teal"], COLORS["gray"]]
+    colors = PALETTE[: len(values)]
+    # Distinct hatches so bars remain separable in grayscale / for color-blind readers.
+    hatches = ["", "//", "..", "xx"]
 
     fig, ax = plt.subplots(figsize=(7.2, 4.4))
-    bars = ax.bar(labels, values, color=colors, edgecolor="#2d3748", linewidth=0.6)
+    bars = ax.bar(labels, values, color=colors, edgecolor=COLORS["black"], linewidth=0.6)
+    for bar, hatch in zip(bars, hatches):
+        bar.set_hatch(hatch)
     ax.set_ylim(0, 1.0)
-    ax.set_ylabel("Score")
-    ax.set_title("B. Focused validation metrics")
+    ax.set_ylabel("Score (0-1, dimensionless)")
+    ax.set_xlabel("Validation metric")
+    ax.set_title("Focused validation metrics")
     ax.grid(axis="y")
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
+    ax.grid(axis="x", visible=False)
 
     for bar, value in zip(bars, values):
         ax.text(
@@ -165,10 +160,9 @@ def figure2_validation_metrics(output_dir: Path) -> dict[str, str]:
             f"{value:.2f}",
             ha="center",
             va="bottom",
-            fontsize=8,
+            fontsize=9,
         )
 
-    fig.tight_layout()
     png_path, pdf_path = save_figure(fig, output_dir, "fig2_focused_validation_metrics")
     return {
         "figure_id": "SynDX-F2",
@@ -189,29 +183,47 @@ def figure2_validation_metrics(output_dir: Path) -> dict[str, str]:
 
 
 def figure3_counterfactual_quality(output_dir: Path) -> dict[str, str]:
+    """Counterfactual-quality profile as a dot/bar small-multiple panel.
+
+    Replaces the former radar/spider chart. Each of the four quality criteria is
+    a separate row plotted on a shared 0-1 position scale (Cleveland--McGill:
+    position on a common scale reads far more accurately than angle on a radar).
+    """
     metrics_path = ROOT / "outputs" / "validation_demo" / "counterfactual" / "validation_metrics.json"
     metrics = load_json(metrics_path)
 
-    labels = ["Sparsity", "Clinical\nplausibility", "Diversity", "Proximity\n(L2, inverted)"]
+    # Same normalizations as before, but rendered on a linear common scale.
     sparsity = 1.0 - min(metrics["sparsity"]["mean"] / 10.0, 1.0)
     plausibility = metrics["clinical_plausibility"]["mean"] / 5.0
     diversity = min(metrics["diversity"]["mean_pairwise_distance"] / 10.0, 1.0)
     proximity = 1.0 - min(metrics["proximity"]["mean_l2"] / 12.0, 1.0)
-    values = [sparsity, plausibility, diversity, proximity]
 
-    angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
-    values_closed = values + values[:1]
-    angles_closed = angles + angles[:1]
+    rows = [
+        ("Sparsity", sparsity),
+        ("Clinical plausibility", plausibility),
+        ("Diversity", diversity),
+        ("Proximity (L2, inverted)", proximity),
+    ]
+    labels = [r[0] for r in rows][::-1]
+    values = [r[1] for r in rows][::-1]
+    y_pos = list(range(len(labels)))
 
-    fig, ax = plt.subplots(figsize=(5.4, 5.0), subplot_kw={"polar": True})
-    ax.plot(angles_closed, values_closed, color=COLORS["teal"], linewidth=1.8)
-    ax.fill(angles_closed, values_closed, color=COLORS["teal"], alpha=0.18)
-    ax.set_xticks(angles)
-    ax.set_xticklabels(labels)
-    ax.set_ylim(0, 1)
-    ax.set_yticks([0.25, 0.5, 0.75, 1.0])
-    ax.set_yticklabels(["0.25", "0.50", "0.75", "1.00"], fontsize=7)
-    ax.set_title("C. Counterfactual quality profile", pad=18)
+    fig, ax = plt.subplots(figsize=(7.0, 3.6))
+    # Thin reference bar + emphasised dot = Cleveland dot plot on a common scale.
+    ax.hlines(y=y_pos, xmin=0, xmax=values, color="#cfd6de", linewidth=2.4, zorder=1)
+    ax.scatter(values, y_pos, s=70, color=COLORS["blue"], edgecolor=COLORS["black"],
+               linewidth=0.6, zorder=3)
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(labels)
+    ax.set_xlim(0, 1.0)
+    ax.set_xticks([0.0, 0.25, 0.5, 0.75, 1.0])
+    ax.set_xlabel("Normalised quality score (0-1, higher is better)")
+    ax.set_title("Counterfactual quality profile")
+    ax.grid(axis="x")
+    ax.grid(axis="y", visible=False)
+
+    for yp, value in zip(y_pos, values):
+        ax.text(value + 0.02, yp, f"{value:.2f}", va="center", fontsize=9)
 
     png_path, pdf_path = save_figure(fig, output_dir, "fig3_counterfactual_quality_profile")
     return {
@@ -221,7 +233,11 @@ def figure3_counterfactual_quality(output_dir: Path) -> dict[str, str]:
         "pdf": str(pdf_path.relative_to(ROOT)),
         "source_script": "scripts/generate_manuscript_figures.py",
         "source_data": str(metrics_path.relative_to(ROOT)),
-        "caption": "Counterfactual quality profile summarizing sparsity, plausibility, diversity, and proximity.",
+        "caption": (
+            "Counterfactual quality profile (dot plot on a common 0-1 scale) "
+            "summarizing sparsity, clinical plausibility, diversity, and "
+            "proximity; replaces a radar chart for accurate magnitude reading."
+        ),
         "article_section": "Counterfactual validation",
     }
 
@@ -253,7 +269,7 @@ def main() -> None:
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     args = parser.parse_args()
 
-    configure_plotting()
+    apply_pub_style()
     args.output_dir.mkdir(parents=True, exist_ok=True)
 
     rows = [
