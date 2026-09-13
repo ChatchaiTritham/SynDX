@@ -1,0 +1,4 @@
+log-log slope (complexity exponent): 1.0467
+R^2 of log-log fit: 0.9864
+Measured sizes: [500, 1000, 2000, 5000, 10000]
+No sizes beyond the measured range are reported or extrapolated.

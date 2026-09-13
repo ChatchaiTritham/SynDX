@@ -798,26 +798,27 @@ class SynDXDatasetGenerator:
         return stats
 
 
-# Initialize dataset generator
-generator = SynDXDatasetGenerator(random_state=42)
+if __name__ == "__main__":
+    # Fixed 2026-09-06: this demo block used to run at MODULE IMPORT time
+    # (no __main__ guard), which crashed `import syndx.syndx_temp` for every
+    # caller (see generate_layer1_dataset's diagnosis-order bug below) and is
+    # why this module was never actually reachable from run_all.py.
+    generator = SynDXDatasetGenerator(random_state=42)
 
-# Generate a small dataset for demonstration
-print("Generating demonstration datasets for SynDX-Hybrid framework...")
-demo_data = generator.generate_complete_dataset(n_samples=1000)
+    print("Generating demonstration datasets for SynDX-Hybrid framework...")
+    demo_data = generator.generate_complete_dataset(n_samples=1000)
 
-print(f"\\nDataset generation completed!")
-print(f"Generated datasets: {list(generator.datasets.keys())}")
-print(f"Total samples in ensemble: {len(generator.datasets['ensemble'])}")
-print(f"Total features in ensemble: {len(generator.datasets['ensemble'].columns)}")
+    print(f"\\nDataset generation completed!")
+    print(f"Generated datasets: {list(generator.datasets.keys())}")
+    print(f"Total samples in ensemble: {len(generator.datasets['ensemble'])}")
+    print(f"Total features in ensemble: {len(generator.datasets['ensemble'].columns)}")
 
-# Save the datasets
-output_dir = generator.save_datasets()
-print(f"Datasets saved to: {output_dir}")
+    output_dir = generator.save_datasets()
+    print(f"Datasets saved to: {output_dir}")
 
-# Print statistics
-stats = generator.get_statistics()
-print(f"\\nGeneration statistics:")
-print(f"  Total samples across all layers: {stats['total_samples']:,}")
-print(f"  Total features across all layers: {stats['total_features']:,}")
-for dataset_name, info in stats['datasets'].items():
-    print(f"  {dataset_name}: {info['samples']:,} samples, {info['features']} features")
+    stats = generator.get_statistics()
+    print(f"\\nGeneration statistics:")
+    print(f"  Total samples across all layers: {stats['total_samples']:,}")
+    print(f"  Total features across all layers: {stats['total_features']:,}")
+    for dataset_name, info in stats['datasets'].items():
+        print(f"  {dataset_name}: {info['samples']:,} samples, {info['features']} features")

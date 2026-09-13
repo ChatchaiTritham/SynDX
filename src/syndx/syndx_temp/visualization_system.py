@@ -835,9 +835,15 @@ class SynDXVisualizer:
         )
 
 
-# Initialize visualizer
-visualizer = SynDXVisualizer(generator)
+if __name__ == "__main__":
+    # Fixed 2026-09-06: ran at import time and referenced an undefined
+    # module-level `generator`, which crashed `import syndx.syndx_temp` for
+    # every caller.
+    from .dataset_generator import SynDXDatasetGenerator
 
-print("SynDX-Hybrid Visualization System Initialized")
-print(f"Figure directory: {visualizer.figure_dir}")
-print(f"DPI setting: {plt.rcParams['figure.dpi']}")
+    generator = SynDXDatasetGenerator(random_state=42)
+    visualizer = SynDXVisualizer(generator)
+
+    print("SynDX-Hybrid Visualization System Initialized")
+    print(f"Figure directory: {visualizer.figure_dir}")
+    print(f"DPI setting: {plt.rcParams['figure.dpi']}")

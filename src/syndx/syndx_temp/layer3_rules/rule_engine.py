@@ -248,7 +248,14 @@ class RuleBasedExpertSystem:
                 trigger_type,
             )
 
-            # Apply rules to determine diagnosis
+            # Build the condition-evaluation record BEFORE applying rules.
+            # (Fixed 2026-09-06: this dict previously referenced 'diagnosis',
+            # 'confidence' and 'urgency' before they were computed, which
+            # raised NameError on every call and meant Layer 3 could never
+            # actually run via run_all.py. Rules only need the condition
+            # variables below; diagnosis/confidence/urgency are the RESULT
+            # of _apply_rules, not an input to it, so they are omitted here
+            # and attached afterward.)
             patient_data = {
                 'timing_pattern': timing_pattern,
                 'trigger_type': trigger_type,
@@ -262,13 +269,13 @@ class RuleBasedExpertSystem:
                 'severity_score': np.random.randint(1, 11),  # 1-10 scale
                 # Common in vestibular disorders
                 'nausea_vomiting': np.random.choice([True, False], p=[0.6, 0.4]),
-                'headache_present': self._sample_headache(diagnosis),
-                'hearing_loss': self._sample_hearing_loss(diagnosis),
-                'tinnitus': self._sample_tinnitus(diagnosis),
+                'hearing_loss': self._sample_hearing_loss('unknown'),
+                'tinnitus': self._sample_tinnitus('unknown'),
                 'hit_abnormal': examination_findings['hit_abnormal'],
                 'nystagmus_type': examination_findings['nystagmus_type'],
+                'nystagmus_peripheral': examination_findings['nystagmus_type'] == 'peripheral',
                 'skew_deviation': examination_findings['skew_deviation'],
-                'dix_hallpike_positive': examination_findings['dix_hallpike_positive'],
+                'dix_hallpike_positive': examination_findings['dix_hallpike_positive'] != 'negative',
                 # Rare neurological signs
                 'focal_neurological_signs': np.random.choice(
                     [True, False], p=[0.98, 0.02]
@@ -279,12 +286,10 @@ class RuleBasedExpertSystem:
                 or examination_findings['skew_deviation'],
                 'spontaneous_onset': trigger_type == 'spontaneous',
                 'episodic_vertigo': timing_pattern == 'episodic',
-                'diagnosis': diagnosis,
-                'confidence': confidence,
-                'urgency': urgency,
+                'headache_present': migraine_history and np.random.random() < 0.8,
             }
 
-            # Apply rules to determine diagnosis
+            # Apply rules to determine diagnosis (diagnosis is an OUTPUT here).
             diagnosis, confidence, urgency = self._apply_rules(patient_data)
 
             # Create patient record
@@ -353,54 +358,48 @@ class RuleBasedExpertSystem:
         # Check each rule to see if it applies
         applicable_rules = []
 
+        # Fixed 2026-09-06: the original sequential .replace() calls only
+        # covered a subset of the identifiers actually used in rule
+        # conditions (e.g. conditions wrote bare 'timing'/'trigger'/'onset'/
+        # 'duration' while patient_data only has 'timing_pattern'/
+        # 'trigger_type'/'duration_hours'; 'migraine_history',
+        # 'hypertension' and 'diabetes' were never substituted at all).
+        # Every named clinical rule therefore raised NameError inside the
+        # bare `except: continue`, silently fell through to 'unknown' for
+        # 100% of samples, and Layer 3 never actually classified anyone.
+        # Token-boundary substitution below covers the full patient_data
+        # vocabulary plus the aliases the rule text actually uses.
+        import re
+
+        alias_map = {
+            'timing': patient['timing_pattern'],
+            'onset': patient['timing_pattern'],
+            'trigger': patient['trigger_type'],
+            'duration': patient['duration_hours'],
+        }
+
         for rule in self.rules:
             try:
-                # Evaluate condition - this is a simplified evaluation
-                # In a real system, we'd use a proper rule engine
                 condition = rule['condition']
+                eval_condition = condition
 
-                # Replace variables in condition with actual patient values
-                eval_condition = condition.replace(
-                    'timing_pattern', f"'{patient['timing_pattern']}'"
-                )
-                eval_condition = eval_condition.replace(
-                    'trigger_type', f"'{patient['trigger_type']}'"
-                )
-                eval_condition = eval_condition.replace('age', str(patient['age']))
-                eval_condition = eval_condition.replace(
-                    'cvd_risk', str(patient['cvd_risk'])
-                )
-                eval_condition = eval_condition.replace(
-                    'hints_central', str(patient['hints_central'])
-                )
-                eval_condition = eval_condition.replace(
-                    'dix_hallpike_positive', str(patient['dix_hallpike_positive'])
-                )
-                eval_condition = eval_condition.replace(
-                    'hit_abnormal', str(patient['hit_abnormal'])
-                )
-                eval_condition = eval_condition.replace(
-                    'nystagmus_peripheral', str(patient['nystagmus_peripheral'])
-                )
-                eval_condition = eval_condition.replace(
-                    'focal_neurological_signs', str(patient['focal_neurological_signs'])
-                )
-                eval_condition = eval_condition.replace(
-                    'spontaneous_onset', str(patient['spontaneous_onset'])
-                )
-                eval_condition = eval_condition.replace(
-                    'episodic_vertigo', str(patient['episodic_vertigo'])
-                )
-                eval_condition = eval_condition.replace(
-                    'headache_present', str(patient['headache_present'])
-                )
-                eval_condition = eval_condition.replace(
-                    'duration_hours', str(patient['duration_hours'])
-                )
+                # Direct patient_data fields (longest keys first to avoid
+                # partial-token collisions, e.g. 'timing_pattern' vs 'timing').
+                for key in sorted(patient.keys(), key=len, reverse=True):
+                    value = patient[key]
+                    token = value if isinstance(value, str) else repr(value)
+                    replacement = f"'{token}'" if isinstance(value, str) else str(value)
+                    eval_condition = re.sub(
+                        rf"\b{re.escape(key)}\b", replacement, eval_condition
+                    )
 
-                # Handle boolean values
-                eval_condition = eval_condition.replace('True', 'True')
-                eval_condition = eval_condition.replace('False', 'False')
+                # Aliases used by rule text but not present verbatim in
+                # patient_data (timing/trigger/onset/duration).
+                for alias, value in alias_map.items():
+                    replacement = f"'{value}'" if isinstance(value, str) else str(value)
+                    eval_condition = re.sub(
+                        rf"\b{alias}\b", replacement, eval_condition
+                    )
 
                 # Evaluate the condition
                 if eval(eval_condition):

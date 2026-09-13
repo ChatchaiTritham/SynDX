@@ -1,0 +1,18 @@
+group,metric,value
+statistical_realism,mean_kl_divergence,0.0609873824591644
+statistical_realism,mean_js_divergence,0.015042038524621569
+statistical_realism,mean_wasserstein,0.1587166666666666
+statistical_realism,n_features,9
+statistical_realism,reference,Layer-1 archetype encoding (shared clinical schema)
+diagnostic_performance,model,XGBoost
+diagnostic_performance,train_test_split,70/30
+diagnostic_performance,n_classes,7
+diagnostic_performance,n_test_samples,3000
+diagnostic_performance,roc_auc_macro,0.8907579990185868
+diagnostic_performance,sensitivity_macro,0.44692632932183074
+diagnostic_performance,specificity_macro,0.9592460955835013
+diagnostic_performance,f1_macro,0.45511902380362207
+diagnostic_performance,accuracy,0.867
+rule_base_composition,n_total_rules_instantiated,247
+rule_base_composition,n_named_clinical_guideline_rules,6
+rule_base_composition,n_generic_filler_rules,241

@@ -1,0 +1,48 @@
+{
+  "seed": 42,
+  "ensemble_weights_grid_search_selected": {
+    "w_combinatorial": 0.1,
+    "w_bayesian": 0.1,
+    "w_rules": 0.8
+  },
+  "ensemble_quotas": {
+    "comb": 1000,
+    "bayes": 1000,
+    "rules": 8000
+  },
+  "statistical_realism": {
+    "mean_kl_divergence": 0.0609873824591644,
+    "mean_js_divergence": 0.015042038524621569,
+    "mean_wasserstein": 0.1587166666666666,
+    "n_features": 9,
+    "reference": "Layer-1 archetype encoding (shared clinical schema)"
+  },
+  "diagnostic_performance": {
+    "model": "XGBoost",
+    "train_test_split": "70/30",
+    "n_classes": 7,
+    "class_names": [
+      "bppv",
+      "menieres",
+      "other",
+      "pppd",
+      "stroke",
+      "vestibular_migraine",
+      "vestibular_neuritis"
+    ],
+    "n_test_samples": 3000,
+    "roc_auc_macro": 0.8907579990185868,
+    "sensitivity_macro": 0.44692632932183074,
+    "specificity_macro": 0.9592460955835013,
+    "f1_macro": 0.45511902380362207,
+    "accuracy": 0.867
+  },
+  "coverage": {
+    "n_archetypes_generated_layer1": 8000
+  },
+  "rule_base_composition": {
+    "n_total_rules_instantiated": 247,
+    "n_named_clinical_guideline_rules": 6,
+    "n_generic_filler_rules": 241
+  }
+}
